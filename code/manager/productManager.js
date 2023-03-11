@@ -51,7 +51,7 @@ export class ProductManager {
         if (existProd != undefined) {
             const products = await this.getProducts()
             let productsUp = products.filter((prod) => prod.id != id)
-            let productUp = {...update, id: id}
+            let productUp = {...existProd, ...update, id: id}
             productsUp.push(productUp)
             fs.writeFileSync(this.file, JSON.stringify(productsUp))
             return productUp

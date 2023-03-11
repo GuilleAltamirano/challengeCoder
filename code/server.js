@@ -7,14 +7,16 @@ const productManager = new ProductManager('./db/productsDb.json')
 // console.log(productManager.getProducts())
 
 // test dos
-// productManager.getAddProducts(
-//     {title: 'Producto Pruena 1',
-//     description: 'Descripción del producto 1',
-//     price: 200,
-//     thumbnail: 'imagen1.jpg',
-//     code: 'ABC123',
-//     stock: 20}
-// );
+// ;(async ()=> {
+//     productManager.getAddProducts(
+//         {title: 'Producto Pruena 1',
+//         description: 'Descripción del producto 1',
+//         price: 200,
+//         thumbnail: 'imagen1.jpg',
+//         code: 'ABC123',
+//         stock: 20}
+//     );
+// })()
 
 // setTimeout(() => {
 //     console.log(productManager.getProducts());
@@ -26,15 +28,18 @@ const productManager = new ProductManager('./db/productsDb.json')
 //     .then( res => console.log(res))
 // }, 2000)
 
-// test cuatro
-// productManager.getProductUp(1, {
-//     title: 'Coca-Cola',
-//     description: 'Coca-Cola de 330ml retornable',
-//     price: 100,
-//     thumbnail: 'https://e7.pngegg.com/pngimages/299/667/png-clipart-coca-cola-bl%C4%81k-glass-bottle-the-coca-cola-company-bouteille-de-coca-cola-coca-ecuador-glass-cola.png',
-//     code: 'ABC123',
-//     stock: 20
-// })
+//test cuatro
+; (async () => {
+    productManager.getProductUp(1, {
+        title: 'Coca-Cola',
+        description: 'Coca-Cola de 330ml retornable',
+        price: 100,
+        thumbnail: 'https://e7.pngegg.com/pngimages/299/667/png-clipart-coca-cola-bl%C4%81k-glass-bottle-the-coca-cola-company-bouteille-de-coca-cola-coca-ecuador-glass-cola.png',
+        code: 'ABC123',
+        stock: 20,
+        id: 10
+    })
+})()
 
 // test Cinco
 // productManager.getDeleteProduct(1)
