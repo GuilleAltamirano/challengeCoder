@@ -14,11 +14,14 @@ export class ProductManager {
     }
 
     async getAddProducts ({title, description, price, thumbnail, code, stock}) {
+        //import products
         const allProducts = await this.getProducts()
+            
+        //product search exist?
         const productExist = allProducts.find(prod => prod.code === code)
-        if (productExist) {
-            return console.error(`This code ${code} existing`)
-        }
+        if (productExist) {return `This code ${code} existing`}
+        
+        //declaring new product
         const newProduct = {
         title,
         description,
@@ -26,23 +29,22 @@ export class ProductManager {
         thumbnail,
         code,
         stock,
-        };
-        if(allProducts.length===0){
-            newProduct.id=1;
-        }else{
-            newProduct.id = allProducts[allProducts.length-1].id+1; 
         }
-        allProducts.push(newProduct);
-        fs.writeFileSync(this.file, JSON.stringify(allProducts))
+        //first product?
+        if(allProducts.length === 0){newProduct.id=1}
+        if(allProducts.length != 0){newProduct.id = allProducts[allProducts.length-1].id+1}
+        
+        //writeFile updated
+        allProducts.push(newProduct)
+        fs.writeFileSync(this.file, JSON.stringify(allProducts, null, 2))
         return newProduct
     }
 
     async getProductById(id) {
         const allProducts = await this.getProducts()
-        const idExist = allProducts.find((prod) => prod.id === id);
-        if (!idExist) {
-            return console.error(`The product whit id ${id}, does not exist`)
-        }
+        const idExist = allProducts.find((prod) => prod.id === id)
+        if (!idExist) {return `The product whit id ${id}, does not exist`}
+
         return idExist
     }
 
@@ -53,7 +55,7 @@ export class ProductManager {
             let productsUp = products.filter((prod) => prod.id != id)
             let productUp = {...existProd, ...update, id: id}
             productsUp.push(productUp)
-            fs.writeFileSync(this.file, JSON.stringify(productsUp))
+            fs.writeFileSync(this.file, JSON.stringify(productsUp, null, 2))
             return productUp
         }
         return 'Product not exist'
@@ -64,7 +66,7 @@ export class ProductManager {
         if (existProd != undefined) {
             const products = await this.getProducts()
             let productsUp = products.filter((prod) => prod.id != id)
-            fs.writeFileSync(this.file, JSON.stringify(productsUp))
+            fs.writeFileSync(this.file, JSON.stringify(productsUp, null, 2))
             return 'product Deleted'
         }
         return 'product not exist'

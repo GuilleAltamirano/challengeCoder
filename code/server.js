@@ -1,46 +1,27 @@
+import express, {query} from "express";
 import { ProductManager } from "./manager/productManager.js";
+import { ProductsValidators } from "./manager/productsValidators.js";
 
+//variables
+const app = express()
+const PORT = process.env.PORT || 8080
 const productManager = new ProductManager('./db/productsDb.json')
+const productsValidators = new ProductsValidators(productManager.getProducts())
 
+//appUse
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
 
-// test uno
-// console.log(productManager.getProducts())
+//rest
+app.get('/api/products', async (req, res) => {
+    res.send(await productsValidators.logicQuery(req.query))
+})
 
-// test dos
-// ;(async ()=> {
-//     productManager.getAddProducts(
-//         {title: 'Producto Pruena 1',
-//         description: 'Descripción del producto 1',
-//         price: 200,
-//         thumbnail: 'imagen1.jpg',
-//         code: 'ABC123',
-//         stock: 20}
-//     );
-// })()
+app.get('/api/products/:id', async (req, res) => {
+    res.send(await productManager.getProductById(JSON.parse(req.params.id)))
+})
 
-// setTimeout(() => {
-//     console.log(productManager.getProducts());
-// }, 1500);
-
-// test tres
-// setTimeout(() => {
-//     productManager.getProductById(1)
-//     .then( res => console.log(res))
-// }, 2000)
-
-//test cuatro
-; (async () => {
-    productManager.getProductUp(1, {
-        title: 'Coca-Cola',
-        description: 'Coca-Cola de 330ml retornable',
-        price: 100,
-        thumbnail: 'https://e7.pngegg.com/pngimages/299/667/png-clipart-coca-cola-bl%C4%81k-glass-bottle-the-coca-cola-company-bouteille-de-coca-cola-coca-ecuador-glass-cola.png',
-        code: 'ABC123',
-        stock: 20,
-        id: 10
-    })
-})()
-
-// test Cinco
-// productManager.getDeleteProduct(1)
-// .then(res => console.log('ok'))
+//Server Run
+app.listen(PORT, () => {
+    console.log(`Server HTTP run in PORT ${PORT}`)
+})
