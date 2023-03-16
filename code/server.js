@@ -1,6 +1,6 @@
 import express from "express"
 import productsRouter from "./src/routes/routerProducts/routerProducts.js"
-import cartsRouter from "./src/routes/routerCarts/routerCarts.js"
+import cartsRouter from './src/routes/routerCarts/routerCarts.js'
 
 
 //variables
@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
+
 
 //Server Run
 app.listen(PORT, () => {

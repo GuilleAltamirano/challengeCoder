@@ -43,7 +43,7 @@ export class ProductsValidators {
             if ((typeof objValues[4] !== 'boolean') || (objValues[4] === '')) {return { error: 'Invalid type or missing status' }}
             if ((typeof objValues[5] !== 'number') || (objValues[5] === '') || (objValues[5] <= 0)) {return { error: 'Invalid type or missing stock' }}        
             if ((typeof objValues[6] !== 'string') || (objValues[6] === '')) {return { error: 'Invalid type or missing category' }}        
-            if ((typeof objValues[7] !== 'string') || (objValues[7] === '')) {return { error: 'Invalid type or missing thumbnail' }}        
+            if ((typeof objValues[7] !== 'object') || (objValues[7] === '')) {return { error: 'Invalid type or missing thumbnail' }}        
             
             //product add exist? (by code)
             const productExist = this.products.find(prod => prod.code === objValues[2])
@@ -110,13 +110,5 @@ export class ProductsValidators {
             //return approved
             return 'approved'
         } catch (err) {return { error: `error in function prodDeleteValidate, is in /src/products/productsValidators.js ` }}
-    }
-
-    async checkId (id) {
-        try {
-            //check id type
-            const parsedId = JSON.parse(id)
-            return parsedId
-        } catch (err) {return { error: `error in function checkId, is in /src/products/productsValidators.js ` }}
     }
 } 
