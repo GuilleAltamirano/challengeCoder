@@ -11,7 +11,6 @@ const cartsValidators = new CartsValidators(cartsManager.getCart())
 cartsRouter.post('', async (req, res) => {
     const status = await cartsValidators.cartsVer()
     if ( status === 'success') { return  res.send(await cartsManager.getCreateCart())}
-    console.log(status)
     res.json(status)
 })
 
@@ -23,8 +22,8 @@ cartsRouter.get('/:id', async (req, res) => {
 
 cartsRouter.post('/:cid/products/:pid', async (req, res) => {
     const status = await cartsValidators.addVerificator(req.params.cid, req.params.pid)
+    if (status === 'success') {return res.send( await cartsManager.addProduct(req.params.cid, req.params.pid))}
     res.send(status)
-    // res.send( await cartsManager.addProduct(req.params.cid, req.params.pid))
 })
 
 export default cartsRouter

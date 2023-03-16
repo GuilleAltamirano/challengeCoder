@@ -15,9 +15,7 @@ productsRouter.get('', async (req, res) => {
 })
 
 productsRouter.get('/:id', async (req, res) => {
-    const idSearch = req.params.id;
-    const result = await productsValidators.prodIdValidate(idSearch)
-    res.json(result)
+    res.json(await productsValidators.prodIdValidate(req.params.id))
 })
 
 productsRouter.post('', async (req, res) => {

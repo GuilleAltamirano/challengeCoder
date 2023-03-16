@@ -108,5 +108,18 @@
     "category": "drinks",
     "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
     "id": 10
+  },
+  {
+    "title": "Fanta",
+    "description": "Fanta de 2L retornable (plastico).",
+    "code": "BCD456",
+    "price": 550,
+    "status": false,
+    "stock": 3,
+    "category": "drinks",
+    "thumbnail": [
+      "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg"
+    ],
+    "id": 11
   }
 ]
