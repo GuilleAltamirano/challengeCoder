@@ -83,7 +83,7 @@ export class ProductsValidators {
 
             //exist product?
             const existProd = await this.prodIdValidate(id)
-            if (typeof existProd !== 'object' ) { return {error: `The product whit id ${id}, does not exist`}}
+            if (existProd !== 'approved' ) { return {error: `The product whit id ${id}, does not exist`}}
 
             //return approved
             return 'approved'
@@ -94,10 +94,10 @@ export class ProductsValidators {
         try {
             //id exist?
             const idExist = this.products.find((prod) => prod.id === JSON.parse(id))
-            if (!idExist) {return `The product whit id ${id}, does not exist`}
+            if (!idExist) {return { error: `The product whit id ${id}, does not exist` }}
 
             //return product
-            return  idExist
+            return  'approved'
         } catch (err) {return { error: `error in function prodIdValidate, is in /src/products/productsValidators.js ` }}
     }
 
@@ -105,7 +105,7 @@ export class ProductsValidators {
         try {
             //exist product?
             const existProd = await this.prodIdValidate(id)
-            if (typeof existProd !== 'object' ) { return {error: `The product whit id ${id}, does not exist`}}
+            if (existProd !== 'approved' ) { return {error: `The product whit id ${id}, does not exist`}}
 
             //return approved
             return 'approved'

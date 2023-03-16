@@ -37,11 +37,10 @@ export class ProductManager {
         try {
             //import products
             const allProducts = await this.getProducts()
-            //id exist?
-            const idExist = allProducts.find((prod) => prod.id === JSON.parse(id))
-            if (!idExist) {return `The product whit id ${id}, does not exist`}
+            //id product
+            const product = allProducts.find((prod) => prod.id === JSON.parse(id))
             //return success
-            return idExist
+            return product
         } catch (err) {return { error: `error in function getProductById, is in /src/manager/products/productManager.js ` }}
     }
 
@@ -67,8 +66,6 @@ export class ProductManager {
 
     async getDeleteProduct(id) {
         try {
-            //exist product?
-            let existProd = await this.getProductById(id)
             //import all products
             const products = await this.getProducts()
             //All products without product to delete
@@ -76,7 +73,7 @@ export class ProductManager {
             //writeFile
             fs.writeFileSync(this.file, JSON.stringify(productsUp, null, 2))
             //return
-            return { success: `product deleted ${existProd}`}
+            return { success: `product deleted`}
         } catch (err) {return { error: `error in function getDeleteProduct, is in /src/manager/products/productManager.js ` }}
     }
 }
