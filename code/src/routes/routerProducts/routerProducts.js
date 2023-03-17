@@ -1,16 +1,22 @@
-import { Router } from "express"
+import express, { Router } from "express"
+import handlebars from "express-handlebars"
 import { ProductManager } from "../../manager/products/productManager.js"
 import { ProductsValidators } from "../../manager/products/productsValidators.js"
 
 //variables
+const app = express()
 const productsRouter = new Router()
 const productManager = new ProductManager('./db/productsDb.json')
 const productsValidators = new ProductsValidators(productManager.getProducts())
 
+//handlebars
+app.engine('handlebars', handlebars.engine())
+app.set('view engine', 'handlebars')
+
 //products router
 productsRouter.get('', async (req, res) => {
     const status = await productsValidators.logicQuery(req.query)
-    if (status === 'approved') { return res.status(200).json(await productManager.getProducts())}
+    if (status === 'approved') { return res.status(200).render('index', await productManager.getProducts())}
     res.status(404).json(status)
 })
 
