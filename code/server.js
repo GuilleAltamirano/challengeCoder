@@ -1,7 +1,6 @@
 import express from "express"
 import handlebars from "express-handlebars"
 import {__dirname} from "./utils.js"
-import { Server } from "socket.io"
 import productsRouter from "./src/routes/routerProducts/routerProducts.js"
 import cartsRouter from './src/routes/routerCarts/routerCarts.js'
 import realTimeProducts from "./src/routes/realtimeproducts/realtimeproducts.js"
@@ -27,10 +26,6 @@ app.use('/api/carts', cartsRouter)
 app.use('/api/realtimeproducts', realTimeProducts)
 
 //Server Run
-const httpServer = app.listen(PORT, () => {
+export const httpServer = app.listen(PORT, () => {
     console.log(`Server HTTP run in PORT ${PORT}`)
-})
-const socketServer = new Server(httpServer)
-socketServer.on('connection', socket => {
-    console.log('new User connected')
 })
