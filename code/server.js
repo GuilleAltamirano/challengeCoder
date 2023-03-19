@@ -1,9 +1,10 @@
 import express from "express"
 import handlebars from "express-handlebars"
+import { Server } from "socket.io"
 import {__dirname} from "./utils.js"
 import productsRouter from "./src/routes/routerProducts/routerProducts.js"
 import cartsRouter from './src/routes/routerCarts/routerCarts.js'
-import realTimeProducts from "./src/routes/realtimeproducts/realtimeproducts.js"
+import realTimeProducts, {ioServer} from "./src/routes/realtimeproducts/realtimeproducts.js"
 
 
 //variables
@@ -26,6 +27,11 @@ app.use('/api/carts', cartsRouter)
 app.use('/api/realtimeproducts', realTimeProducts)
 
 //Server Run
-export const httpServer = app.listen(PORT, () => {
+const httpServer = app.listen(PORT, () => {
     console.log(`Server HTTP run in PORT ${PORT}`)
 })
+
+//server socket
+const socketServer = new Server(httpServer)
+//export server
+ioServer(socketServer)
