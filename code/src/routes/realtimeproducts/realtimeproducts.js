@@ -18,12 +18,18 @@ export const ioServer = (io) => {
             console.log(user)
         })
         socket.emit('products', await productManager.getProducts())
+        socket.on('newProduct', async newProduct => {
+            await productManager.getAddProducts(newProduct)
+        })
+        socket.on('idProd', async id => {
+            await productManager.getDeleteProduct(id)
+        })
     })
 }
 
 
 //route
-realTimeProducts.get('/', async (req, res) => {
+realTimeProducts.post('/', async (req, res) => {
     res.render('realTimeProducts')
 })
 
