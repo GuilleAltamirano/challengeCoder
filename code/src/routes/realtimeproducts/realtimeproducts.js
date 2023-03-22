@@ -29,6 +29,9 @@ export const ioServer = (io) => {
 
 
 //route
+realTimeProducts.get('/', async (req, res) => {
+    res.render('realTimeProducts')
+})
 realTimeProducts.post('/', async (req, res) => {
     res.render('realTimeProducts')
 })

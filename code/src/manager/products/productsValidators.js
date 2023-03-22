@@ -49,10 +49,6 @@ export class ProductsValidators {
             const productExist = this.products.find(prod => prod.code === objValues[2])
             if (productExist) {return { error: `This code ${objValues[2]} existing` }}
             
-            //first product?
-            if(this.products.length === 0){obj.id = 1}
-            if(this.products.length != 0){obj.id = this.products[this.products.length-1].id+1}
-            
             //return approved
             return 'approved'
         } catch (err) {return { error: `error in function prodIdValidate, is in /src/products/productsValidators.js ` }}

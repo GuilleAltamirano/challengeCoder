@@ -4,6 +4,7 @@ socket.emit('user', 'New User connected')
 
 socket.on('products', async products => {
     const containerProd = document.getElementById('products')
+    containerProd.innerHTML = ''
     if (products.length > 0) {
         await products.map(product => {
             if (product.status) {

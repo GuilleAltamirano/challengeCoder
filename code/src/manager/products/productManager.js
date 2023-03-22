@@ -23,7 +23,11 @@ export class ProductManager {
         try {
             //import products
             const allProducts = await this.getProducts()
-
+            
+            //first product?
+            if(allProducts.length === 0){obj.id = 1}
+            if(allProducts.length != 0){obj.id = allProducts[allProducts.length-1].id+1}
+            
             //writeFile updated
             allProducts.push(obj)
             fs.writeFileSync(this.file, JSON.stringify(allProducts, null, 2))
