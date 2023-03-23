@@ -4,7 +4,7 @@ import { CartsValidators } from "../../manager/carts/cartsValidators.js";
 
 //variables
 const cartsRouter = new Router()
-const cartsManager = new CartsManager('./db/cartsDb.json')
+const cartsManager = new CartsManager('./src/db/cartsDb.json')
 const cartsValidators = new CartsValidators(cartsManager.getCart())
 
 //carts router

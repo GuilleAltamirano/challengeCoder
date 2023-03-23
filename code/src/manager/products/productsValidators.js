@@ -1,5 +1,3 @@
-import { json } from "express"
-
 export class ProductsValidators {
 
     constructor (products) {

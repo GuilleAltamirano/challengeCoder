@@ -6,7 +6,7 @@ import { ProductsValidators } from "../../manager/products/productsValidators.js
 //variables
 const app = express()
 const productsRouter = new Router()
-const productManager = new ProductManager('./db/productsDb.json')
+const productManager = new ProductManager('./src/db/productsDb.json')
 const productsValidators = new ProductsValidators(productManager.getProducts())
 
 //handlebars

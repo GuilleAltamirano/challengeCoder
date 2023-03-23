@@ -1,11 +1,12 @@
 import express, { Router } from "express"
 import handlebars from "express-handlebars"
+import { upload } from "../../utils/multer.js"
 import { ProductManager } from "../../manager/products/productManager.js"
 
 //variable
 const app = express()
 const realTimeProducts = new Router()
-const productManager = new ProductManager('./db/productsDb.json')
+const productManager = new ProductManager('./src/db/productsDb.json')
 
 //handlebars
 app.engine('handlebars', handlebars.engine())
@@ -29,7 +30,7 @@ export const ioServer = (io) => {
 
 
 //route
-realTimeProducts.get('/', async (req, res) => {
+realTimeProducts.get('/', upload.single('file'), async (req, res) => {
     res.render('realTimeProducts')
 })
 realTimeProducts.post('/', async (req, res) => {

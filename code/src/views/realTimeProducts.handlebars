@@ -1,5 +1,5 @@
 <h2>Add products</h2>
-<form onsubmit="return addProduct()" action="/api/realtimeproducts" method="post">
+<form onsubmit="return addProduct()" action="/api/realtimeproducts" method="post" enctype="multipart/form-data">
     <div>
         <label for="title">Title: </label>
         <input type="text" name="title" required id="title">
@@ -26,7 +26,8 @@
     </div>
     <div>
         <label for="thumbnail">Thumbnail: </label>
-        <input type="text" name="thumbnail[]" required id="thumbnail">
+        <input type="text" name="thumbnail[]" id="thumbnail" placeholder="url">
+        <input type="file" name="file" id="file">
     </div>
     <button>Send</button>
 </form>

@@ -3,7 +3,7 @@ import fs from "fs";
 export class CartsManager {
     constructor (file) {
         this.file = file
-        this.products = fs.readFileSync('./db/productsDb.json')
+        this.products = fs.readFileSync('./src/db/productsDb.json')
     }
 
     getCart () {
