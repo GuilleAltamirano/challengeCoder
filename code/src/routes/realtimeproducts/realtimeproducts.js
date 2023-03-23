@@ -30,10 +30,10 @@ export const ioServer = (io) => {
 
 
 //route
-realTimeProducts.get('/', upload.single('file'), async (req, res) => {
+realTimeProducts.get('/', async (req, res) => {
     res.render('realTimeProducts')
 })
-realTimeProducts.post('/', async (req, res) => {
+realTimeProducts.post('/', upload.single('file'), async (req, res) => {
     res.render('realTimeProducts')
 })
 

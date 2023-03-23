@@ -1,14 +1,13 @@
 import multer from "multer"
+import { __dirname } from "./utils.js"
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null,'./src/public/uploads')
+        cb(null, __dirname + '/public/uploads')
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname)
     },
 })
 
-export const upload = multer({
-    storage
-})
+export const upload = multer({storage})
