@@ -29,7 +29,7 @@ export const ioServer = (io) => {
 }
 
 
-//route
+//routes
 realTimeProducts.get('/', async (req, res) => {
     res.render('realTimeProducts')
 })

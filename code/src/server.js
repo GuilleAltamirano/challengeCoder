@@ -1,6 +1,7 @@
 import express from "express"
 import handlebars from "express-handlebars"
 import { Server } from "socket.io"
+import mongoose from "mongoose"
 import {__dirname} from "./utils/utils.js"
 import productsRouter from "./routes/routerProducts/routerProducts.js"
 import cartsRouter from './routes/routerCarts/routerCarts.js'
@@ -25,6 +26,9 @@ app.set('view engine', 'handlebars')
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/realtimeproducts', realTimeProducts)
+
+//mongo Atlas
+mongoose.connect('mongodb+srv://lguille2000:VZ3jPYvVndnLkfpA@cluster0.hcxd8la.mongodb.net/?retryWrites=true&w=majority')
 
 //Server Run
 const httpServer = app.listen(PORT, () => {
