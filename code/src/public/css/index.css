@@ -1,0 +1,27 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+.title {
+    color: red;
+    text-align: center;
+    margin: 50px;
+}
+.containerProducts {
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+}
+.product{
+    display: grid;
+    justify-content: center;
+    width: 300px;
+    height: 350px;
+    border: 1px solid black;
+    padding: 10px;
+}
+.imgProd { 
+    width: 100px;
+}
