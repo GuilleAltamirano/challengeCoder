@@ -46,5 +46,4 @@ socketServer.on('connection', async socket => {
 socketServer.on('disconnect', () => {
     console.log('user disconnected');
 });
-//export server
 
