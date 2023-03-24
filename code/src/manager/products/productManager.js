@@ -73,7 +73,10 @@ export class ProductManager {
             //import all products
             const products = await this.getProducts()
             //All products without product to delete
-            let productsUp = products.filter((prod) => prod.id != id)
+            let productsUp = products.filter(prod => prod.id != id)
+            let productsDelete = products.find((prod) => prod.id == id)
+            productsDelete.status = false
+            productsUp.push(productsDelete)
             //writeFile
             fs.writeFileSync(this.file, JSON.stringify(productsUp, null, 2))
             //return

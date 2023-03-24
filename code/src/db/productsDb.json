@@ -103,7 +103,7 @@
     "description": "Fanta de 1L retornable (vidrio)",
     "code": "BCD345",
     "price": 350,
-    "status": true,
+    "status": false,
     "stock": 20,
     "category": "drinks",
     "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
