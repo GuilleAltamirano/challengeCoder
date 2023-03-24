@@ -43,7 +43,3 @@ socketServer.on('connection', async socket => {
     })
     ioProducts(socketServer, socket)
 })
-socketServer.on('disconnect', () => {
-    console.log('user disconnected');
-});
-
