@@ -8,16 +8,18 @@ socket.on('products', async products => {
     if (products.length > 0) {
         await products.map(product => {
             if (product.status) {
-                containerProd.innerHTML += `
-                <div class="product">
-                    <img src=${product.thumbnail} class="imgProd" />
-                    <h3>${product.title}</h3>
-                    <p>${product.description}</p>
-                    <p>$${product.price}</p>
-                    <p>disponibles: ${product.stock}</p>
-                    <button onclick="deleteProd(${product.id})">Delete</button>
-                </div>
-                `
+                if (product.stock > 0) {
+                    containerProd.innerHTML += `
+                    <div class="product">
+                        <img src=${product.thumbnail} class="imgProd" />
+                        <h3>${product.title}</h3>
+                        <p>${product.description}</p>
+                        <p>$${product.price}</p>
+                        <p>disponibles: ${product.stock}</p>
+                        <button onclick="deleteProd(${product.id})">Delete</button>
+                    </div>
+                    `
+                }
             }
         })
     }

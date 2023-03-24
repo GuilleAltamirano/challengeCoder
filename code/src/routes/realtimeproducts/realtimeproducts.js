@@ -7,10 +7,16 @@ import { ioServerProd, ioServerAddProd, ioServerDelete } from "../../manager/soc
 const app = express()
 const realTimeProducts = new Router()
 
+//const serverSocket
+export const ioProducts = (io, socket) => {
+    ioServerProd(io, socket)
+    ioServerAddProd(io, socket)
+    ioServerDelete(io, socket)
+}
+
 //handlebars
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
-
 
 //routes
 realTimeProducts.get('/', async (req, res) => {

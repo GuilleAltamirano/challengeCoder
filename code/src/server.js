@@ -3,10 +3,9 @@ import handlebars from "express-handlebars"
 import { Server } from "socket.io"
 import mongoose from "mongoose"
 import {__dirname} from "./utils/utils.js"
-import { ioServerProd, ioServerAddProd, ioServerDelete } from "./manager/sockets/socketProd.js"
 import productsRouter from "./routes/routerProducts/routerProducts.js"
 import cartsRouter from './routes/routerCarts/routerCarts.js'
-import realTimeProducts from "./routes/realtimeproducts/realtimeproducts.js"
+import realTimeProducts, {ioProducts} from "./routes/realtimeproducts/realtimeproducts.js"
 
 
 //variables
@@ -42,9 +41,7 @@ socketServer.on('connection', async socket => {
     socket.on('user', user => {
         console.log(user)
     })
-    ioServerProd(socketServer, socket)
-    ioServerAddProd(socketServer, socket)
-    ioServerDelete(socketServer, socket)
+    ioProducts(socketServer, socket)
 })
 socketServer.on('disconnect', () => {
     console.log('user disconnected');
