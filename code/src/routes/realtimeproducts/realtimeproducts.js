@@ -20,13 +20,13 @@ app.set('view engine', 'handlebars')
 
 //routes
 realTimeProducts.get('/', async (req, res) => {
-    res.render('realTimeProducts', { ioServerProd })
+    res.render('realTimeProducts')
 })
 realTimeProducts.post('/', upload.single('file'), async (req, res) => {
-    res.render('realTimeProducts', { ioServerAddProd })
+    res.render('realTimeProducts')
 })
 realTimeProducts.delete('/', async (req, res) => {
-    res.render('realTimeProducts', { ioServerDelete })
+    res.render('realTimeProducts')
 })
 
 //export route

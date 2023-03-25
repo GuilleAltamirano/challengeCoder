@@ -108,5 +108,16 @@
     "category": "drinks",
     "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
     "id": 10
+  },
+  {
+    "title": "dasd",
+    "description": "dsa",
+    "code": "sda",
+    "price": "2",
+    "status": false,
+    "stock": "2",
+    "category": "dsa",
+    "thumbnail": "das",
+    "id": 11
   }
 ]

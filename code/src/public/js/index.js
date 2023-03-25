@@ -25,7 +25,8 @@ socket.on('products', async products => {
     }
 })
 
-const addProduct = () => {
+async function addProduct (e) {
+    e.preventDefault()
     const product = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
@@ -36,10 +37,19 @@ const addProduct = () => {
         category: document.getElementById('category').value,
         thumbnail: document.getElementById('thumbnail').value
     }
-    console.log('enviando new product')
+    const response = await fetch('/api/realtimeproducts', {
+        method: 'POST',
+        body: product,
+        headers: {
+            'content-type': "multipart/form-data"
+        }
+    })
+    console.log(response)
     socket.emit('newProduct', product)
     return
 }
+
+document.getElementById('formProd').addEventListener('submit', addProduct)
 
 const deleteProd = (id) => {
     socket.emit('idProd', id)
