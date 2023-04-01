@@ -2,11 +2,11 @@ const socket = io()
 
 socket.emit('user', 'New User connected')
 
-socket.on('products', async products => {
+socket.on('products', products => {
     const containerProd = document.getElementById('products')
     containerProd.innerHTML = ''
     if (products.length > 0) {
-        await products.map(product => {
+        products.map(product => {
             if (product.status) {
                 if (product.stock > 0) {
                     containerProd.innerHTML += `

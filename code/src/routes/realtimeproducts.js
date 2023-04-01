@@ -1,17 +1,16 @@
 import express, { Router } from "express"
 import handlebars from "express-handlebars"
-import { upload } from "../../utils/multer.js"
-import { ioServerProd, ioServerAddProd, ioServerDelete } from "../../manager/sockets/socketProd.js"
+import { ioServerProd, ioServerAddProd, ioServerDelete } from "../daos/socketProd.js"
 
 //variable
 const app = express()
 const realTimeProducts = new Router()
 
 //const serverSocket
-export const ioProducts = (io, socket) => {
-    ioServerProd(io, socket)
-    ioServerAddProd(io, socket)
-    ioServerDelete(io, socket)
+export const ioProducts = async (io, socket) => {
+    await ioServerProd(io, socket)
+    await ioServerAddProd(io, socket)
+    await ioServerDelete(io, socket)
 }
 
 //handlebars
@@ -22,7 +21,7 @@ app.set('view engine', 'handlebars')
 realTimeProducts.get('/', async (req, res) => {
     res.render('realTimeProducts')
 })
-realTimeProducts.post('/', upload.single('file'), async (req, res) => {
+realTimeProducts.post('/', async (req, res) => {
     res.render('realTimeProducts')
 })
 realTimeProducts.delete('/', async (req, res) => {

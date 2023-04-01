@@ -1,7 +1,7 @@
 import express, { Router } from "express"
 import handlebars from "express-handlebars"
-import { ProductManager } from "../../manager/products/productManager.js"
-import { ProductsValidators } from "../../manager/products/productsValidators.js"
+import { ProductManager } from "../daos/products/productManager.js"
+import { ProductsValidators } from "../daos/products/productsValidators.js"
 
 //variables
 const app = express()

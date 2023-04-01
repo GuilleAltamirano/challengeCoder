@@ -1,4 +1,4 @@
-import { ProductManager } from "../products/productManager.js"
+import { ProductManager } from "./products/productManager.js"
 
 const productManager = new ProductManager('./src/db/productsDb.json')
 
@@ -9,12 +9,12 @@ export const ioServerProd = async (io, socket) => {
 //Add new product
 export const ioServerAddProd = async (io, socket) => {
     socket.on('newProduct', async newProduct => {
-        await productManager.getAddProducts(newProduct)
+        await productManager.addProducts(newProduct)
     })
 }
 //Delete product
 export const ioServerDelete = async (io, socket) => {
     socket.on('idProd', async id => {
-        await productManager.getDeleteProduct(id)
+        await productManager.deleteProduct(id)
     })
 }

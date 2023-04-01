@@ -19,7 +19,7 @@ export class ProductManager {
         } catch (err) {return { error: `error in function getProducts, is in /src/manager/products/productManager.js ` }}
     }
 
-    async getAddProducts (obj) {
+    async addProducts (obj) {
         try {
             //import products
             const allProducts = await this.getProducts()
@@ -37,7 +37,7 @@ export class ProductManager {
         } catch (err) {return { error: `error in function getAddProducts, is in /src/manager/products/productManager.js ` }}
     }
 
-    async getProductById(id) {
+    async productById(id) {
         try {
             //import products
             const allProducts = await this.getProducts()
@@ -48,7 +48,7 @@ export class ProductManager {
         } catch (err) {return { error: `error in function getProductById, is in /src/manager/products/productManager.js ` }}
     }
 
-    async getProductUp(id, update){
+    async productUp(id, update){
         try {
             //Product to update
             const existProd = await this.getProductById(id)
@@ -68,7 +68,7 @@ export class ProductManager {
 
     }
 
-    async getDeleteProduct(id) {
+    async deleteProduct(id) {
         try {
             //import all products
             const products = await this.getProducts()

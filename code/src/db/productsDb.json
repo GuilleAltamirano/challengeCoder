@@ -1,28 +1,6 @@
 [
   {
     "title": "Coca-Cola",
-    "description": "Coca-Cola de 330ml retornable(vidrio)",
-    "code": "ABC123",
-    "price": 100,
-    "status": true,
-    "stock": 20,
-    "category": "drinks",
-    "thumbnail": "https://e7.pngegg.com/pngimages/299/667/png-clipart-coca-cola-bl%C4%81k-glass-bottle-the-coca-cola-company-bouteille-de-coca-cola-coca-ecuador-glass-cola.png",
-    "id": 1
-  },
-  {
-    "title": "Coca-Cola",
-    "description": "Coca Cola de 1L retornable (vidrio)",
-    "code": "ABC234",
-    "price": 350,
-    "status": true,
-    "stock": 20,
-    "category": "drinks",
-    "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/160/839/products/005-004-002_coca-cola-retornable-x-125-lts-vidrio1-b5667f51dc104136c615884683055181-480-0.jpg",
-    "id": 2
-  },
-  {
-    "title": "Coca-Cola",
     "description": "Coca Cola de 2L retornable (plastico)",
     "code": "ABC345",
     "price": 550,
@@ -77,15 +55,15 @@
     "id": 7
   },
   {
-    "title": "Sprite",
-    "description": "Sprite de 1L retornable (vidrio)",
-    "code": "BCD123",
+    "title": "Fanta",
+    "description": "Fanta de 1L retornable (vidrio)",
+    "code": "BCD345",
     "price": 350,
     "status": true,
     "stock": 20,
     "category": "drinks",
-    "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/160/839/products/005-004-032_sprite-retornable-x-125-lts-vidrio1-18f2379e856730ceb815884687797507-1024-1024.jpg",
-    "id": 8
+    "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
+    "id": 10
   },
   {
     "title": "Sprite",
@@ -99,25 +77,36 @@
     "id": 9
   },
   {
-    "title": "Fanta",
-    "description": "Fanta de 1L retornable (vidrio)",
-    "code": "BCD345",
+    "title": "Coca-Cola",
+    "description": "Coca-Cola de 330ml retornable(vidrio)",
+    "code": "ABC123",
+    "price": 100,
+    "status": true,
+    "stock": 20,
+    "category": "drinks",
+    "thumbnail": "https://e7.pngegg.com/pngimages/299/667/png-clipart-coca-cola-bl%C4%81k-glass-bottle-the-coca-cola-company-bouteille-de-coca-cola-coca-ecuador-glass-cola.png",
+    "id": 1
+  },
+  {
+    "title": "Coca-Cola",
+    "description": "Coca Cola de 1L retornable (vidrio)",
+    "code": "ABC234",
     "price": 350,
     "status": true,
     "stock": 20,
     "category": "drinks",
-    "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
-    "id": 10
+    "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/160/839/products/005-004-002_coca-cola-retornable-x-125-lts-vidrio1-b5667f51dc104136c615884683055181-480-0.jpg",
+    "id": 2
   },
   {
-    "title": "dasd",
-    "description": "dsa",
-    "code": "sda",
-    "price": "2",
-    "status": false,
-    "stock": "2",
-    "category": "dsa",
-    "thumbnail": "das",
-    "id": 11
+    "title": "Sprite",
+    "description": "Sprite de 1L retornable (vidrio)",
+    "code": "BCD123",
+    "price": 350,
+    "status": true,
+    "stock": 20,
+    "category": "drinks",
+    "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/160/839/products/005-004-032_sprite-retornable-x-125-lts-vidrio1-18f2379e856730ceb815884687797507-1024-1024.jpg",
+    "id": 8
   }
 ]

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { CartsManager } from "../../manager/carts/cartManager.js";
-import { CartsValidators } from "../../manager/carts/cartsValidators.js";
+import { CartsManager } from "../daos/carts/cartManager.js";
+import { CartsValidators } from "../daos/carts/cartsValidators.js";
 
 //variables
 const cartsRouter = new Router()
