@@ -4,7 +4,7 @@ const productManager = new ProductManager('./src/db/productsDb.json')
 
 //List products
 export const ioServerProd = async (io, socket) => {
-    socket.emit('products', await productManager.getProducts())
+    io.emit('products', await productManager.getProducts())
 }
 //Add new product
 export const ioServerAddProd = async (io, socket) => {

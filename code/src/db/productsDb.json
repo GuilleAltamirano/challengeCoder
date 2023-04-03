@@ -55,28 +55,6 @@
     "id": 7
   },
   {
-    "title": "Fanta",
-    "description": "Fanta de 1L retornable (vidrio)",
-    "code": "BCD345",
-    "price": 350,
-    "status": true,
-    "stock": 20,
-    "category": "drinks",
-    "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
-    "id": 10
-  },
-  {
-    "title": "Sprite",
-    "description": "Sprite de 2L retornable (plastico)",
-    "code": "BCD234",
-    "price": 550,
-    "status": true,
-    "stock": 20,
-    "category": "drinks",
-    "thumbnail": "https://www.superseis.com.py/images/thumbs/0233691.jpeg",
-    "id": 9
-  },
-  {
     "title": "Coca-Cola",
     "description": "Coca-Cola de 330ml retornable(vidrio)",
     "code": "ABC123",
@@ -108,5 +86,27 @@
     "category": "drinks",
     "thumbnail": "https://d3ugyf2ht6aenh.cloudfront.net/stores/001/160/839/products/005-004-032_sprite-retornable-x-125-lts-vidrio1-18f2379e856730ceb815884687797507-1024-1024.jpg",
     "id": 8
+  },
+  {
+    "title": "Sprite",
+    "description": "Sprite de 2L retornable (plastico)",
+    "code": "BCD234",
+    "price": 550,
+    "status": false,
+    "stock": 20,
+    "category": "drinks",
+    "thumbnail": "https://www.superseis.com.py/images/thumbs/0233691.jpeg",
+    "id": 9
+  },
+  {
+    "title": "Fanta",
+    "description": "Fanta de 1L retornable (vidrio)",
+    "code": "BCD345",
+    "price": 350,
+    "status": false,
+    "stock": 20,
+    "category": "drinks",
+    "thumbnail": "https://www.distribuidoraniki.com.ar/database/articulos/fotos/340/Fanta%20Naranja%20Retornable%201,5%20lts__1.jpg",
+    "id": 10
   }
 ]
