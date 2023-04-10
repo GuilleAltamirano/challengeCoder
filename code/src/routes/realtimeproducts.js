@@ -1,13 +1,7 @@
-import express, { Router } from "express"
-import { ioProducts } from "../daos/fs/socketProd.js"
+import { Router } from "express"
 
 //variable
-const app = express()
 const realTimeProducts = new Router()
-
-export const ioProductsConnection = async (io, socket) => {
-    await ioProducts(io, socket)
-}
 
 //routes
 realTimeProducts.get('/api/realtimeproducts', async (req, res) => {

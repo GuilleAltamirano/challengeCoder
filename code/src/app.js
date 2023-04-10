@@ -1,16 +1,16 @@
 import express from "express"
 import handlebars from "express-handlebars"
-import { Server } from "socket.io"
 import {__dirname} from "./utils/utils.js"
 import productsRouter from "./routes/routerProducts.js"
 import cartsRouter from "./routes/routerCarts.js"
-import realTimeProducts, {ioProductsConnection} from "./routes/realtimeproducts.js"
+import realTimeProducts from "./routes/realtimeproducts.js"
 import { mongoConnect } from "./config/mongoConnect.config.js"
+import { socketServer } from "./config/socketConnect.config.js"
 
 
 //variables
 const app = express()
-const PORT = process.env.PORT || 8080
+export const PORT = process.env.PORT || 8080
 
 //appUse
 app.use(express.json())
@@ -36,11 +36,4 @@ const httpServer = app.listen(PORT, () => {
 })
 
 //server socket
-const socketServer = new Server(httpServer)
-socketServer.on('connection', async socket => {
-    console.log(`Socket server run in route localhost:${PORT}/api/realtimesproducts`)
-    socket.on('user', user => {
-        console.log(user)
-    })
-    await ioProductsConnection(socketServer, socket)
-})
+await socketServer(httpServer)

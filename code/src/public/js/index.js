@@ -10,7 +10,7 @@ socket.on('products', products => {
             <p>doesn't exist products</p>
         `
     }
-    products.map(product => {
+    products.forEach(product => {
         if (product.status) {
             if (product.stock > 0) {
                 containerProd.innerHTML += `

@@ -7,10 +7,10 @@ import { postProductCartController } from "../controllers/cart/postProductCart.c
 const cartsRouter = new Router()
 
 //carts router
-cartsRouter.post('', postCartController)
+cartsRouter.post('/api/carts', postCartController)
 
-cartsRouter.get('/:cid', getCartIdController)
+cartsRouter.get('/api/carts/:cid', getCartIdController)
 
-cartsRouter.post('/:cid/products/:pid', postProductCartController)
+cartsRouter.post('/api/carts/:cid/products/:pid', postProductCartController)
 
 export default cartsRouter

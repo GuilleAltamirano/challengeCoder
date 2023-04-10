@@ -1,5 +1,5 @@
 import { ApiError } from "../../../errors/ApiError.errors.js"
-import { productsServices } from "../../../daos/mongoDb/services/products.services.js"
+import { productsServices } from "../../../daos/mongoDb/services/Products.services.js"
 
 export const putProductsValidator = async (updated, pid) => {   
     //validate values
