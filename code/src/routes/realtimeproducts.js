@@ -13,12 +13,6 @@ export const ioProductsConnection = async (io, socket) => {
 realTimeProducts.get('/api/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })
-realTimeProducts.post('/api/realtimeproducts', async (req, res) => {
-    res.render('realTimeProducts')
-})
-realTimeProducts.delete('/api/realtimeproducts', async (req, res) => {
-    res.render('realTimeProducts')
-})
 
 //export route
 export default realTimeProducts
