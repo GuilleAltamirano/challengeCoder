@@ -1,30 +1,22 @@
 import express, { Router } from "express"
-import handlebars from "express-handlebars"
-import { ioServerProd, ioServerAddProd, ioServerDelete } from "../daos/socketProd.js"
+import { ioProducts } from "../daos/fs/socketProd.js"
 
 //variable
 const app = express()
 const realTimeProducts = new Router()
 
-//const serverSocket
-export const ioProducts = async (io, socket) => {
-    await ioServerProd(io, socket)
-    await ioServerAddProd(io, socket)
-    await ioServerDelete(io, socket)
+export const ioProductsConnection = async (io, socket) => {
+    await ioProducts(io, socket)
 }
 
-//handlebars
-app.engine('handlebars', handlebars.engine())
-app.set('view engine', 'handlebars')
-
 //routes
-realTimeProducts.get('/', async (req, res) => {
+realTimeProducts.get('/api/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })
-realTimeProducts.post('/', async (req, res) => {
+realTimeProducts.post('/api/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })
-realTimeProducts.delete('/', async (req, res) => {
+realTimeProducts.delete('/api/realtimeproducts', async (req, res) => {
     res.render('realTimeProducts')
 })
 

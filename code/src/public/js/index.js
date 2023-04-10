@@ -5,24 +5,27 @@ socket.emit('user', 'New User connected')
 socket.on('products', products => {
     const containerProd = document.getElementById('products')
     containerProd.innerHTML = ''
-    if (products.length > 0) {
-        products.map(product => {
-            if (product.status) {
-                if (product.stock > 0) {
-                    containerProd.innerHTML += `
-                    <div class="product">
-                        <img src=${product.thumbnail} class="imgProd" />
-                        <h3>${product.title}</h3>
-                        <p>${product.description}</p>
-                        <p>$${product.price}</p>
-                        <p>disponibles: ${product.stock}</p>
-                        <button onclick="deleteProd(${product.id})">Delete</button>
-                    </div>
-                    `
-                }
-            }
-        })
+    if (!products.length > 0) {
+        containerProd.innerHTML += `
+            <p>doesn't exist products</p>
+        `
     }
+    products.map(product => {
+        if (product.status) {
+            if (product.stock > 0) {
+                containerProd.innerHTML += `
+                <div class="product">
+                    <img src=${product.thumbnail} class="imgProd" />
+                    <h3>${product.title}</h3>
+                    <p>${product.description}</p>
+                    <p>$${product.price}</p>
+                    <p>disponibles: ${product.stock}</p>
+                    <button onclick="deleteProd(${product.id})">Delete</button>
+                </div>
+                `
+            }
+        }
+    })
 })
 
 async function addProduct (e) {
@@ -44,7 +47,6 @@ async function addProduct (e) {
             'content-type': "multipart/form-data"
         }
     })
-    console.log(response)
     socket.emit('newProduct', product)
     return
 }

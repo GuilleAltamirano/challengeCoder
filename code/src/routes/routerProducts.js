@@ -1,48 +1,29 @@
 import express, { Router } from "express"
 import handlebars from "express-handlebars"
-import { ProductManager } from "../daos/products/productManager.js"
-import { ProductsValidators } from "../daos/products/productsValidators.js"
+import { getProductsController } from "../controllers/products/getProducts.controller.js"
+import { getIdProductsControllers } from "../controllers/products/getIdProducts.controllers.js"
+import { postProductsController } from "../controllers/products/postProducts.controller.js"
+import { putProductsController } from "../controllers/products/putProducts.controller.js"
+import { deleteProductsControllers } from "../controllers/products/deleteProducts.controller.js"
 
 //variables
 const app = express()
 const productsRouter = new Router()
-const productManager = new ProductManager('./src/db/productsDb.json')
-const productsValidators = new ProductsValidators(productManager.getProducts())
 
 //handlebars
 app.engine('handlebars', handlebars.engine())
 app.set('view engine', 'handlebars')
 
 //products router
-productsRouter.get('', async (req, res) => {
-    const status = await productsValidators.logicQuery(req.query)
-    if (status === 'approved') { return res.status(200).render('index', await productManager.getProducts())}
-    res.status(404).json(status)
-})
+productsRouter.get('/api/products', getProductsController)
 
-productsRouter.get('/:id', async (req, res) => {
-    const status = await productsValidators.prodIdValidate(req.params.id)
-    if (status === 'approved'){ return res.status(202).json( await productManager.getProductById(req.params.id)) }
-    res.status(406).json(status)
-})
+productsRouter.get('/api/products/:pid', getIdProductsControllers)
 
-productsRouter.post('', async (req, res) => {
-    const status = await productsValidators.validatorAdd(req.body);
-    if (status === 'approved'){ return res.status(201).json(await productManager.getAddProducts(req.body))};
-    res.status(400).json(status)
-})
+productsRouter.post('/api/products', postProductsController)
 
-productsRouter.put('/:id', async (req, res) => {
-    const status = await productsValidators.validatorUpdate(req.params.id, req.body)
-    if (status === 'approved') { return res.status(202).json(await productManager.getProductUp(req.params.id, req.body))}
-    res.status(406).json(status)
-})
+productsRouter.put('/api/products/:pid', putProductsController)
 
-productsRouter.delete('/:id', async (req, res) => {
-    const status = await productsValidators.prodDeleteValidate(req.params.id)
-    if (status === 'approved') { return res.status(202).json(await productManager.getDeleteProduct(req.params.id))}
-    res.status(400).json(status)
-})
+productsRouter.delete('/api/products/:pid', deleteProductsControllers)
 
 //export router
 export default productsRouter

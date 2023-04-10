@@ -4,7 +4,8 @@ import { Server } from "socket.io"
 import {__dirname} from "./utils/utils.js"
 import productsRouter from "./routes/routerProducts.js"
 import cartsRouter from "./routes/routerCarts.js"
-import realTimeProducts, {ioProducts} from "./routes/realtimeproducts.js"
+import realTimeProducts, {ioProductsConnection} from "./routes/realtimeproducts.js"
+import { mongoConnect } from "./config/mongoConnect.config.js"
 
 
 //variables
@@ -16,15 +17,18 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
 
+//db
+await mongoConnect()
+
 //handlebars
 app.engine('handlebars', handlebars.engine())
 app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 //routes
-app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter)
-app.use('/api/realtimeproducts', realTimeProducts)
+app.use(productsRouter)
+app.use(cartsRouter)
+app.use(realTimeProducts)
 
 //Server Run
 const httpServer = app.listen(PORT, () => {
@@ -37,5 +41,5 @@ socketServer.on('connection', async socket => {
     socket.on('user', user => {
         console.log(user)
     })
-    await ioProducts(socketServer, socket)
+    await ioProductsConnection(socketServer, socket)
 })
