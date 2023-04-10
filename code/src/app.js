@@ -38,6 +38,7 @@ const httpServer = app.listen(PORT, () => {
 //server socket
 const socketServer = new Server(httpServer)
 socketServer.on('connection', async socket => {
+    console.log(`Socket server run in route localhost:${PORT}/api/realtimesproducts`)
     socket.on('user', user => {
         console.log(user)
     })

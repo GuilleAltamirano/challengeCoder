@@ -15,12 +15,11 @@ socket.on('products', products => {
             if (product.stock > 0) {
                 containerProd.innerHTML += `
                 <div class="product">
-                    <img src=${product.thumbnail} class="imgProd" />
                     <h3>${product.title}</h3>
                     <p>${product.description}</p>
                     <p>$${product.price}</p>
                     <p>disponibles: ${product.stock}</p>
-                    <button onclick="deleteProd(${product.id})">Delete</button>
+                    <button onclick="deleteProd('${product._id}')">Delete</button>
                 </div>
                 `
             }
@@ -34,19 +33,36 @@ async function addProduct (e) {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
         code: document.getElementById('code').value,
-        price: document.getElementById('price').value,
+        price: parseFloat(document.getElementById('price').value),
         status: true,
-        stock: document.getElementById('stock').value,
+        stock: parseInt(document.getElementById('stock').value),
         category: document.getElementById('category').value,
-        thumbnail: document.getElementById('thumbnail').value
+        thumbnail: []
     }
-    socket.emit('newProduct', product)
+    const thumbnailInputs = document.getElementsByName('thumbnail[]')
+    thumbnailInputs.forEach(input => {
+        if (!input.value) product.thumbnail.push('https://www.sabormarino.com/assets/images/default.png')
+        product.thumbnail.push(input.value)
+    })
+    const response = await fetch('/api/products', {
+        method: 'POST',
+        body: JSON.stringify(product),
+        headers: {
+            'content-type': "application/json"
+        }
+    })
     return
 }
 
+
 document.getElementById('formProd').addEventListener('submit', addProduct)
 
-const deleteProd = (id) => {
-    socket.emit('idProd', id)
+const deleteProd = async (pid) => {
+    const response = await fetch(`/api/products/${pid}`, {
+        method: 'DELETE',
+        headers: {
+            'content-type': "application/json"
+        }
+    })
     return
 }

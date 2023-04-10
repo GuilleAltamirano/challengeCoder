@@ -1,11 +1,11 @@
 import fs from "fs";
 
-export class ProductManager {
+class ProductManager {
     constructor(file){
         this.file = file
     }
 
-    getProducts() {
+    async getProducts() {
         try {
             //exist the file?
             if (fs.existsSync(this.file)) {
@@ -87,3 +87,5 @@ export class ProductManager {
         } catch (err) {return { error: `error in function getDeleteProduct, is in /src/manager/products/productManager.js ` }}
     }
 }
+
+export const productManager = new ProductManager('../db/productsDb.json')

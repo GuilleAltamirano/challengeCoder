@@ -11,7 +11,7 @@ export const postProductsValidations = async (data) => {
     if ((typeof price !== 'number') || (!price)) {throw new ApiError(`price ${price} type is not valid`, 400)}
     if ((typeof stock !== 'number') || (!stock)) {throw new ApiError(`stock ${stock} type is not valid`, 400)}
     if ((typeof category !== 'string') || (!category)) {throw new ApiError(`category ${category} type is not valid`, 400)}
-    if ((typeof thumbnail !== 'object')) {throw new ApiError(`thumbnail ${thumbnail} type is not valid`, 400)}
+    if (!Array.isArray(thumbnail)) {throw new ApiError(`thumbnail ${thumbnail} type is not valid`, 400)}
     //Exist product
     const prod = await productsServices.getProducts({code: data.code})
     if (prod.length !== 0) {throw new ApiError(`This code ${code} existing`, 406)}
