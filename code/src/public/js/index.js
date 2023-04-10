@@ -40,13 +40,6 @@ async function addProduct (e) {
         category: document.getElementById('category').value,
         thumbnail: document.getElementById('thumbnail').value
     }
-    // const response = await fetch(`/api/products`, {
-    //     method: 'POST',
-    //     body: JSON.stringify(product),
-    //     headers: {
-    //         'content-type': "multipart/form-data"
-    //     }
-    // })
     socket.emit('newProduct', product)
     return
 }
