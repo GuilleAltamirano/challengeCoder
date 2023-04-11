@@ -5,10 +5,7 @@ class MessagesServices {
         this.messages = messages
     }
 
-    async getMessages (filter) {
-        //filter?
-        if (filter) {return this.messages.find(filter).lean()}
-        //no filter
+    async getMessages () {
         return this.messages.find().lean()
     }
 

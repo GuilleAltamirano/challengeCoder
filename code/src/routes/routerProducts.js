@@ -5,6 +5,8 @@ import { getIdProductsControllers } from "../controllers/products/getIdProducts.
 import { postProductsController } from "../controllers/products/postProducts.controller.js"
 import { putProductsController } from "../controllers/products/putProducts.controller.js"
 import { deleteProductsControllers } from "../controllers/products/deleteProducts.controller.js"
+import { multerPRoductsControllers } from "../controllers/products/multerProducts.controllers.js"
+import { upload } from "../utils/multer.js"
 
 //variables
 const app = express()
@@ -24,6 +26,8 @@ productsRouter.post('/api/products', postProductsController)
 productsRouter.put('/api/products/:pid', putProductsController)
 
 productsRouter.delete('/api/products/:pid', deleteProductsControllers)
+
+productsRouter.post('/api/multerProd', upload.single('file'), multerPRoductsControllers)
 
 //export router
 export default productsRouter

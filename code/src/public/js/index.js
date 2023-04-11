@@ -1,34 +1,48 @@
 const socket = io()
+const containerProd = document.getElementById('products')
 
 socket.emit('user', 'New User connected')
 
 socket.on('products', products => {
-    const containerProd = document.getElementById('products')
     containerProd.innerHTML = ''
-    if (!products.length > 0) {
-        containerProd.innerHTML += `
-            <p>doesn't exist products</p>
-        `
-    }
     products.forEach(product => {
         if (product.status) {
             if (product.stock > 0) {
-                containerProd.innerHTML += `
-                <div class="product">
-                    <h3>${product.title}</h3>
-                    <p>${product.description}</p>
-                    <p>$${product.price}</p>
-                    <p>disponibles: ${product.stock}</p>
-                    <button onclick="deleteProd('${product._id}')">Delete</button>
-                </div>
-                `
+                printProd(product)
             }
         }
     })
 })
 
+socket.on('newProduct', prod => {
+    printProd(prod)
+})
+
+function printProd (product) {
+    containerProd.innerHTML += `
+    <div class="product" id="${product._id}">
+        <img src="${product.thumbnails[0]}"/>
+        <h3>${product.title}</h3>
+        <p>${product.description}</p>
+        <p class="price">$${product.price}</p>
+        <p class="stock">disponibles: ${product.stock}</p>
+        <button onclick="deleteProd('${product._id}')">Delete</button>
+    </div>
+    `
+}
+
+socket.on('delProd', pid => {
+    delProd(pid)
+})
+
+function delProd (pid){
+    const delProd = document.getElementById(pid)
+    containerProd.removeChild(delProd)
+}
+
 async function addProduct (e) {
     e.preventDefault()
+    
     const product = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
@@ -37,13 +51,10 @@ async function addProduct (e) {
         status: true,
         stock: parseInt(document.getElementById('stock').value),
         category: document.getElementById('category').value,
-        thumbnail: []
+        thumbnails: document.getElementById('thumbnails')
     }
-    const thumbnailInputs = document.getElementsByName('thumbnail[]')
-    thumbnailInputs.forEach(input => {
-        if (!input.value) product.thumbnail.push('https://www.sabormarino.com/assets/images/default.png')
-        product.thumbnail.push(input.value)
-    })
+    
+    printProd(product)
     const response = await fetch('/api/products', {
         method: 'POST',
         body: JSON.stringify(product),
@@ -51,8 +62,11 @@ async function addProduct (e) {
             'content-type': "application/json"
         }
     })
+    socket.emit('newProduct', product)
     return
 }
+
+
 
 
 document.getElementById('formProd').addEventListener('submit', addProduct)
@@ -64,5 +78,13 @@ const deleteProd = async (pid) => {
             'content-type': "application/json"
         }
     })
+    delProd(pid)
+    socket.emit('delProd', pid)
     return
 }
+
+// if (!products.length > 0) {
+//     containerProd.innerHTML += `
+//         <p>doesn't exist products</p>
+//     `
+// }
