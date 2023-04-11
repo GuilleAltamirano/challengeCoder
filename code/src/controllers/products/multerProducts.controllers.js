@@ -1,11 +1,14 @@
-export const multerPRoductsControllers = async (req, res, next) => {
+import { __dirname } from "../../utils/utils.js"
+
+export const multerProductsControllers = async (req, res, next) => {
     try {
-        console.log(req)
-        console.log(file);
+        //var
+        const file = req.file
+        const urlImage = `/uploads/${file.filename}`
         //return
         res.status(200).json({
             status: true,
-            payload: 'All Ok'
+            payload: urlImage
         })
     } catch (err) {next(err)}
 }

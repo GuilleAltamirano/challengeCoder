@@ -1,5 +1,6 @@
 const socket = io()
 const containerProd = document.getElementById('products')
+const fileInput = document.getElementById('file')
 
 socket.emit('user', 'New User connected')
 
@@ -43,6 +44,15 @@ function delProd (pid){
 async function addProduct (e) {
     e.preventDefault()
     
+    const formData = new FormData()
+    formData.append('file', fileInput.files[0])
+    
+    const resFile = await fetch('/api/multerProd', {
+        method: 'POST',
+        body: formData,
+        enctype: 'multipart/form-data'
+    })
+
     const product = {
         title: document.getElementById('title').value,
         description: document.getElementById('description').value,
@@ -53,6 +63,10 @@ async function addProduct (e) {
         category: document.getElementById('category').value,
         thumbnails: document.getElementById('thumbnails')
     }
+
+    if (resFile.status !== true) product.thumbnails = []
+    const resData = await resFile.json()
+    product.thumbnails = [resData.payload]
     
     printProd(product)
     const response = await fetch('/api/products', {
@@ -65,9 +79,6 @@ async function addProduct (e) {
     socket.emit('newProduct', product)
     return
 }
-
-
-
 
 document.getElementById('formProd').addEventListener('submit', addProduct)
 
