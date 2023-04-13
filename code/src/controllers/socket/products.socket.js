@@ -1,4 +1,4 @@
-import { productsServices } from "../mongoDb/services/Products.services.js"
+import { productsServices } from "../../daos/mongoDb/services/Products.services.js"
 
 //var
 
@@ -12,6 +12,7 @@ export const ioProducts = async (io, socket) => {
         socket.on('newProduct', prod => {
             io.emit('newProduct', prod)
         })
+        //delProduct
         socket.on('delProd', pid => {
             socket.broadcast.emit('delProd', pid)
         })
