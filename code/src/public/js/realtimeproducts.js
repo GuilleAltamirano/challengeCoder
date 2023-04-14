@@ -113,8 +113,6 @@ async function addProduct (e) {
     //All ok
     if (response.status === 200) {
         socket.emit('newProduct', product)
-        //print new product to customer
-        await printProd(product)
     }
     return
 }

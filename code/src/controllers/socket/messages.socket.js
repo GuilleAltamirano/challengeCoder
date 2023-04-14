@@ -1,14 +1,13 @@
 import { messagesServices } from "../../daos/mongoDb/services/Messages.services.js"
-let messages = []
 
 export const ioMessages = async (io, socket) => {
     try {
         socket.on('user', data => {
             socket.broadcast.emit('newUser',data.user)
         })
-        socket.on('newMessage', data => {
-            messages.push(data)
-            io.emit('messages', messages)
+        socket.on('newMessage', async data => {
+            await messagesServices.addMessages(data)
+            io.emit('messages', await messagesServices.getMessages())
         })
     } catch (err) {console.error(err)}
 }

@@ -1,5 +1,3 @@
-import { __dirname } from "../../utils/utils.js"
-
 export const multerProductsControllers = async (req, res, next) => {
     try {
         //var

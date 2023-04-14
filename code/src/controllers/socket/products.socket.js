@@ -9,7 +9,9 @@ export const ioProducts = async (io, socket) => {
         //get products
         io.emit('products', products)
         //newProduct
-        socket.on('newProduct', prod => {
+        socket.on('newProduct', async prod => {
+            const product = await productsServices.getProducts({code: prod.code})
+            prod._id = product[0]._id
             io.emit('newProduct', prod)
         })
         //delProduct

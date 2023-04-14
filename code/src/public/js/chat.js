@@ -27,7 +27,7 @@ function newMessage(e) {
     e.preventDefault()
     const messageInput = document.getElementById('chatBox')
     const message = messageInput.value
-    const send = `${user} dice: ${message}`
+    const send = { user, message }
     socket.emit('newMessage', send)
     chatBox.value = ""
 }
@@ -47,10 +47,16 @@ socket.on('newUser', data => {
 
 socket.on('messages', data => {
     const messages = document.getElementById('messages')
-    messages.innerHTML = ""
+    messages.innerHTML = ''
     data.forEach(i => {
-        const li = document.createElement('li')
-        li.textContent = i
-        messages.appendChild(li)
+        const message = document.createElement('div')
+        message.classList.add('message')
+        if (i.user === user) {
+            message.classList.add('sent')
+        } else {
+            message.classList.add('received')
+        }
+        message.innerHTML = `<span>${i.user}</span><p>${i.message}</p>`
+        messages.appendChild(message)
     })
 })
