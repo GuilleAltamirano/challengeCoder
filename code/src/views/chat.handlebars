@@ -1,8 +1,17 @@
-<h1>Bienvenido al chat</h1>
-<div>
-    <input type="text" id="chatBox" required placeholder="Writing you message">
-    <button type="submit">Send</button>
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>Chat en vivo</h2>
+    </div>
+    <div class="messages-container">
+        <ul id="messages" class="messages-list">
+        <!-- Aquí se añadirán los mensajes -->
+        </ul>
+    </div>
+    <form id="chatForm" class="chat-input">
+        <input type="text" id="chatBox" placeholder="Writing your message...">
+        <button id="send-button">Enviar</button>
+    </form>
 </div>
-<div id="messages"></div>
+
 
 <script type="module" src="/js/chat.js"></script>
