@@ -11,6 +11,6 @@ route.post('/api/carts', postCartController)
 
 route.get('/api/carts/:cid', getCartIdController)
 
-route.post('/api/carts/:cid/products/:pid', postProductCartController)
+route.post('/api/carts/:cid/product/:pid', postProductCartController)
 
 export default route

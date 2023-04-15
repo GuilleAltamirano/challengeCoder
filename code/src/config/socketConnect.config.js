@@ -6,7 +6,7 @@ import { ioMessages } from "../controllers/socket/messages.socket.js"
 export const socketServer = async (httpServer) => {
     try {
         const io = new Server(httpServer)
-        console.log(`Socket server run in route localhost:${PORT}/api/realtimesproducts`)
+        console.log(`Socket server run in route localhost:${PORT}/realtimesproducts`)
         io.on('connection', async socket => {
             socket.on('user', user => {
                 console.log(user)

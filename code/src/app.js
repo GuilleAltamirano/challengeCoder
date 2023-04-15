@@ -28,7 +28,7 @@ app.use(router)
 
 //Server Run
 const httpServer = app.listen(PORT, () => {
-    console.log(`Server HTTP run in route localhost:${PORT}/api/products`)
+    console.log(`Server HTTP run in route localhost:${PORT}/products`)
 })
 
 //server socket
