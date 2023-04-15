@@ -1,11 +1,9 @@
 import express from "express"
 import handlebars from "express-handlebars"
 import {__dirname} from "./utils/utils.js"
-import productsRouter from "./routes/routerProducts.js"
-import cartsRouter from "./routes/routerCarts.js"
-import realTimeProducts from "./routes/realtimeproducts.js"
 import { mongoConnect } from "./config/mongoConnect.config.js"
 import { socketServer } from "./config/socketConnect.config.js"
+import { router } from './routes/index.js'
 
 
 //variables
@@ -26,9 +24,7 @@ app.set('views', __dirname + '/views')
 app.set('view engine', 'handlebars')
 
 //routes
-app.use(productsRouter)
-app.use(cartsRouter)
-app.use(realTimeProducts)
+app.use(router)
 
 //Server Run
 const httpServer = app.listen(PORT, () => {

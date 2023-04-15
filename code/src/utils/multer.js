@@ -1,10 +1,11 @@
 import multer from "multer"
 import { __dirname } from "./utils.js"
+import path from "path"
 import { ApiError } from "../errors/ApiError.errors.js"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, process.cwd() + '/public/')
+        cb(null, __dirname + '/public/uploads')
     },
     filename: function (req, file, cb) {
         // generate the public name, removing problematic characters

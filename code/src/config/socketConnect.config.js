@@ -1,6 +1,7 @@
 import { Server } from "socket.io"
 import { PORT } from "../app.js"
-import { ioProducts } from "../daos/fs/socketProd.js"
+import { ioProducts } from "../controllers/socket/products.socket.js"
+import { ioMessages } from "../controllers/socket/messages.socket.js"
 
 export const socketServer = async (httpServer) => {
     try {
@@ -11,6 +12,7 @@ export const socketServer = async (httpServer) => {
                 console.log(user)
             })
             await ioProducts(io, socket)
+            await ioMessages(io, socket)
         })
     } catch (err) {console.error(err)}
 }
