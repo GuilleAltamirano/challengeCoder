@@ -2,6 +2,10 @@ import { productsServices } from '../../../daos/mongoDb/services/Products.servic
 import { ApiError } from "../../../errors/ApiError.errors.js"
 
 export const postProductsValidations = async (data) => {
+    //Exist product
+    const prod = await productsServices.getProducts({code: data.code})
+    if (prod.length !== 0) {throw new ApiError(`This code ${code} existing`, 406)}
+    
     //destructuring object
     const {title, description, code, price, stock, category, thumbnails} = data
     
@@ -13,10 +17,6 @@ export const postProductsValidations = async (data) => {
     if ((typeof stock !== 'number') || (!stock)) {throw new ApiError(`stock ${stock} type is not valid`, 400)}
     if ((typeof category !== 'string') || (!category)) {throw new ApiError(`category ${category} type is not valid`, 400)}
     if (!Array.isArray(thumbnails)) {throw new ApiError(`thumbnails ${thumbnails} type is not valid`, 400)}
-    
-    //Exist product
-    const prod = await productsServices.getProducts({code: data.code})
-    if (prod.length !== 0) {throw new ApiError(`This code ${code} existing`, 406)}
     
     //return
     const newProduct = await productsServices.addProduct(data)

@@ -21,5 +21,9 @@ router.get('/', async (req,res)=>{
     })
 })
 
+router.get('*', async(req, res) => {
+    res.status(404).render('undefined')
+})
+
 //export route
 export default router
