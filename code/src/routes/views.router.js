@@ -14,8 +14,7 @@ router.get('/chats', async (req, res) => {
 })
 
 router.get('/', async (req,res)=>{
-    const allProducts = await productsServices.getProducts({status: true})
-
+    const allProducts = await productsServices.productsPaginate({limit:10})
     res.render('home',{
         products: allProducts
     })

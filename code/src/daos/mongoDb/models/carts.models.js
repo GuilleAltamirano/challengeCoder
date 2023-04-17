@@ -7,4 +7,8 @@ const cartSchema = new Schema({
     }]
 })
 
+cartSchema.pre('find', function(){
+    this.populate('products.product')
+})
+
 export const cartsModel = model('Carts', cartSchema)

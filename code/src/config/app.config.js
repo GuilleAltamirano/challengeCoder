@@ -1,7 +1,7 @@
 import handlebars from "express-handlebars"
 import { router } from '../routes/index.js'
 import {__dirname} from "../utils/utils.js"
-
+import { errHandler } from "../middlewares/errHandler.middlewares.js"
 
 export const appConfig = async (app, express) => {
     // config
@@ -15,4 +15,7 @@ export const appConfig = async (app, express) => {
 
     //routes
     app.use(router)
+
+    //error
+    app.use(errHandler)
 }

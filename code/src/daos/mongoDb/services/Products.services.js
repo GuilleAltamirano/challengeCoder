@@ -13,6 +13,10 @@ class ProductsServices {
         return this.products.find().lean()
     }
 
+    async productsPaginate (limit) {
+        return this.products.paginate({}, {limit})
+    }
+
     async getProductById (id) {
         //is valid?
         if (!isValidObjectId(id)){return undefined}
