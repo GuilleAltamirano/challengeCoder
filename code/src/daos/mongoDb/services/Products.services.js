@@ -13,8 +13,8 @@ class ProductsServices {
         return this.products.find().lean()
     }
 
-    async productsPaginate (limit) {
-        return this.products.paginate({}, {limit})
+    async productsPaginate ({ filter, limit, page }) {
+        return this.products.paginate({filter}, { limit, page })
     }
 
     async getProductById (id) {

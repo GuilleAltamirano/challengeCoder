@@ -14,10 +14,13 @@ router.get('/chats', async (req, res) => {
 })
 
 router.get('/', async (req,res)=>{
-    const allProducts = await productsServices.productsPaginate({limit:10})
+    const { filter={},limit=5, page=1 } = req.query
+
+    const allProducts = await productsServices.productsPaginate({ filter, limit, page })
     res.render('home',{
         products: allProducts
     })
+    // res.json(allProducts)
 })
 
 router.get('*', async(req, res) => {

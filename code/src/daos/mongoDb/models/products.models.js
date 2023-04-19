@@ -1,7 +1,5 @@
 import { Schema, model } from "mongoose"
-import { paginate } from "mongoose-paginate-v2"
-import mongooseLeanVirtuals from "mongoose-lean-virtuals"
-
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 const productSchema = new Schema({
     title: {type: String, require: true, min: 3},
@@ -18,7 +16,8 @@ const productSchema = new Schema({
     }
 })
 
-productSchema.plugin(mongooseLeanVirtuals)
-productSchema.plugin(paginate)
+productSchema.plugin(mongoosePaginate, {
+    lean: true
+})
 
 export const productsModel = model('Products', productSchema)
