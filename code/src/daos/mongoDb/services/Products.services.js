@@ -13,8 +13,9 @@ class ProductsServices {
         return this.products.find().lean()
     }
 
-    async productsPaginate ({ page, limit, query='' }) {
-        return this.products.paginate({}, {limit, page, lean:true })
+    async productsPaginate ({ page, limit, category, sort }) {
+        const query = category ? { $and: [{ status: true }, { category }] } : { status: true }
+        return this.products.paginate(query, {page, limit, sort, lean: true})
     }
 
     async getProductById (id) {
