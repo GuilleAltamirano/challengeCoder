@@ -27,6 +27,9 @@ class CartsServices {
         return this.carts.updateOne(id, prod)
     }
 
+    async deleteProdInCart (cid, pid) {
+        return this.carts.updateOne(cid, pid)
+    }
 }
 
 export const cartsServices = new CartsServices(cartsModel)

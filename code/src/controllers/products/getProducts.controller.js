@@ -4,7 +4,7 @@ export const getProductsController = async (req, res, next) => {
     try {
         res.status(200).json({
             status: true,
-            payload: await productsServices.productsPaginate({})
+            payload: await productsServices.getProducts()
         })
     } catch (err) {next(err)}
 }

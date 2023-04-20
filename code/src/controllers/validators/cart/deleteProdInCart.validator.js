@@ -3,7 +3,7 @@ import { productsServices } from "../../../daos/mongoDb/services/products.servic
 import { ApiError } from "../../../errors/ApiError.errors.js"
 
 
-export const postProductCartValidator = async (cid, pid) => {
+export const deleteProdInCartValidator = async (cid, pid) => {
     //exist cart?
     const cart = await cartsServices.cartsById(cid)
     if (!cart) {throw new ApiError(`cart id ${cid} doesn't exist`, 404)}
@@ -14,17 +14,10 @@ export const postProductCartValidator = async (cid, pid) => {
     const products = cart.products
     //exist Product?
     const existProd = products.find(prod => prod.product.equals(pid))
-    if (!existProd){
-        const addProd = {product: prod.id, quantity: 1}
-        products.push(addProd)
-        const updated = await cartsServices.addProductCart({"_id": cid}, {"products": products})
-        return updated
-    }
-    //there is stock?
-    if (existProd.quantity >= prod.stock) {throw new ApiError(`Stock product:${pid} is small to quantity ${existProd.quantity}`, 404)}
-    //add ok
-    existProd.quantity += 1
+    if (!existProd) {throw new ApiError(`product id: ${pid} doesn't exist in cart`, 404)}
+    //filter prods in cart
+    const filterProd = products.filter(prod => !prod.product.equals(pid))
     //return
-    const updated = await cartsServices.addProductCart({"_id": cid}, {"products": products})
+    const updated = await cartsServices.deleteProdInCart({"_id": cid}, {"products": filterProd})
     return updated
 }        
