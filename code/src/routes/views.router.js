@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { productsServices } from "../daos/mongoDb/services/Products.services.js"
+import { homeController } from "../controllers/view/home.controller.js"
 
 //variable
 const router = new Router()
@@ -13,24 +13,10 @@ router.get('/chats', async (req, res) => {
     res.render('chat')
 })
 
-router.get('/', async (req,res)=>{
-    const { page=1, limit=10, category, sort } = req.query
+router.get('/', homeController)
 
-    const { docs, 
-        hasPrevPage,
-        prevPage,
-        hasNextPage,
-        nextPage, 
-    } = await productsServices.productsPaginate({ page, limit, category, sort })
-
-    res.render('home',{
-        products: docs,
-            hasPrevPage,
-            prevPage,
-            hasNextPage,
-            nextPage
-    })
-
+router.get('/carts/:cid', async(req,res) => {
+    res.status(200).render('cart')
 })
 
 router.get('*', async(req, res) => {

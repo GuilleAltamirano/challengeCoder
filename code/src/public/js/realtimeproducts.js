@@ -116,7 +116,7 @@ async function addProduct (e) {
     }
     return
 }
-//request delete produ
+//request delete product
 const deleteProd = async (pid) => {
     //req
     const response = await fetch(`/api/products/${pid}`, {

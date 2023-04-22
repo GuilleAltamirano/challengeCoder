@@ -6,6 +6,7 @@ import { getCartsController } from "../controllers/cart/getCarts.controller.js"
 import { putUpQuantityController } from "../controllers/cart/putUpQuantity.controller.js"
 import { deleteProdInCartController } from "../controllers/cart/deleteProdInCart.controller.js"
 import { deleteProdsCartController } from "../controllers/cart/deleteProdsCart.controller.js"
+import { putUpProdController } from "../controllers/cart/putUpProd.controller.js";
 
 //variables
 const router = new Router()
@@ -18,6 +19,7 @@ router.post('/api/carts', postCartController)
 // add prod in cart
 router.post('/api/carts/:cid/products/:pid', postProductCartController)
 //put carts
+router.put('/api/carts/:cid', putUpProdController)
 router.put('/api/carts/:cid/products/:pid', putUpQuantityController)
 //delete prod in cart
 router.delete('/api/carts/:cid/products/:pid', deleteProdInCartController)

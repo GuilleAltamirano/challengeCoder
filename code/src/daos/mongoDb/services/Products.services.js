@@ -30,6 +30,7 @@ class ProductsServices {
     }
 
     async putProduct (id, update) {
+        console.log(update);
         return this.products.updateOne(id, update)
     }
 

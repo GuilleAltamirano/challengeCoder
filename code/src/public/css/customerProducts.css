@@ -1,0 +1,153 @@
+/* Estilos para la sección de productos */
+
+.titles {
+    color: #ff4500;
+    text-align: center;
+    margin-top: 30px;
+    margin-bottom: 25px;
+}
+
+.products-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.product {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ddd;
+    margin: 20px;
+    width: 300px;
+}
+
+.thumbnails {
+    width: 100%;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+}
+
+h2 {
+    font-size: 1.5rem;
+    margin: 20px;
+}
+
+.description {
+    margin: 0 20px 20px;
+}
+
+.price {
+    margin: 0 20px;
+    font-weight: bold;
+}
+
+.stock {
+    margin: 0 20px;
+}
+
+.add-to-cart {
+    display: block;
+    margin: 20px auto;
+    background-color: #ff4500;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #d13900;
+}
+
+/* Estilos para la paginación */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    display: inline-block;
+    padding: 5px;
+    margin: 5px;
+    background-color: #ff8080;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.pagination a.current {
+    background-color: #ff5252;
+}
+
+.pagination-pages {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: 0 20px;
+}
+
+.pagination-page {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #3f51b5;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-page.current {
+    background-color: #7986cb;
+}
+
+.pagination-page:hover {
+    background-color: #303f9f;
+}
+
+.pagination .pagination-page:first-child {
+    margin-left: 0;
+}
+
+.pagination .pagination-page:last-child {
+    margin-right: 0;
+}
+
+.pagination.prev,
+.pagination.next {
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #3f51b5;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.pagination.prev:hover,
+.pagination.next:hover {
+    background-color: #303f9f;
+}
+
+.pagination.prev {
+    margin-right: 10px;
+}
+
+.pagination.next {
+    margin-left: 10px;
+}

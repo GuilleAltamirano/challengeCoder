@@ -17,5 +17,5 @@ export const appConfig = async (app, express) => {
     app.use(router)
 
     //error
-    // app.use(errHandler)
+    app.use(errHandler)
 }
