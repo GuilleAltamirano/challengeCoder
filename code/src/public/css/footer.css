@@ -1,0 +1,18 @@
+footer {
+    background-color: #F5F5F5;
+    color: #777777;
+    padding: 20px;
+    text-align: center;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+}
+
+footer a {
+    color: #777777;
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: #333333;
+    text-decoration: underline;
+}
