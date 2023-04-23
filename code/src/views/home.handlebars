@@ -5,14 +5,19 @@
     
     <div class="products-container">
         {{#each payload}}
-        <div class="product">
-            <img class="thumbnails" alt="Imagen del producto" src="{{thumbnails}}">
-            <h2>{{title}}</h2>
-            <p class="description">{{description}}</p>
-            <p class="price">Precio: ${{price}}</p>
-            <p class="stock">Stock:{{stock}}</p>
-            <button class="add-to-cart" _id="{{_id}}">Añadir al carrito</button>
-        </div>
+            <div class="product">
+                <img class="thumbnails" alt="Imagen del producto" src="{{thumbnails}}">
+                <h2>{{title}}</h2>
+                <p class="description">{{description}}</p>
+                <p class="price">Precio: ${{price}}</p>
+                <p class="stock">Stock:{{stock}}</p>
+                <div class="container-button">
+                    <button id="increment-{{_id}}">+</button>
+                    <p class="count" id="count-{{_id}}" max="{{stock}}">1</p>
+                    <button id="decrement-{{_id}}">-</button>
+                </div>
+                <button class="add-to-cart" _id="{{_id}}">Añadir al carrito</button>
+            </div>
         {{/each}}
     </div>
     <div class="pagination-container">

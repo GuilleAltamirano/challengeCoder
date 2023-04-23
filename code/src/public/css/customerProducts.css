@@ -47,6 +47,41 @@ h2 {
     margin: 0 20px;
 }
 
+.container-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}  
+
+button {
+    background-color: #0080ff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+button:hover {
+    background-color: #0059b3;
+}
+
+.count {
+    font-size: 1rem;
+    margin: 0 0.5rem;
+    width: 2rem;
+    text-align: center;
+    display: inline-block;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0.25rem;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
 .add-to-cart {
     display: block;
     margin: 20px auto;

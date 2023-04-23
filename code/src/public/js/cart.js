@@ -76,6 +76,9 @@ async function searchCart () {
 }
 searchCart()
 
+//logic quantity
+
+
 
 //delete product in cart
 async function delProd(e) {

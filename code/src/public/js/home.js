@@ -2,7 +2,52 @@ import 'https://cdn.jsdelivr.net/npm/sweetalert2@11'
 
 let cartAssign = localStorage.getItem('cartAssign')
 
+
 const addToCartButtons = document.querySelectorAll('.add-to-cart')
+
+addToCartButtons.forEach(button => {
+    //var for button
+    const productId = button.getAttribute('_id')
+    const incrementButton = document.getElementById(`increment-${productId}`)
+    const decrementButton = document.getElementById(`decrement-${productId}`)
+    const countPrint = document.getElementById(`count-${productId}`)
+    //stock max
+    const maxCount = countPrint.getAttribute('max')
+    let count = parseInt(countPrint.textContent)
+    
+    //increment button 
+    incrementButton.addEventListener('click', function() {
+        //operation
+        if (count < parseInt(maxCount)) {
+            count++
+            countPrint.textContent = count
+        }
+        if (count === parseInt(maxCount)) {
+            incrementButton.disabled = true
+        }
+        if (count > 1) {
+            decrementButton.disabled = false
+        }
+        return
+    })
+    
+    //decrement button
+    decrementButton.addEventListener('click', function() {
+        //operation
+        if (count > 1) {
+            count--
+            countPrint.textContent = count
+        }
+        if (count === 1) {
+            decrementButton.disabled = true
+        }
+        if (count < parseInt(maxCount)) {
+            incrementButton.disabled = false
+        }
+        return
+    })
+})
+
 
 addToCartButtons.forEach(button => {
     button.addEventListener('click', addProd)
@@ -11,6 +56,8 @@ addToCartButtons.forEach(button => {
 async function addProd(e) {
     e.preventDefault()
     const productId = e.target.getAttribute('_id')
+    const qtyElement = document.getElementById(`count-${productId}`)
+    const qty = parseInt(qtyElement.textContent)
     //create cart
     const response = await fetch('/api/carts', {
         method: 'POST',
@@ -30,8 +77,15 @@ async function addProd(e) {
             'content-type': "application/json"
         }
     })
+    const addQty = await fetch(`/api/carts/${cartAssign}/products/${productId}`, {
+        method: 'PUT',
+        headers: {
+            'content-type': "application/json"
+        },
+        body: JSON.stringify({ quantity: qty })
+    })
     //All ok?
-    if (await addProd.status !== 200) return Swal.fire({
+    if (await addQty.status !== 200) return Swal.fire({
         title: `Error to add product in cart`,
         toast: true,
         position: 'top-end',
