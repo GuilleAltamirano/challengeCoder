@@ -39,16 +39,38 @@ async function searchCart () {
         const decreaseQuantityButton = document.createElement('button')
         decreaseQuantityButton.classList.add('decrease-quantity')
         decreaseQuantityButton.textContent = '-'
+        decreaseQuantityButton.addEventListener('click', function () {
+            let count = quantityNumber.textContent
+            if (count > 1) {
+                count--
+                i.quantity = count
+                quantityNumber.textContent = count
+            }
+            if (count === 1) {decreaseQuantityButton.disabled = true}
+            if (count < prod.stock) {increaseQuantityButton.disabled = false}
+            return
+        })
         productDetailsDiv.appendChild(decreaseQuantityButton)
         //create quantity product
         const quantityNumber = document.createElement('p')
         quantityNumber.classList.add('quantity-number')
         quantityNumber.textContent = i.quantity
         productDetailsDiv.appendChild(quantityNumber)
-        //create increase button produc
+        //create increase button product
         const increaseQuantityButton = document.createElement('button')
         increaseQuantityButton.classList.add('increase-quantity')
         increaseQuantityButton.textContent = '+'
+        increaseQuantityButton.addEventListener('click', function () {
+            let count = quantityNumber.textContent
+            if (count === prod.stock) {increaseQuantityButton.disabled = true}
+            if (count < prod.stock) {
+                count++
+                i.quantity = count
+                quantityNumber.textContent = count
+            }
+            if (count > 1) {decreaseQuantityButton.disabled = false}
+            return
+        })
         productDetailsDiv.appendChild(increaseQuantityButton)
         //create append child button to product div
         productDiv.appendChild(productDetailsDiv)
@@ -73,12 +95,42 @@ async function searchCart () {
     delProds.textContent = 'Delete all prods'
     delProds.addEventListener('click', delAllProds)
     viewCart.appendChild(delProds)
+    //delete products
+    const update = document.createElement('button')
+    update.textContent = 'Update cart'
+    update.addEventListener('click', async function () {
+        const updateCart = await fetch(`/api/carts/${cartAssign}`, {
+            method: 'PUT',
+            headers: {
+                'content-type': "application/json"
+            },
+            body: JSON.stringify({ products: data.payload }),
+        })
+        if (updateCart.status !== 200) return Swal.fire({
+            title: `Error update cart`,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            width: 200,
+            padding: '1em',
+            background: '#fff',
+        })
+    
+        return Swal.fire({
+            title: `Update cart success`,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            width: 200,
+            padding: '1em',
+            background: '#fff',
+        })
+    })
+    viewCart.appendChild(update)
 }
 searchCart()
-
-//logic quantity
-
-
 
 //delete product in cart
 async function delProd(e) {

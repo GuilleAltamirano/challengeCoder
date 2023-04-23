@@ -2,6 +2,7 @@ import { cartsServices } from "../../../daos/mongoDb/services/Carts.services.js"
 import { ApiError } from "../../../errors/ApiError.errors.js"
 
 export const putUpProdValidator = async (cid, prods) => {
+    console.log(prods);
     //exist cart?
     const cart = await cartsServices.getCarts({_id: cid})
     if (!cart) {throw new ApiError(`cart id ${cid} doesn't exist`, 404)}
