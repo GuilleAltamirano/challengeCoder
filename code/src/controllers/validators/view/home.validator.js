@@ -1,4 +1,5 @@
 import { productsServices } from "../../../daos/mongoDb/services/Products.services.js"
+import { PORT } from "../../../app.js"
 
 export const homeValidator = async(query) => {
     //var
@@ -20,8 +21,8 @@ export const homeValidator = async(query) => {
         arrayPage.push(i)
     }
     //prev link
-    if (hasPrevPage) prevLink = `http://localhost:8080/?page=${prevPage}`
-    if (hasNextPage) nextLink = `http://localhost:8080/?page=${nextPage}`
+    if (hasPrevPage) prevLink = `http://localhost:${PORT}/?page=${prevPage}`
+    if (hasNextPage) nextLink = `http://localhost:${PORT}/?page=${nextPage}`
 
     //return
     return {

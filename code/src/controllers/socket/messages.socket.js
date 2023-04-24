@@ -6,6 +6,7 @@ export const ioMessages = async (io, socket) => {
             socket.broadcast.emit('newUser',data.user)
         })
         socket.on('newMessage', async data => {
+            console.log(data);
             await messagesServices.addMessages(data)
             io.emit('messages', await messagesServices.getMessages())
         })
