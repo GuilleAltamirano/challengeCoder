@@ -2,7 +2,7 @@ import { printProd } from "./realtimeprod/print.realtimeprod.js"
 import { addProduct } from "./realtimeprod/addProd.realtimeprod.js"
 import { delProd } from "./realtimeprod/addProd.realtimeprod.js"
 
-export const socket = io()
+const socket = io()
 export const containerProd = document.getElementById('products')
 const formProd = document.getElementById('formProd').addEventListener('submit', addProduct)
 
