@@ -85,7 +85,7 @@ async function addProd(e) {
         body: JSON.stringify({ quantity: qty })
     })
     //All ok?
-    if (await addQty.status !== 200) return Swal.fire({
+    if (addQty.status !== 200) return Swal.fire({
         title: `Error to add product in cart`,
         toast: true,
         position: 'top-end',
