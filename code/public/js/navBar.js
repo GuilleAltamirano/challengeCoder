@@ -1,3 +1,6 @@
+import { functionNavbar } from "./navbar/function.navbar.js"
+
+//pagination
 const path = `http://localhost:8080/` //route 
 let cartAssign = localStorage.getItem('cartAssign') //id cart assign 
 
@@ -13,3 +16,4 @@ realTime.setAttribute('href', `${path}realtimeproducts`) //add attribute href wi
 const chat = document.getElementById('chatNav') //label a for chats
 chat.setAttribute('href', `${path}chats`) //add attribute href with address
 
+functionNavbar()

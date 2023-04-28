@@ -1,7 +1,7 @@
 /* Estilos para hacer responsive */
 .product-container {
     display: grid;
-    grid-template-columns: 30% 10% 10% 10% 10% 10%;
+    grid-template-columns: 15% 10% 10% 10% 10% 10%;
     align-items: center;
     margin: 20px 0;
 }
@@ -18,6 +18,8 @@
     margin-top: 10px;
     width: 80%;
 }
+
+
 
 .decrease-quantity,
 .increase-quantity {
@@ -102,4 +104,13 @@
 .button-update-cart[disabled],
 .button-delete-products[disabled] {
     background-color: #bdbdbd;
+}
+
+/* dark mode */
+.dark-mode .product-container {
+    background-color: #222;
+    color: #fff;
+}
+html:not(.dark-mode) .product-container {
+    background-color: #fff;
 }

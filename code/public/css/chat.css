@@ -6,6 +6,14 @@
     border-radius: 5px;
 }
 
+/* dark mode */
+.dark-mode .chat-container {
+    background-color: #222;
+}
+html:not(.dark-mode) .chat-container {
+    background-color: #fff;
+}
+
 .chat-header {
     padding: 20px;
     background-color: #3f51b5;

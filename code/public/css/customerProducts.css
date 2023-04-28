@@ -137,3 +137,12 @@ button:hover {
     opacity: 0.5;
     pointer-events: none;
 }
+
+
+/* dark mode */
+.dark-mode .products-container {
+    background-color: #222;
+}
+html:not(.dark-mode) .products-container {
+    background-color: #fff;
+}

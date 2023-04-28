@@ -5,6 +5,13 @@
     grid-template-columns: 1fr;
     gap: 10px;
 }
+/* dark mode */
+.dark-mode #formProd {
+    background-color: #222;
+}
+html:not(.dark-mode) #formProd {
+    background-color: #fff;
+}
 
 #formProd div {
     display: flex;
@@ -72,6 +79,14 @@
     align-content: center;
     align-items: center;
     height: 100%;
+}
+
+/* dark mode */
+.dark-mode .products-container {
+    background-color: #222;
+}
+html:not(.dark-mode) .products-container {
+    background-color: #fff;
 }
 
 /* Estilo para cada producto */
