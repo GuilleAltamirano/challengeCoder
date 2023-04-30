@@ -12,18 +12,18 @@ import { putUpProdController } from "../controllers/cart/putUpProd.controller.js
 const router = new Router()
 
 //get carts
-router.get('/api/carts', getCartsController)
-router.get('/api/carts/:cid', getCartIdController)
+router.get('/', getCartsController)
+router.get('/:cid', getCartIdController)
 //new cart
-router.post('/api/carts', postCartController)
+router.post('/', postCartController)
 // add prod in cart
-router.post('/api/carts/:cid/products/:pid', postProductCartController)
+router.post('/:cid/products/:pid', postProductCartController)
 //put carts
-router.put('/api/carts/:cid', putUpProdController)
-router.put('/api/carts/:cid/products/:pid', putUpQuantityController)
+router.put('/:cid', putUpProdController)
+router.put('/:cid/products/:pid', putUpQuantityController)
 //delete prod in cart
-router.delete('/api/carts/:cid/products/:pid', deleteProdInCartController)
+router.delete('/:cid/products/:pid', deleteProdInCartController)
 //delete prods in cart
-router.delete('/api/carts/:cid', deleteProdsCartController)
+router.delete('/:cid', deleteProdsCartController)
 
 export default router

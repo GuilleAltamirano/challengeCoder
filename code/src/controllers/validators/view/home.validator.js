@@ -20,11 +20,10 @@ export const homeValidator = async(query) => {
     for (let i = 1; i <= totalPages; i++) {
         arrayPage.push(i)
     }
-    //prev link
+
     if (hasPrevPage) prevLink = `http://localhost:${PORT}/?page=${prevPage}`
     if (hasNextPage) nextLink = `http://localhost:${PORT}/?page=${nextPage}`
 
-    //return
     return {
         status: true,
         payload: docs,

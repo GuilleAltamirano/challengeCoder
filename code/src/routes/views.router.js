@@ -19,6 +19,14 @@ router.get('/carts/:cid', async(req,res) => {
     res.status(200).render('cart')
 })
 
+router.get('/register', async (req, res) => {
+    res.status(200).render('signUp')
+})
+
+router.get('/Login', async (req, res) => {
+    res.status(200).render('login')
+})
+
 router.get('*', async(req, res) => {
     res.status(404).render('undefined')
 })

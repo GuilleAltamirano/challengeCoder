@@ -1,9 +1,11 @@
 import handlebars from "express-handlebars"
+import create from "connect-mongo"
 import { router } from '../routes/index.js'
 import {__dirname} from "../utils/utils.js"
 import { errHandler } from "../middlewares/errHandler.middlewares.js"
 import cookieParser from "cookie-parser"
 import session from "express-session"
+import {authMiddleware} from '../middlewares/auth.middleware.js'
 
 export const appConfig = async (app, express) => {
     // config
@@ -20,13 +22,18 @@ export const appConfig = async (app, express) => {
 
     //sessions
     app.use(session({
+        store: new create({
+            mongoUrl: "mongodb+srv://lguille:GrzBBTmDcPC3zVqJ@coder.barbhh9.mongodb.net/coder?retryWrites=true&w=majority",
+            mongoOptions: {useNewUrlParser: true, useUnifiedTopology: true},
+            ttl: 7200
+        }),
         secret: 'a~d={99%Qo&BhPpkcAN9ed;-z=Muhs(=_co_,qo(LwJ49a2qV=', //key secret 
         resave: true, //keep session active
         saveUninitialized: true //save session even if empty
     }))
 
     //routes
-    app.use(router)
+    app.use(authMiddleware, router)
 
     //error
     app.use(errHandler)

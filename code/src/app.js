@@ -1,3 +1,4 @@
+import { config } from "dotenv"
 import express from "express"
 import { mongoConnect } from "./config/mongoConnect.config.js"
 import { socketServer } from "./config/socketConnect.config.js"
@@ -5,6 +6,7 @@ import { appConfig } from "./config/app.config.js"
 
 
 //variables
+config()
 const app = express()
 export const PORT = process.env.PORT || 8080
 

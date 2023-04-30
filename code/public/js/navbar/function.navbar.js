@@ -1,4 +1,4 @@
-export const functionNavbar = async () => {
+export const functionMode = async () => {
     async function init() {
         let mode = await getCookies()
         modeStyle(mode)
@@ -39,4 +39,26 @@ export const functionNavbar = async () => {
         let mode = data.payload || false
         return mode
     }
+}
+
+export const logoutFunction = (btLogout) => {
+    btLogout.addEventListener('click', async () => {
+        const response = await fetch('/api/sessions', {
+            method: 'DELETE'
+        })
+        const data = await response.json()
+
+        if (data.status === true) {return location.reload()}
+
+        Swal.fire({
+            title: `${data.payload}`,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            width: 200,
+            padding: '1em',
+            background: '#fff',
+        })
+    })
 }

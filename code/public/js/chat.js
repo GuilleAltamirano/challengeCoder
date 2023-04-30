@@ -1,26 +1,5 @@
-import 'https://cdn.jsdelivr.net/npm/sweetalert2@11' //import swal-alert-2
-
 const socket = io() //declaration for use socket
 let user //var user modifiable
-
-//alert collect user
-Swal.fire({
-    title: 'Sign up', //title alert
-    html:
-        '<input id="swal-input1" class="swal2-input" type="text" placeholder="User">' + //input for User
-        '<input id="swal-input2" class="swal2-input" type="password" placeholder="Password">', //input for password
-    preConfirm: () => { 
-        const user = document.getElementById('swal-input1').value //collect user and assign in var
-        const password = document.getElementById('swal-input2').value //collect password and assign in var
-        if (!user || !password) return Swal.showValidationMessage('Please enter a user and password') //exist user and password
-        return { user, password } //all ok, return user and password
-    },
-    allowOutsideClick: false //access denied out of alert
-    }).then((data) => {
-        //receive data
-        user = data.value.user //new value user
-        socket.emit('user', data.value) //emit alert new user connected for other users
-})
 
 
 const chatForm = document.getElementById('chatForm') //receive data 
