@@ -1,5 +1,6 @@
 import { Router } from "express"
 import { homeController } from "../controllers/view/home.controller.js"
+import { userServices } from "../daos/mongoDb/services/Users.services.js"
 
 //variable
 const router = new Router()
@@ -23,8 +24,20 @@ router.get('/register', async (req, res) => {
     res.status(200).render('signUp')
 })
 
-router.get('/Login', async (req, res) => {
+router.get('/login', async (req, res) => {
     res.status(200).render('login')
+})
+
+router.get('/profile', async (req, res) => {
+    const { email, role } = req.session
+    const date = await userServices.getUsers({emailAddress: email})
+    const profile = {
+        name: date[0].surname,
+        lastname: date[0].lastname,
+        email,
+        role
+    }
+    res.status(200).render('profile', profile)
 })
 
 router.get('*', async(req, res) => {

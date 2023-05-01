@@ -6,7 +6,7 @@ class Users {
     }
 
     async getUsers (email) {
-        return this.users.find(email)
+        return this.users.find(email).lean()
     }
 
     async postUser (user) {

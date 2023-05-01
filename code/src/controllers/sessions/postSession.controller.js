@@ -9,9 +9,8 @@ export const postLoginController = async (req, res, next) => {
         const { email, password } = user
 
         const existUser = await userServices.getUsers({emailAddress: email})
-
         if (email === 'adminCoder@coder.com' && password === 'adminCod3r123') {
-            session.name = existUser[0].surname
+            session.name = 'ADMIN'
             session.email = email
             session.role = 'admin'
             return res.status(302).redirect('/')
@@ -24,7 +23,7 @@ export const postLoginController = async (req, res, next) => {
         session.email = email
         session.role = 'user'
 
-        return res.status(302).redirect('/')
+        res.status(302).redirect('/')
     } catch (err) {next(err)}
 }
 

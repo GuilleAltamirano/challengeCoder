@@ -4,7 +4,8 @@ export const homeController = async (req, res, next) => {
     try {
         //var
         const query = req.query
-        const verification = await homeValidator(query)
+        const session = req.session
+        const verification = await homeValidator(query, session)
         //return
         res.status(200).render('home', verification)
     } catch (err) {next(err)}
