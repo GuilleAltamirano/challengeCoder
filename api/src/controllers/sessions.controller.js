@@ -5,11 +5,12 @@ import { registerValidation } from "../validations/sessions.validation.js"
 export const loginController = async (req, res, next) => {
     try {
         const { emailAddress, password } = req.body
-        const existUser = await userServices.getUsers({emailAddress})
-        
+        let existUser = await userServices.getUsers({emailAddress});
+        existUser[0] = existUser.length === 0 ? {fullname: undefined} : {fullname: `${existUser[0].firstname} ${existUser[0].lastname}`};        
         const user = emailAddress === process.env.EMAIL && password === process.env.PASSWORD ?
-        {fullname: 'admin', role: 'admin'} : {fullname: `${existUser[0].firstname} ${existUser[0].lastname}`, role: 'user'}
-        if (!user) {throw new ApiError(`User or password invalid`, 400)}
+        {fullname: 'admin', role: 'admin'} : {fullname: existUser[0].fullname, role: 'user'}
+
+        if (!user.fullname) {throw new ApiError(`User or password invalid`, 400)}
 
         req.session.name = user.fullname
         req.session.email = emailAddress

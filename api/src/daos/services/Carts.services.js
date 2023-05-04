@@ -6,8 +6,8 @@ class CartsServices {
         }
 
         async getCarts (query) {
-                if(!query) return this.carts.find()
-                return this.carts.find(query)
+                if(!query) return this.carts.find().lean()
+                return this.carts.find(query).lean()
         }
 
         async postCart () {

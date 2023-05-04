@@ -1,0 +1,13 @@
+<link rel="stylesheet" href="/css/cart.css">
+
+<h2>Cart</h2>
+
+<div class="container-prods">
+    {{#each payload}}
+        <div>
+            <h3>{{this.product.title}}</h3>
+            <p>{{this.product.description}}</p>
+            <p>{{this.quantity}}</p>
+        </div>
+    {{/each}}
+</div>

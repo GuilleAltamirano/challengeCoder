@@ -5,7 +5,6 @@ const router = new Router()
 
 router.post('/login', loginController)
 router.post('/register', registerController)
-
-router.delete('/logout', logoutController)
+router.post('/logout', logoutController)
 
 export default router

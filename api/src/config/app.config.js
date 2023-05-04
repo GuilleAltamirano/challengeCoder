@@ -4,6 +4,7 @@ import {errorMiddlewares} from '../middlewares/Errors.middleware.js'
 import session from "express-session"
 import create from "connect-mongo"
 import { engine } from "express-handlebars"
+import { authMiddleware } from "../middlewares/auth.middleware.js"
 
 export const appConfig = async (app, express) => {
     // config
@@ -26,7 +27,7 @@ export const appConfig = async (app, express) => {
         saveUninitialized: true //save session even if empty
     }))
     //router
-    app.use(routes)
+    app.use(authMiddleware, routes)
 
     //middlewares
     app.use(errorMiddlewares)
