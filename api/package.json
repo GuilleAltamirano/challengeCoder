@@ -1,5 +1,5 @@
 {
-  "name": "Api Coder",
+  "name": "coder",
   "version": "0.2.3",
   "description": "",
   "main": "src/app.js",
@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "connect-mongo": "^5.0.0",
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.0.3",

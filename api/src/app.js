@@ -1,8 +1,6 @@
 import { config } from 'dotenv'
 config()
-//express --------------------------------------------------------------------
 import express from 'express'
-//configs --------------------------------------------------------------------
 import { appConfig } from './config/app.config.js'
 import { mongoConfig } from './config/mongo.config.js'
 import { socketConfig } from './config/socket.config.js'
