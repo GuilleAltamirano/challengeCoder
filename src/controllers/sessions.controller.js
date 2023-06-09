@@ -52,3 +52,13 @@ export const githubController = async (accessToken, refreshToken, profile, done)
         done(null, dataUser)
     } catch (err) {done(err, null)}
 }
+
+export const emailsValidationController = async (req, res, next) => {
+    try {
+        const {code} = req.body
+        const cookie = req.signedCookies['cookieAuthEmail']
+        const codeValid = await sessionsServices.codeValid({code, cookie})
+
+        res.redirectPage('/')
+    } catch (err) {next(err)}
+}

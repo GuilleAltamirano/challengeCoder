@@ -14,7 +14,8 @@ export class UsersDaoMongo {
     }
     
     async put(_id, user) {
-        return this.users.updateOne(_id, user)
+        
+        return this.users.updateOne({_id}, user)
     }
 }
 

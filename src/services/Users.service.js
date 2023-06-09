@@ -8,13 +8,13 @@ class UsersServices {
     async post (data) {
         let { first_name, last_name, email, age, password } = data
         const existUser = await usersDao.get({email})
-        if ((email === EMAIL_ADMIN) || existUser) throw new ApiError('user existing', 400)
+        if ((email === EMAIL_ADMIN) || existUser.length > 0) throw new ApiError('user existing', 400)
 
         const cart = await cartsDao.post()
         password = createHash(password)
         const newUser = await usersDao.post(new UsersDto({first_name, last_name, email, age, password, cart: cart._id}))
         
-        return cart
+        return {newUser}
     }
 
     async put (data) {

@@ -21,3 +21,7 @@ export const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
 export const COOKIE_SECRET = process.env.COOKIE_SECRET
 export const WHITE_LIST = process.env.WHITE_LIST
 export const PERSISTENCE = process.env.PERSISTENCE
+export const EMAIL_NODEMAILER = process.env.EMAIL_NODEMAILER
+export const PASS_NODEMAILER = process.env.PASS_NODEMAILER
+export const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID
+export const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN

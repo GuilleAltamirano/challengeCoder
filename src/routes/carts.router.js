@@ -25,7 +25,7 @@ class CartsRouter extends Routers {
 
     async init(){
         this.get('/',['ADMIN'], cartsValidation('paginate'),getCartsController)
-        this.get('/:cid',['PUBLIC'], getCartByIdController)
+        this.get('/:cid',['ADMIN'], getCartByIdController)
 
         this.post('/',['ADMIN'], postCarts)
         this.post('/:cid/products/:pid',['USER'], postProdInCartController)

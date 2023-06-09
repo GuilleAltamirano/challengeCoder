@@ -42,7 +42,7 @@ export default class Routers {
             passport.authenticate('jwt', function (err, user, info) {
             if (err) return next(err)
 
-            if (!user && (req.path !== '/login' && req.path !== '/register')) return res.redirect('/login')
+            if (!user && (req.path !== '/login' && req.path !== '/register' && req.path !== '/register/verification')) return res.redirect('/login')
             if (user && (req.path === '/login' || req.path === '/register')) return res.redirect('/')
             req.user = user
 
@@ -65,7 +65,11 @@ export default class Routers {
                 maxAge: 3600000,
                 httpOnly: true
             }).redirect(304, '/')
-            
+            res.cookieAuthEmail = (date) => res.cookie('cookieAuthEmail', date, {
+                signed: true,
+                maxAge: 600000,
+                httpOnly: true
+            }).redirect(304, '/register/validation')
             next()
         } catch (err) {next(err)}
     }

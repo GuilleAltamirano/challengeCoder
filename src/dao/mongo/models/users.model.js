@@ -9,7 +9,8 @@ const userSchema = new Schema({
     age: { type: Number},
     password: {type: String},
     cart: {type: Schema.Types.ObjectId, ref: 'Carts', required: true},
-    role: {type: String, default: 'USER'}
+    role: {type: String, default: 'USER'},
+    verified: {type: Boolean, default: false, required: true}
 })
 
 
