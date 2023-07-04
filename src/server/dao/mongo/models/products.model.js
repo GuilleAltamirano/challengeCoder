@@ -9,6 +9,7 @@ const productSchema = new Schema({
     status: {type: Boolean, require: true, default: true, index: true},
     stock: {type: Number, require: true, min: 1, max: 999},
     category: {type: String, require: true},
+    owner: {type: String, default: 'ADMIN'},
     thumbnails: {
         type: [String], 
         default: ['https://placehold.co/300x300'], 

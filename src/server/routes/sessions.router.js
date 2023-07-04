@@ -1,5 +1,5 @@
 import Routers from "./router.js"
-import { emailsValidationController, loginController, forgotPasswordController } from "../controllers/sessions.controller.js"
+import { emailsValidationController, loginController, forgotPasswordController, newPasswordController } from "../controllers/sessions.controller.js"
 import { postUsersController } from "../controllers/users.controller.js"
 import { emailsValidation, sessionsValidation } from "../validations/joiSessions.validation.js"
 import passport from "passport"
@@ -13,7 +13,8 @@ class SessionsRouter extends Routers {
         this.get('/current', ['USER', 'ADMIN'], async (req, res) => res.jsonSuccess(req.user))
         
         this.post('/login', ['PUBLIC'], await sessionsValidation('login'), loginController)
-        this.post('/forgot-password', ['PUBLIC'], await sessionsValidation('forgot'), forgotPasswordController)
+        this.post('/forgotpassword', ['PUBLIC'], await sessionsValidation('forgot'), forgotPasswordController)
+        this.get('/newpassword', ['PUBLIC'], newPasswordController)
         this.post('/register', ['PUBLIC'], postUsersController)
         this.post('/verification', ['PUBLIC'], emailsValidation, emailsValidationController)
         this.post('/logout', ['USER', 'ADMIN'], async(req, res) => res.clearCookie('cookieToken').redirectPage('/login'))

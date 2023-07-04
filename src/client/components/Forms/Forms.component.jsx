@@ -2,6 +2,7 @@ import style from './Forms.module.sass'
 import { ButtonComponent } from '../Accessories/Accessories.component'
 import { isValidEmail, isValidPassword, isValidName, isValidAge } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
+import { useNavigate } from 'react-router-dom'
 
 export const FormLogin = () => {
     const loginFetch = (e) => {
@@ -105,12 +106,13 @@ export const FormRegister = () => {
 }
 
 export const FormForgotPassword = () => {
-    const fetch = (e) => {
+    const navigate = useNavigate ()
+    const petition = (e) => {
         e.preventDefault()
         const email = document.getElementById('email').value
         if (!isValidEmail(email)){console.log('Email invalid'); return}
 
-        return fetch('/api/sessions/forgot-password', {
+        return fetch('/api/sessions/forgotpassword', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,13 +120,57 @@ export const FormForgotPassword = () => {
             body: JSON.stringify({email}),
             redirect: 'follow',
         })
-        .then(res => console.log(res))
+        .then(res => {
+            if (res.status !== 200) return
+            navigate ('/login')
+        })
     }
     return(
-        <form className={style.form_signup}>
+        <form className={style.form_signup} onSubmit={petition}>
             <div>
                 <label htmlFor="email">Email</label>
                 <input id='email' type="email" name="email" placeholder="Email" required/>
+            </div>
+
+            <div className={style.button_login}>
+                <ButtonComponent title="Send" />
+            </div>
+        </form>
+    )
+}
+
+export const FormNewPassword = ({id}) => {
+    const petition = (e) => {
+        e.preventDefault()
+
+        const data = {
+            password: document.getElementById('password').value,
+            confirmPassword: document.getElementById('confirmPassword').value
+        }
+
+        if (!isValidPassword(data.password)){console.log('Password invalid'); return}
+        if (!isValidPassword(data.confirmPassword)){console.log('Password invalid'); return}
+        if (data.password !== data.confirmPassword){console.log('Password invalid'); return}
+
+        return fetch(`/api/users/newPassword/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({password: data.confirmPassword}),
+            redirect: 'follow',
+        }).then(res => res.json()).then(data => console.log(data))
+    }
+
+    return (
+        <form className={style.form_signup} onSubmit={petition}>
+            <div>
+                <label htmlFor="password">Password</label>
+                <input id='password' type="password" name="password" placeholder="Password" required/>
+            </div>
+            <div>
+                <label htmlFor="confirmPassword">Confirm password</label>
+                <input id='confirmPassword' type="password" name="confirmPassword" placeholder="Confirm password" required/>
             </div>
 
             <div className={style.button_login}>

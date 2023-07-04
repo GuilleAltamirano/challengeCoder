@@ -22,9 +22,9 @@ class ProductsRouter extends Routers {
 
         async init(){
                 this.get('/',['PUBLIC'], getProductsController)
-                this.get('/:pid',['USER, ADMIN'], getProductsByIdController)
+                this.get('/:pid',['USER', 'ADMIN'], getProductsByIdController)
 
-                this.post('/',['ADMIN'], await productsValidation('post'), postProductsController)
+                this.post('/',['ADMIN', 'PREMIUM'], await productsValidation('post'), postProductsController)
 
                 this.put('/:pid',['ADMIN'], await productsValidation('put'), putProductsController)
 

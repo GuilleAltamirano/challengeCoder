@@ -4,15 +4,22 @@ import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
 import { isValidPassword } from "../utils/bcrypt.js"
+import { generateToken, generateTokenForValidation } from "../config/passport.config.js"
+import { sendEmailValidation } from "../utils/nodemailer.js"
 
 class SessionsServices {
-    async login (data) {
-        const { email, password } = data
+    async login ({ email, password }) {
         if (email === varsEnv.EMAIL_ADMIN && password === varsEnv.PASSWORD_ADMIN) return new SessionsDto('admin')
+
         const existUser = await usersDao.get({email})
-        if (!existUser) throw new ApiError(`User or password invalid`, 400)
+        if (!existUser[0]) throw new ApiError(`User or password invalid`, 400)
+
         if (!isValidPassword(existUser[0], password)) throw new ApiError(`User or password invalid`, 400)
-        return new SessionsDto(existUser[0])
+        
+        const user = new SessionsDto(existUser[0])
+        const token = await generateToken(user)
+
+        return token
     }
 
     async codeValid ({code, cookie}) {
@@ -32,10 +39,22 @@ class SessionsServices {
             const newUser = new GoogleDto({profile, cart})
             const addUser = await usersDao.post(newUser)
 
-            return new SessionsDto(addUser)
+            const data = new SessionsDto(addUser)
+            return await generateToken(data)
         }
 
-        return new SessionsDto(existUser[0])
+        const data = new SessionsDto(existUser[0])
+        return await generateToken(data)
+    }
+
+    async forgotPassword ({email}) {
+        const existUser = await usersDao.get({email})
+        if (existUser.length === 0) throw new ApiError('User no exist', 400)
+
+        const code = await generateTokenForValidation(email)
+        const sendEmailVerify = await sendEmailValidation({receiver: email, code})
+
+        return {code}
     }
 }
 

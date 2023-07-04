@@ -9,7 +9,7 @@ const Login = () => {
             <h2>Login to Ddbase</h2>
 
             <FormLogin/>
-            <a href="#">Forgot your password?</a>
+            <Link to='/forgotpassword'>Forgot your password?</Link>
 
             <LineComponent />
             <div className={style.google_button}><GoogleComponent /></div>

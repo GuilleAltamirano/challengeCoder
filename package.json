@@ -4,8 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "nodemon src/server/main.js -w src/server --mode dev --user root",
-    "start": "node src/server/main.js -u customer",
+    "dev": "nodemon src/server/server.js -w src/server --mode dev --user root",
+    "start": "node src/server/server.js -u customer",
     "build": "vite build"
   },
   "dependencies": {

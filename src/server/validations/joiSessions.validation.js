@@ -1,12 +1,13 @@
 import Joi from "joi";
 import { ApiError } from "../errors/Api.error.js";
 
-const schemaLogin = Joi.object({
+//for login and forgot-password
+const schema = Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string().min(6).required()
+    password: Joi.string().min(6)
 }).alter({
-    login: (schema) => schema.required(),
     forgot: (schema) => schema,
+    login: (schema) => schema.required(),
 })
 
 const schemaEmail = Joi.object({
@@ -16,8 +17,8 @@ const schemaEmail = Joi.object({
 export const sessionsValidation =  async (type) => {
     return async (req, res, next) => {
         try {
-            const typeSchema = schemaLogin.tailor(type).validate(req.body)
-            if (typeSchema.error) throw new ApiError(`Query invalid`, 400)
+            const typeSchema = schema.tailor(type).validate(req.body)
+            if (typeSchema.error) throw new ApiError(`Date invalid`, 400)
             next()
         } catch (err) {next(err)}
     };

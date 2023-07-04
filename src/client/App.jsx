@@ -4,6 +4,7 @@ import NavBar from "./layouts/navbar.jsx";
 import Login from "./pages/login/Login.jsx";
 import Register from './pages/register/Register';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
+import NewPassword from './pages/newPassword/NewPassword';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route extract path='/login' element={<Login />} />
           <Route extract path='/register' element={<Register />} />
           <Route extract path='/forgotpassword' element={<ForgotPassword />} />
+          <Route extract path='/newpassword' element={<NewPassword />} />
         </Routes>
       </div>
     </BrowserRouter>

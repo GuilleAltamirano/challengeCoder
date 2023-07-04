@@ -36,7 +36,7 @@ export default class Routers {
 
     handlePolicies = policies => async (req, res, next) => {
         try {
-            passport.authenticate('jwt', function (err, user, info) {
+            passport.authenticate('login', function (err, user, info) {
                 if (err) return next(err)
                 if (policies[0] === 'PUBLIC') return next()
                 if (!user && (req.path !== '/login' && req.path !== '/register' && req.path !== '/register/verification' && req.path !== '/auth/google' && req.path !== '/auth/google/callback')) return res.status(401).json({status: false, message: 'redirect to login'})
@@ -54,7 +54,7 @@ export default class Routers {
         try {
             res.jsonSuccess = payload => res.status(200).json({status: 'success', payload})
             res.jsonMessage = message => res.status(200).json({status: true, message})
-            res.redirectPage = url => res.redirect(304, url)
+            res.redirectPage = url => res.status(304).redirect(url)
             res.cookieSession = token => res.cookie('cookieToken', token, {
                 signed: true,
                 maxAge: 3600000,

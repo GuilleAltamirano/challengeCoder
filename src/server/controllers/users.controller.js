@@ -21,3 +21,14 @@ export const putUsersController = async (req, res, next) => {
         res.jsonMessage('User updated')
     } catch (err) {next(err)}
 }
+
+export const putNewPasswordController = async (req, res, next) => {
+    try {
+        const id = req.uid
+        const password = req.body.password
+
+        const services = await usersServices.newPassword({_id: id, password})
+
+        res.json('Esta ok')
+    } catch (err) {next(err)}
+}

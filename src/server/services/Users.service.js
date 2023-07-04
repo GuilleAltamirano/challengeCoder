@@ -2,7 +2,7 @@ import { UsersDto } from "../dao/DTOs/users.dto.js"
 import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
-import { createHash } from "../utils/bcrypt.js"
+import { createHash, isValidPassword } from "../utils/bcrypt.js"
 
 class UsersServices {
     async post (data) {
@@ -24,6 +24,19 @@ class UsersServices {
         const { email=user.email, age=user.age, password=user.password, role=user.role } = update
         const updated = await usersDao.put({ email, age, password, role })
         return updated
+    }
+
+    async newPassword ({_id, password}) {
+        const existUser = await usersDao.get({_id})
+        if (existUser.length === 0) throw new ApiError('User no existing', 400)
+
+        const isValid = await isValidPassword(existUser[0], password)
+        if (isValid) throw new ApiError('Invalid, same password', 400)
+
+        const newPassword = await createHash(password)
+        const upUser = await usersDao.put(_id, {password: newPassword})
+        
+        return
     }
 }
 

@@ -1,6 +1,6 @@
-import { generateToken } from "../config/passport.config.js"
+import { usersDao } from "../dao/factory.dao.js"
 import { sessionsServices } from "../services/Sessions.service.js"
-import { sendEmailValidation } from "../utils/nodemailer.js"
+import passport from "passport"
 
 export const cookieExtractor = req  => {
     let token = null
@@ -13,8 +13,7 @@ export const cookieExtractor = req  => {
 export const loginController = async (req, res, next) => {
     try {
         const { email, password } = req.body
-        const data = await sessionsServices.login({email, password})
-        const token = await generateToken(data)
+        const token = await sessionsServices.login({email, password})
 
         res.cookieSession(token)
     } catch (err) {next(err)}
@@ -22,8 +21,8 @@ export const loginController = async (req, res, next) => {
 
 export const googleController = async (request, accessToken, refreshToken, profile, done) => {
     try {
-        const data = await sessionsServices.googleAuth(profile)
-        const token = await generateToken(data)
+        const token = await sessionsServices.googleAuth(profile)
+
         const res = request.res
         res.cookie('cookieToken', token, {
             signed: true,
@@ -47,10 +46,21 @@ export const emailsValidationController = async (req, res, next) => {
 export const forgotPasswordController = async (req, res, next) => {
     try {
         const { email } = req.body
-        const code = Math.random().toString(36).substring(2, 18)
-        const sendEmailVerify = await sendEmailValidation({receiver: email, code})
+        const code = await sessionsServices.forgotPassword({email})
 
-        const date = {code, email}
-        res.cookieAuthEmail(date)
+        res.redirectPage('/login')
+    } catch (err) {next(err)}
+}
+
+export const newPasswordController = async (req, res, next) => {
+    try {
+        passport.authenticate('verification', (error, user) => {
+            if (error) {return next(error)}
+            if (user) return req.user = user
+            return req.user = undefined
+        })(req, res, next)
+        if (!req.user) return res.redirectPage('/forgotpassword')
+        const user = await usersDao.get({email: req.user.user})
+        return res.redirectPage(`/newpassword/?user=${user[0]._id}`)
     } catch (err) {next(err)}
 }
