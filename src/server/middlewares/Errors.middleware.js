@@ -11,7 +11,7 @@ export const errorMiddlewares = async (err, req, res, next) => {
         })
     }
 
-    logger.fatal({error: err.message, stack: err.stack})
+    logger.fatal(err.stack)
     // await generateWhatsapp(err)
     return res.status(500).json({
         status: false,

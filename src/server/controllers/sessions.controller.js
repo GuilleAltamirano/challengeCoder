@@ -60,7 +60,9 @@ export const newPasswordController = async (req, res, next) => {
             return req.user = undefined
         })(req, res, next)
         if (!req.user) return res.redirectPage('/forgotpassword')
-        const user = await usersDao.get({email: req.user.user})
-        return res.redirectPage(`/newpassword/?user=${user[0]._id}`)
+        
+        const {token, id} = await sessionsServices.newPassword({email: req.user.user})
+
+        return res.cookieNewPassword({token, id})
     } catch (err) {next(err)}
 }

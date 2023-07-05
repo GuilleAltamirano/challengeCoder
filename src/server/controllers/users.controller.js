@@ -27,7 +27,7 @@ export const putNewPasswordController = async (req, res, next) => {
         const id = req.uid
         const password = req.body.password
 
-        const services = await usersServices.newPassword({_id: id, password})
+        const services = await usersServices.newPassword({_id: id, password, email: req.user.user.email})
 
         res.json('Esta ok')
     } catch (err) {next(err)}

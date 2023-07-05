@@ -19,7 +19,7 @@ class UsersRouter extends Routers {
     async init(){
         this.post('/', ['ADMIN'], await usersValidation('post'), postUsersController)
         this.put('/:uid', ['ADMIN'], await usersValidation('put'), putUsersController)
-        this.put('/newPassword/:uid', ['PUBLIC'], putNewPasswordController)
+        this.put('/newPassword/:uid', ['USER'], putNewPasswordController)
     }
 }
 

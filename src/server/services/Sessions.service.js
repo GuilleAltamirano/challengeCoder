@@ -56,6 +56,16 @@ class SessionsServices {
 
         return {code}
     }
+
+    async newPassword ({email}) {
+        const existUser = await usersDao.get({email})
+        if (!existUser[0]) throw new ApiError(`User no exist`, 400)
+
+        const user = new SessionsDto(existUser[0])
+        const token = await generateToken(user)
+
+        return {token, id: existUser[0]._id}
+    }  
 }
 
 export const sessionsServices = new SessionsServices()

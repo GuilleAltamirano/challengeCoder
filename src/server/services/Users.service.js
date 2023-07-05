@@ -26,9 +26,10 @@ class UsersServices {
         return updated
     }
 
-    async newPassword ({_id, password}) {
+    async newPassword ({_id, password, email}) {
         const existUser = await usersDao.get({_id})
         if (existUser.length === 0) throw new ApiError('User no existing', 400)
+        if (existUser[0].email !== email || email !== varsEnv.EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
 
         const isValid = await isValidPassword(existUser[0], password)
         if (isValid) throw new ApiError('Invalid, same password', 400)

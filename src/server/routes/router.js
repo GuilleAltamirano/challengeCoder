@@ -65,6 +65,11 @@ export default class Routers {
                 maxAge: 600000,
                 httpOnly: true
             }).redirect(304, '/validation')
+            res.cookieNewPassword = ({token, id}) => res.cookie('cookieToken', token, {
+                signed: true,
+                maxAge: 3600000,
+                httpOnly: true
+            }).status(304).redirect(`/newpassword/?user=${id}`)
             next()
         } catch (err) {next(err)}
     }
