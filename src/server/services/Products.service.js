@@ -27,17 +27,29 @@ class ProductsServices {
     }
 
     async post (prod) {
+        const existProd = await this.get({code: prod.code})
+        if (existProd.length !== 0) throw new ApiError('Product existing', 400)
         const addProd = new ProductsDtoPost(prod)
         const newProd = await productsDao.post(addProd)
         return newProd
     }
 
-    async put (pid, update){
+    async put (pid, update, user){
+        const existProd = await this.get({_id: pid})
+        if (existProd.length === 0) throw new ApiError('Product no existing', 400)
+
+        if (user.user.email !== existProd[0].owner && user.user.role !== 'ADMIN') throw new ApiError('No permission', 400)
+        
         const up = await productsDao.put(pid, update)
         return
     }
 
-    async delete (pid) {
+    async delete (pid, user) {
+        const existProd = await this.get({_id: pid})
+        if (existProd.length === 0) throw new ApiError('Product no existing', 400)
+
+        if (user.user.email !== existProd[0].owner && user.user.role !== 'ADMIN') throw new ApiError('No permission', 400)
+        
         const del = await productsDao.put(pid, {status: false})
         return
     }

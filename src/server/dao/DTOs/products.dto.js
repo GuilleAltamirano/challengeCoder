@@ -8,5 +8,6 @@ export class ProductsDtoPost {
         this.stock = product.stock
         this.category = product.category
         this.thumbnails = product.thumbnails
+        if (product.user.role === 'PREMIUM') this.owner = product.user.email
     }
 }

@@ -42,7 +42,6 @@ export default class Routers {
                 if (!user && (req.path !== '/login' && req.path !== '/register' && req.path !== '/register/verification' && req.path !== '/auth/google' && req.path !== '/auth/google/callback')) return res.status(401).json({status: false, message: 'redirect to login'})
                 if (user && (req.path === '/login' || req.path === '/register')) return res.status(401).json({status: false, message: 'Logged in, redirect to home'})
                 req.user = user
-
                 if (!policies.includes(user.user.role)) throw new ApiError('No permission', 401)
                 
                 next()

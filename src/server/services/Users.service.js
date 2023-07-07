@@ -39,6 +39,15 @@ class UsersServices {
         
         return
     }
+
+    async challengeRole ({uid}) {
+        const existUser = await usersDao.get({_id: uid})
+        if (existUser.length === 0) throw new ApiError('User no existing', 400)
+
+        if (existUser[0].role === 'ADMIN') return
+        const up = existUser[0].role === 'PREMIUM' ? await usersDao.put({_id: uid}, {role: 'USER'}) : await usersDao.put({_id: uid}, {role: 'PREMIUM'})
+        return
+    }
 }
 
 export const usersServices = new UsersServices()

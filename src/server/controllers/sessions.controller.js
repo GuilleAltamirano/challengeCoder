@@ -54,15 +54,17 @@ export const forgotPasswordController = async (req, res, next) => {
 
 export const newPasswordController = async (req, res, next) => {
     try {
+        //is valid query with jwt 
         passport.authenticate('verification', (error, user) => {
             if (error) {return next(error)}
             if (user) return req.user = user
             return req.user = undefined
         })(req, res, next)
+        //new email
         if (!req.user) return res.redirectPage('/forgotpassword')
         
         const {token, id} = await sessionsServices.newPassword({email: req.user.user})
-
+        //cookie for challenge password
         return res.cookieNewPassword({token, id})
     } catch (err) {next(err)}
 }

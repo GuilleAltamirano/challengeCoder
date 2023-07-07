@@ -1,9 +1,8 @@
-import { ApiError } from "../errors/Api.error.js"
 import { productServices } from "../services/Products.service.js"
 
 export const getProductsController = async (req, res, next) => {
     try {
-        const { page=1, limit=9, category, sort, provider } = req.query
+        const { page=1, limit=9, category, sort='name', provider } = req.query
         const payload = await productServices.paginate({ page, limit, category, sort, provider })
 
         res.jsonSuccess(payload)
@@ -22,9 +21,7 @@ export const getProductsByIdController = async (req, res, next) => {
 export const postProductsController = async (req, res, next) => {
     try {
         const { title, description, code, price, stock, category, thumbnails } = req.body
-        const existProd = await productServices.get({code})
-        if (existProd.length != 0) throw new ApiError('User existing', 400)
-        const payload = await productServices.post({ title, description, code, price, stock, category, thumbnails })
+        const payload = await productServices.post({ title, description, code, price, stock, category, thumbnails, user: req.user.user })
 
         res.jsonSuccess(payload)
     } catch (err) {next(err)}
@@ -34,7 +31,7 @@ export const putProductsController = async (req, res, next) => {
     try {
         const pid = req.pid
         const updated = req.body
-        const response = await productServices.put({_id: pid}, updated)
+        const response = await productServices.put({_id: pid}, updated, {user: req.user.user})
 
         res.jsonMessage('Product updated')
     } catch (err) {next(err)}
@@ -43,7 +40,7 @@ export const putProductsController = async (req, res, next) => {
 export const deleteProductsController = async (req, res, next) => {
     try {
         const pid = req.pid
-        const del = await productServices.delete({_id: pid})
+        const del = await productServices.delete({_id: pid}, {user: req.user.user})
 
         res.jsonMessage('Product deleted')
     } catch (err) {next(err)}

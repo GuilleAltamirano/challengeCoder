@@ -29,6 +29,15 @@ export const putNewPasswordController = async (req, res, next) => {
 
         const services = await usersServices.newPassword({_id: id, password, email: req.user.user.email})
 
-        res.json('Esta ok')
+        res.redirectPage('/login')
+    } catch (err) {next(err)}
+}
+
+export const putRoleController = async (req, res, next) => {
+    try {
+        const uid = req.uid
+        const data = await usersServices.challengeRole({uid})
+
+        res.jsonMessage('User updated')
     } catch (err) {next(err)}
 }

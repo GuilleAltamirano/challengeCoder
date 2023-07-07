@@ -32,9 +32,9 @@ export const postProdInCartController = async (req, res, next) => {
     try {
         const cid = req.cid
         const pid = req.pid
-        const prod = await productServices.get({_id: pid}) //valid product existence
-        if (!prod[0].status) throw new ApiError('Product invalid', 400)
-        const updated = await cartsServices.postProdInCart({cid, prod})
+        const user = req.user.user
+
+        const updated = await cartsServices.postProdInCart({cid, pid, user})
 
         res.jsonSuccess(updated)
     } catch (err) {next(err)}

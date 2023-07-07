@@ -13,7 +13,7 @@ class CartsServices {
     async get (filter) {
         if (!filter) return await cartsDao.get()
         const res = await cartsDao.get(filter)
-        if (!res) {throw new ApiError(`cart or product invalid`, 404)}
+        if (res.length === 0) {throw new ApiError(`cart or product invalid`, 404)}
         return res[0].products
     }
 
@@ -22,14 +22,15 @@ class CartsServices {
         return newCart
     }
 
-    async put (data) {
-        const {_id, products} = data
+    async put ({_id, products}) {
         const updated = await cartsDao.put({_id, products})
         return
     }
 
-    async postProdInCart (data) {
-        const {cid, prod} = data
+    async postProdInCart ({cid, pid, user}) {
+        const prod = await productsDao.get({_id: pid}) //valid product existence
+        if (!prod[0].status) throw new ApiError('Product invalid', 400)
+        if (prod[0].owner === user.email && prod[0].owner !== 'ADMIN') throw new ApiError('No permission', 400)
 
         const prodsInCart = await this.get({_id: cid})
         const existProdInCart = prodsInCart.find(products => products.product._id.equals(prod[0]._id))//valid product existence in cart

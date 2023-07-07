@@ -28,7 +28,7 @@ class CartsRouter extends Routers {
         this.get('/:cid',['ADMIN'], getCartByIdController)
 
         this.post('/',['ADMIN'], postCarts)
-        this.post('/:cid/products/:pid',['USER'], postProdInCartController)
+        this.post('/:cid/products/:pid',['USER', 'PREMIUM'], postProdInCartController)
         this.post('/:cid/purchase', ['USER'], postPurchaseController)
 
         this.put('/:cid',['USER'], await cartsValidation('put'),putCartController)
