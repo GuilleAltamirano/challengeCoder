@@ -20,7 +20,7 @@ class UsersRouter extends Routers {
         this.post('/', ['ADMIN'], await usersValidation('post'), postUsersController)
         
         this.put('/:uid', ['ADMIN'], await usersValidation('put'), putUsersController)
-        this.put('/newPassword/:uid', ['USER'], putNewPasswordController)
+        this.put('/newPassword/:uid', ['USER', 'PREMIUM'], putNewPasswordController)
         this.put('/premium/:uid', ['USER', 'PREMIUM'], putRoleController)
     }
 }

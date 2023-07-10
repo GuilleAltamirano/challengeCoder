@@ -1,0 +1,184 @@
+paths:
+  /api/products:
+    get:
+      summary: Obtener productos
+      tags:
+        - Products
+      description: Retorna una lista de productos utilizando mongoose paginate v2.
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  payload:
+                    type: object
+                    properties:
+                      docs:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                      totalPages:
+                        type: integer
+                      currentPage:
+                        type: integer
+                      allCategories:
+                        type: array
+                        items:
+                          type: string
+                      allProvider:
+                        type: array
+                        items:
+                          type: string
+                      arrayPage:
+                        type: array
+                        items:
+                          type: integer
+                      hasPrevPage:
+                        type: boolean
+                      prevPage:
+                        type: integer
+                      hasNextPage:
+                        type: boolean
+                      nextPage:
+                        type: integer
+
+    post:
+      summary: Crear un producto
+      tags:
+        - Products
+      description: Crea un nuevo producto con los campos proporcionados.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        201:
+          description: Created
+        400:
+          description: Bad Request
+
+  /api/products/{pid}:
+    get:
+      summary: Obtener un producto por ID
+      tags:
+        - Products
+      description: Retorna el producto con el ID autogenerado por MongoDB.
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        404:
+          description: Not Found
+
+    put:
+      summary: Actualizar un producto
+      tags:
+        - Products
+      description: Modifica el producto con el ID proporcionado utilizando los campos del req.body.
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad Request
+        404:
+          description: Not Found
+
+    delete:
+      summary: Eliminar un producto
+      tags:
+        - Products
+      description: Cambia el estado del producto con el ID proporcionado a false.
+      parameters:
+        - name: pid
+          in: path
+          description: ID del producto
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        status:
+          type: boolean
+        stock:
+          type: integer
+        category:
+          type: string
+        owner:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string
+        id:
+          type: string
+
+    ProductInput:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        code:
+          type: string
+        price:
+          type: number
+        stock:
+          type: integer
+        category:
+          type: string
+        owner:
+          type: string
+        thumbnails:
+          type: array
+          items:
+            type: string

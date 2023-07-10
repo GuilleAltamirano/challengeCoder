@@ -50,13 +50,14 @@ export const FormRegister = () => {
         e.preventDefault()
 
         const data = {
-            firstname: document.getElementById('firstname').value,
-            lastname: document.getElementById('lastname').value,
+            first_name: document.getElementById('firstname').value,
+            last_name: document.getElementById('lastname').value,
             email: document.getElementById('email').value,
             password: document.getElementById('password').value,
-            age: document.getElementById('age').value
+            age: parseInt(document.getElementById('age').value)
         }
-        if (!isValidName(data.firstname) || !isValidEmail(data.lastname)){console.log('Name invalid'); return}
+        
+        if (!isValidName(data.first_name) || !isValidName(data.last_name)){console.log('Name invalid'); return}
         if (!isValidEmail(data.email)){console.log('Email invalid'); return}
         if (!isValidPassword(data.password)){console.log('Password invalid'); return}
         if (!isValidAge(data.age)){console.log('Age invalid'); return}
@@ -91,7 +92,7 @@ export const FormRegister = () => {
             </div>
             <div>
                 <label htmlFor="age">What's your age?</label>
-                <input id='age' type="number" name='age' placeholder='Your age' min={18} required/>
+                <input id='age' type="number" name='age' placeholder='Your age' min={18} max={99} required/>
             </div>
             
             <LineComponent />

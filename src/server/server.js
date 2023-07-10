@@ -4,7 +4,6 @@ import { socketConfig } from './config/socket.config.js'
 import varsEnv from './env/vars.env.js'
 import ViteExpress from "vite-express"
 import { logger } from './utils/logger.js'
-import commander from './utils/commander.js'
 
 const app = express()
 await appConfig(app, express)

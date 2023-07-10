@@ -1,4 +1,3 @@
-import { usersDao } from "../dao/factory.dao.js"
 import { sessionsServices } from "../services/Sessions.service.js"
 import passport from "passport"
 
@@ -35,9 +34,9 @@ export const googleController = async (request, accessToken, refreshToken, profi
 
 export const emailsValidationController = async (req, res, next) => {
     try {
-        const {code} = req.body
-        const cookie = req.signedCookies['cookieAuthEmail']
-        const codeValid = await sessionsServices.codeValid({code, cookie})
+        const code = req.query.code
+
+        const codeValid = await sessionsServices.codeValid({_id: code})
 
         res.redirectPage('/')
     } catch (err) {next(err)}

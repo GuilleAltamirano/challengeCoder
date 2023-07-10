@@ -11,12 +11,12 @@ class SessionsRouter extends Routers {
 
     async init(){
         this.get('/current', ['USER', 'ADMIN'], async (req, res) => res.jsonSuccess(req.user))
+        this.get('/verification', ['PUBLIC'], emailsValidation, emailsValidationController)
         
         this.post('/login', ['PUBLIC'], await sessionsValidation('login'), loginController)
         this.post('/forgotpassword', ['PUBLIC'], await sessionsValidation('forgot'), forgotPasswordController)
         this.get('/newpassword', ['PUBLIC'], newPasswordController)
         this.post('/register', ['PUBLIC'], postUsersController)
-        this.post('/verification', ['PUBLIC'], emailsValidation, emailsValidationController)
         this.post('/logout', ['USER', 'ADMIN'], async(req, res) => res.clearCookie('cookieToken').redirectPage('/login'))
         
         this.get('/auth/google', ['PUBLIC'],passport.authenticate('google', { session: false }))

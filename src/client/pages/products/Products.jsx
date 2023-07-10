@@ -29,11 +29,17 @@ const Products = () => {
             {loading ? 'Loading...'
             :
             <div>
-                <h3>Filters</h3>
-                <DropdownButton title="Category" list={payload.allCategories} filter={{query, setQuery}} />
-                <DropdownButton title="Provider" list={payload.allProvider} filter={{query, setQuery}} />
-                <DropdownButton title="Price" list={priceOptions} filter={{query, setQuery}} />
+                <div>
+                    <h3>Filters</h3>
+                    <DropdownButton title="Category" list={payload.allCategories} filter={{query, setQuery}} />
+                    <DropdownButton title="Provider" list={payload.allProvider} filter={{query, setQuery}} />
+                    <DropdownButton title="Price" list={priceOptions} filter={{query, setQuery}} />
+                </div>
+                <div>
+                    
+                </div>
             </div>
+
             }
         </div>
     )

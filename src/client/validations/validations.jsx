@@ -8,11 +8,11 @@ export const isValidPassword = (password) => {
     return true
 }
 export const isValidName= (name) => {
-    if (typeof name !== string) return false
+    if (typeof name !== 'string') return false
     if (name.length <= 3) return false
     return true
 }
 export const isValidAge = (age) => {
-    if (typeof age !== number || age <= 17 || age >= 90) return false
+    if (typeof age !== 'number' || age <= 17 || age >= 90) return false
     return true
 }

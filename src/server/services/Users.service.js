@@ -3,18 +3,21 @@ import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
+import { generateTokenForValidation } from "../config/passport.config.js"
+import { sendEmailValidation } from "../utils/nodemailer.js"
 
 class UsersServices {
-    async post (data) {
-        let { first_name, last_name, email, age, password } = data
+    async post ({ first_name, last_name, email, age, password }) {
         const existUser = await usersDao.get({email})
         if ((email === varsEnv.EMAIL_ADMIN) || existUser.length > 0) throw new ApiError('user existing', 400)
 
         const cart = await cartsDao.post()
         password = await createHash(password)
         const newUser = await usersDao.post(new UsersDto({first_name, last_name, email, age, password, cart: cart._id}))
-        
-        return {newUser}
+
+        const sendEmailVerify = await sendEmailValidation({receiver: email, code: newUser._id, use: 'verify', user: newUser.first_name})
+
+        return
     }
 
     async put (data) {
@@ -29,7 +32,7 @@ class UsersServices {
     async newPassword ({_id, password, email}) {
         const existUser = await usersDao.get({_id})
         if (existUser.length === 0) throw new ApiError('User no existing', 400)
-        if (existUser[0].email !== email || email !== varsEnv.EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
+        if (existUser[0].email !== email && email !== varsEnv.EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
 
         const isValid = await isValidPassword(existUser[0], password)
         if (isValid) throw new ApiError('Invalid, same password', 400)

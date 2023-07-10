@@ -22,12 +22,11 @@ class SessionsServices {
         return token
     }
 
-    async codeValid ({code, cookie}) {
-        const {email} = cookie
-        if (code !== cookie.code) throw new ApiError('Code entered invalid', 400)
-        const user = await usersDao.get({email})
-        const {_id} = user[0]
-        const update = await usersDao.put(_id, {verified: true})
+    async codeValid ({_id}) {
+        const user = await usersDao.get({_id})
+        if (user.length === 0) throw new ApiError('User invalid', 400)
+        const update = await usersDao.put({_id}, {verified: true})
+
         return
     }
 
@@ -52,7 +51,7 @@ class SessionsServices {
         if (existUser.length === 0) throw new ApiError('User no exist', 400)
 
         const code = await generateTokenForValidation(email)
-        const sendEmailVerify = await sendEmailValidation({receiver: email, code})
+        const sendEmailVerify = await sendEmailValidation({receiver: email, code, use: 'forgot', user: existUser[0].first_name})
 
         return {code}
     }
