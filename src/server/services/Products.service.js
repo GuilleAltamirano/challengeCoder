@@ -16,7 +16,7 @@ class ProductsServices {
         for (let i = 1; i <= totalPages; i++) {
             arrayPage.push(i)
         }
-        return { docs, allCategories, allProvider, arrayPage, hasPrevPage, prevPage, hasNextPage, nextPage }
+        return { docs, allCategories, allProvider, pagination: {arrayPage, hasPrevPage, prevPage, hasNextPage, nextPage, totalPages} }
     }
 
     async get (filter) {

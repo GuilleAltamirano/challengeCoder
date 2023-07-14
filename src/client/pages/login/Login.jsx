@@ -1,9 +1,20 @@
+import { useContext, useEffect } from 'react'
 import style from './Login.module.sass'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FormLogin } from '../../components/Forms/Forms.component.jsx'
 import { LineComponent, GoogleComponent } from '../../components/Accessories/Accessories.component.jsx'
+import {AuthContext} from '../../context/auth.context'
 
 const Login = () => {
+    const navigate = useNavigate ()
+    const {isAuth} = useContext(AuthContext)
+    
+    useEffect(() => {
+        if (isAuth === 'true') {
+            navigate('/');
+        }
+    }, [isAuth])
+
     return (
         <div className={style.container_login}>
             <h2>Login to Ddbase</h2>

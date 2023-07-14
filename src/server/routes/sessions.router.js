@@ -17,7 +17,7 @@ class SessionsRouter extends Routers {
         this.post('/forgotpassword', ['PUBLIC'], await sessionsValidation('forgot'), forgotPasswordController)
         this.get('/newpassword', ['PUBLIC'], newPasswordController)
         this.post('/register', ['PUBLIC'], postUsersController)
-        this.post('/logout', ['USER', 'ADMIN'], async(req, res) => res.clearCookie('cookieToken').redirectPage('/login'))
+        this.post('/logout', ['USER', 'ADMIN', 'PREMIUM'], async(req, res) => res.clearCookie('cookieToken').redirectPage('/login'))
         
         this.get('/auth/google', ['PUBLIC'],passport.authenticate('google', { session: false }))
         this.get('/auth/google/callback', ['PUBLIC'],passport.authenticate('google', 

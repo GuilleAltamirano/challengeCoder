@@ -1,15 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import style from './Products.module.sass'
 import { SearchComponent } from '../../components/Search/Search.component'
 import { fetchProducts } from '../../helper/products.helper'
 import { DropdownButton } from '../../components/DropdownButton/DropdownButton.componente'
+import { ProductsComponent } from '../../components/products/Products.component'
+import {AuthContext} from '../../context/auth.context'
+import { useNavigate } from 'react-router-dom'
+import { BtPaginateComponent } from '../../components/btPaginate/BtPaginate.component'
 
 const Products = () => {
+    const navigate = useNavigate ()
+    const {isAuth} = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
     const [payload, setPayload] = useState({})
     const [query, setQuery] = useState('')
 
-    const priceOptions = ['asc', 'des']
+    const priceOptions = ['Asc', 'Des']
 
     useEffect(() => {
         const getProducts = async () => {
@@ -17,26 +23,32 @@ const Products = () => {
             setPayload(prods)
             setLoading(false)
         }
+        if (isAuth === 'false') navigate ('/login')
         getProducts()
     }, [])
 
     return (
-        <div className={style.container_products}>
-            <h2>Products</h2>
-            
-            <SearchComponent />
-
+        <div>
+            <h2>Customer</h2>
             {loading ? 'Loading...'
             :
-            <div>
-                <div>
+            <div className={style.customer}>
+                <div className={style.container_filter}>
                     <h3>Filters</h3>
-                    <DropdownButton title="Category" list={payload.allCategories} filter={{query, setQuery}} />
-                    <DropdownButton title="Provider" list={payload.allProvider} filter={{query, setQuery}} />
-                    <DropdownButton title="Price" list={priceOptions} filter={{query, setQuery}} />
+                    <DropdownButton title="Category" list={payload.allCategories} query={{query, setQuery}} />
+                    <DropdownButton title="Provider" list={payload.allProvider} query={{query, setQuery}} />
+                    <DropdownButton title="Price" list={priceOptions} query={{query, setQuery}} />
                 </div>
-                <div>
-                    
+                <div className={style.container_products}>
+                    <h3>Products</h3>
+                    <div className={style.search}>
+                        <SearchComponent title={'Search product in Ddbase'}/>
+                    </div>
+                    <ProductsComponent docs={payload.docs}/>
+                    <BtPaginateComponent pagination={payload.pagination} qry={{query, setQuery}}/>
+                </div>
+                <div className={style.container_client} >
+                    <h3>clients</h3>
                 </div>
             </div>
 

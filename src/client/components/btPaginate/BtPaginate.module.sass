@@ -1,0 +1,21 @@
+@use '../../index.module'
+
+.container_pagination
+    display: flex
+    justify-content: space-between
+    margin: 3% 10%
+    background-color: white
+    border-radius: 15px
+    padding: 0.8%
+    div
+        display: flex
+        button
+            background-color: index.$orange_ddbase
+            border: none
+            margin: 0 5%
+            cursor: pointer
+            border-radius: 5px
+        button:hover
+            background-color: index.$orange_ddbase_hover
+    .end
+        margin: 0 2% 0 0

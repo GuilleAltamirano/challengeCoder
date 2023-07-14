@@ -1,11 +1,17 @@
 import style from './Forms.module.sass'
+import { useContext } from 'react'
 import { ButtonComponent } from '../Accessories/Accessories.component'
 import { isValidEmail, isValidPassword, isValidName, isValidAge } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
 import { useNavigate } from 'react-router-dom'
+import {AuthContext} from '../../context/auth.context'
+
 
 export const FormLogin = () => {
-    const loginFetch = (e) => {
+    const navigate = useNavigate ()
+    const {setIsAuth} = useContext(AuthContext)
+
+    const loginFetch = async (e) => {
         e.preventDefault()
 
         const data = {
@@ -16,7 +22,7 @@ export const FormLogin = () => {
         if (!isValidEmail(data.email)){console.log('Email invalid'); return}
         if (!isValidPassword(data.password)){console.log('Password invalid'); return}
 
-        return fetch('/api/sessions/login', {
+        return await fetch('/api/sessions/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -24,7 +30,13 @@ export const FormLogin = () => {
             body: JSON.stringify(data),
             redirect: 'follow',
         })
-        .then(res => console.log(res))
+        .then(res => {
+            if (res.status === 200) {
+                setIsAuth(true)
+                navigate ('/')
+            }
+            return console.log(res)
+        })
     }
     
     return (

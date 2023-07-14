@@ -1,7 +1,19 @@
+import { useContext, useEffect } from 'react'
+import {AuthContext} from '../../context/auth.context'
 import style from './ForgotPassword.module.sass'
 import { FormForgotPassword } from '../../components/Forms/Forms.component'
+import { useNavigate } from 'react-router-dom'
 
 const ForgotPassword = () => {
+    const navigate = useNavigate ()
+    const {isAuth} = useContext(AuthContext)
+    
+    useEffect(() => {
+        if (isAuth) {
+            navigate('/');
+        }
+    }, [isAuth])
+
     return(
         <div className={style.container_forgotPassword}>
             <h2>Password reset</h2>

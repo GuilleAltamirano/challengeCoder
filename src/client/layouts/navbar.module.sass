@@ -1,15 +1,33 @@
 .navTop 
     background-color: black
-    display: flex
+    display: grid
+    grid-template-columns: 30% 5%
+    justify-content: space-between
+    align-items: center
     max-height: 150px
     padding: 1%
     margin-bottom: 4%
-    img
-        max-width: 80px
-        max-height: 70px
-        padding: 1%
-    h1
-        font-size: 350%
-        color: white
-        align-self: center
-        margin: 0 0 0 1%
+    .logo
+        display: flex
+        .container_img
+            max-width: 80px
+            max-height: 70px
+            img
+                width: 100%
+                height: auto
+                padding: 1%
+        h1
+            font-size: 350%
+            color: white
+            align-self: center
+            margin: 0 0 0 1%
+    .imgUser
+        display: flex
+        justify-content: flex-end
+        align-items: flex-end
+        width: 40px
+        height: 40px
+        img
+            width: 100%
+            height: auto
+            cursor: pointer

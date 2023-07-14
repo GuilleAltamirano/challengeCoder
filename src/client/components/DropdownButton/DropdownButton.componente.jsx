@@ -1,27 +1,54 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react'
 import style from './DropdownButton.module.sass'
 
-export const DropdownButton = ({list, title, query, setQuery}) => {
-    const [showOptions, setShowOptions] = useState(false);
-    const [qry, setQry] = useState('') //for internal query
+export const DropdownButton = ({ list, title, query }) => {
+    const [filter, setFilter] = useState("")
 
-    const ToggleOptions = () => {
-        setShowOptions(!showOptions);
-    };
+    useEffect(() => {
+        let updatedQuery = ""
+        if (filter.length !== 0) {
+            updatedQuery = query.query
+                .split("&")
+                .filter((param) => !param.startsWith(`${title}=`))
+                .join("&")
+            updatedQuery = updatedQuery.length !== 0 ? `${updatedQuery}&${filter}` : filter
+        } else {
+            updatedQuery = query.query
+                .split("&")
+                .filter((param) => !param.startsWith(`${title}=`))
+                .join("&")
+        }
+        query.setQuery(updatedQuery)
+    }, [filter])
+
+    const handleCheckboxChange = (e, item) => {
+        const selectedValue = `${title}=${item}`
+        const isItemSelected = filter === selectedValue
+
+        if (isItemSelected) {
+            setFilter("")
+        } else {
+            setFilter(selectedValue)
+        }
+    }
 
     return (
-        <div>
-            <button onClick={ToggleOptions}>{title} {!showOptions ? '>' : 'v'}</button>
-            {showOptions && (
-                <div className={style.container_DropdownButton}>
-                    {list.map((item, index) => (
-                        <label key={index}>
-                            <input type="checkbox" name={title} />
-                            {item}
-                        </label>
-                    ))}
-                </div>
-            )}
+        <div className={style.container_DropdownButton}>
+            <h4>{title}: </h4>
+            <div>
+                {list.map((item, index) => (
+                    <label key={index}>
+                    <input
+                        type="checkbox"
+                        name={title}
+                        checked={filter === `${title}=${item}`}
+                        onChange={(e) => handleCheckboxChange(e, item)}
+                    />
+                    {item}
+                    </label>
+                ))}
+            </div>
         </div>
-    );
-};
+    )
+}
+

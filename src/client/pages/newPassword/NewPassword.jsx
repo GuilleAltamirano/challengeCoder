@@ -1,14 +1,21 @@
-import { FormNewPassword } from '../../components/Forms/Forms.component';
+import { useContext, useEffect } from 'react'
+import {AuthContext} from '../../context/auth.context'
 import style from './NewPassword.module.sass'
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FormNewPassword } from '../../components/Forms/Forms.component';
 
 const NewPassword = () => {
     const navigate = useNavigate()
-    const location = useLocation();
-    
+    const location = useLocation()
+    const {isAuth} = useContext(AuthContext)
     const query = new URLSearchParams(location.search);
     const id = query.get('user')
-    if (!id) return navigate ('/login')
+    
+    useEffect(() => {
+        if (isAuth === 'true') navigate('/')
+        if (!id) navigate ('/login')
+    }, [isAuth])
+    
 
     return (
         <div className={style.containerNewPassword}>
