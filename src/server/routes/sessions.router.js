@@ -10,7 +10,7 @@ class SessionsRouter extends Routers {
     }
 
     async init(){
-        this.get('/current', ['USER', 'ADMIN'], async (req, res) => res.jsonSuccess(req.user))
+        this.get('/current', ['USER', 'ADMIN', 'PREMIUM'], async (req, res) => res.jsonSuccess(req.user))
         this.get('/verification', ['PUBLIC'], emailsValidation, emailsValidationController)
         
         this.post('/login', ['PUBLIC'], await sessionsValidation('login'), loginController)

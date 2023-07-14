@@ -6,6 +6,8 @@ import Register from './pages/register/Register';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
 import NewPassword from './pages/newPassword/NewPassword';
 import Products from './pages/products/Products';
+import Home from './pages/home/Home';
+import Manager from './pages/manager/Manager';
 import { AuthProvider } from './context/auth.context';
 import { UserProvider } from './context/user.context';
 
@@ -19,9 +21,11 @@ function App() {
             <Routes>
               <Route extract path='/login' element={<Login />} />
               <Route extract path='/register' element={<Register />} />
-              <Route extract path='/products' element={<Products />} />
               <Route extract path='/forgotpassword' element={<ForgotPassword />} />
               <Route extract path='/newpassword' element={<NewPassword />} />
+              <Route extract path='/' element={<Home />} />
+              <Route extract path='/customer' element={<Products />} />
+              <Route extract path='/manager' element={<Manager />} />
             </Routes>
           </div>
         </BrowserRouter>

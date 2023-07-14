@@ -13,7 +13,7 @@ export const UserProvider = ({ children }) => {
             const data = await fetchUser(setIsAuth)
             setUser(data)
         }
-        if (isAuth !== 'false') petition()
+        if (isAuth === 'true') petition()
     }, [])
 
     return (

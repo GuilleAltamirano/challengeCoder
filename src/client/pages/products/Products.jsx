@@ -5,11 +5,13 @@ import { fetchProducts } from '../../helper/products.helper'
 import { DropdownButton } from '../../components/DropdownButton/DropdownButton.componente'
 import { ProductsComponent } from '../../components/products/Products.component'
 import {AuthContext} from '../../context/auth.context'
+import { UserContext } from '../../context/user.context'
 import { useNavigate } from 'react-router-dom'
 import { BtPaginateComponent } from '../../components/btPaginate/BtPaginate.component'
 
 const Products = () => {
     const navigate = useNavigate ()
+    const {user} = useContext(UserContext)
     const {isAuth} = useContext(AuthContext)
     const [loading, setLoading] = useState(true)
     const [payload, setPayload] = useState({})
@@ -18,18 +20,18 @@ const Products = () => {
     const priceOptions = ['Asc', 'Des']
 
     useEffect(() => {
-        const getProducts = async () => {
-            const prods = await fetchProducts()
+        const getProducts = async (query) => {
+            const prods = await fetchProducts(query)
             setPayload(prods)
             setLoading(false)
         }
         if (isAuth === 'false') navigate ('/login')
-        getProducts()
+        getProducts(query)
     }, [])
-
+    
     return (
         <div>
-            <h2>Customer</h2>
+            {!user || (user.role !== 'PREMIUM' && user.role !== 'ADMIN') ? '' : <h2>Customer</h2>}
             {loading ? 'Loading...'
             :
             <div className={style.customer}>
@@ -47,9 +49,11 @@ const Products = () => {
                     <ProductsComponent docs={payload.docs}/>
                     <BtPaginateComponent pagination={payload.pagination} qry={{query, setQuery}}/>
                 </div>
-                <div className={style.container_client} >
-                    <h3>clients</h3>
-                </div>
+                {!user || (user.role !== 'PREMIUM' && user.role !== 'ADMIN') ? '' : 
+                    <div className={style.container_client} >
+                        <h3>clients</h3>
+                    </div>
+                }
             </div>
 
             }

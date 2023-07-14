@@ -1,5 +1,5 @@
-export const fetchProducts = async () => {
-    return await fetch('/api/products', {method: 'GET'})
+export const fetchProducts = async (query) => {
+    return await fetch(`/api/products/?${query}`, {method: 'GET'})
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') return data.payload

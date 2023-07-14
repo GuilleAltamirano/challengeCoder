@@ -1,14 +1,13 @@
 import style from './Forms.module.sass'
 import { useContext } from 'react'
 import { ButtonComponent } from '../Accessories/Accessories.component'
-import { isValidEmail, isValidPassword, isValidName, isValidAge } from '../../validations/validations'
+import { isValidEmail, isValidPassword, isValidName, isValidAge, isValidProduct } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
 import { useNavigate } from 'react-router-dom'
 import {AuthContext} from '../../context/auth.context'
 
 
 export const FormLogin = () => {
-    const navigate = useNavigate ()
     const {setIsAuth} = useContext(AuthContext)
 
     const loginFetch = async (e) => {
@@ -33,7 +32,7 @@ export const FormLogin = () => {
         .then(res => {
             if (res.status === 200) {
                 setIsAuth(true)
-                navigate ('/')
+                window.location.reload()
             }
             return console.log(res)
         })
@@ -189,6 +188,62 @@ export const FormNewPassword = ({id}) => {
             <div className={style.button_login}>
                 <ButtonComponent title="Send" />
             </div>
+        </form>
+    )
+}
+
+export const FormNewProduct = () => {
+    const petition = (e) => {
+        e.preventDefault()
+
+        const data = {
+            title: document.getElementById('title').value,
+            description: document.getElementById('description').value,
+            code: document.getElementById('code').value,
+            price: document.getElementById('price').value,
+            stock: document.getElementById('stock').value,
+            category: document.getElementById('category').value
+        }
+        const {title, description, code, price, stock, category} = isValidProduct({title: data.title, description: data.description, code: data.code, price: parseInt(data.price), stock: parseInt(data.stock), category: data.category})
+        
+        return fetch(`/api/products`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({title, description, code, price, stock, category}),
+            redirect: 'follow',
+        }).then(res => res.json()).then(data => data.status === 'success' ? window.location.reload() : data.message)
+    }
+    
+    return(
+        <form className={style.form_newProduct} onSubmit={petition}>
+            <div>
+                <label htmlFor="title">Title:</label>
+                <input type="text" id='title' name='title' placeholder='Insert product title' min={3} max={15} required />
+            </div>
+            <div>
+                <label htmlFor="description">Description:</label>
+                <input type="text" id='description' name='description' placeholder='Insert product description' min={7} max={40} required/>
+            </div>
+            <div>
+                <label htmlFor="code">Code:</label>
+                <input type="text" id='code' name='code' placeholder='Insert product code' required/>
+            </div>
+            <div>
+                <label htmlFor="price">Price</label>
+                <input type="number" id='price' name='price' placeholder='Insert product price' min={0} required />
+            </div>
+            <div>
+                <label htmlFor="stock">Stock</label>
+                <input type="numbercategory" id='stock' name='stock' placeholder='Insert product stock' min={1} max={999} required/>
+            </div>
+            <div>
+                <label htmlFor="category">Category</label>
+                <input type="text" id='category' name='category' placeholder='Insert product category' required/>
+            </div>
+
+            <ButtonComponent title='Create product' />
         </form>
     )
 }
