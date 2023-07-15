@@ -36,7 +36,7 @@ export const postProdInCartController = async (req, res, next) => {
 
         const updated = await cartsServices.postProdInCart({cid, pid, user})
 
-        res.jsonSuccess(updated)
+        res.jsonSuccess('Product add in cart')
     } catch (err) {next(err)}
 }
 
