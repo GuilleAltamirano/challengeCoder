@@ -10,7 +10,7 @@ const schema = Joi.object({
 }).alter({
     post: (schema) => schema.required(),
     put: (schema) => schema,
-})
+}).min(1).max(5)
 
 export const usersValidation = async (type) => {
     return async (req, res, next) => {

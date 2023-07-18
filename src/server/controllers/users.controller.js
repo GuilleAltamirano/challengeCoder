@@ -34,8 +34,18 @@ export const putNewPasswordController = async (req, res, next) => {
 export const putRoleController = async (req, res, next) => {
     try {
         const uid = req.uid
-        const data = await usersServices.challengeRole({uid})
+        const token = await usersServices.challengeRole({uid})
 
-        res.jsonMessage('User updated')
+        res.clearCookie('cookieToken').cookieSession(token)
+    } catch (err) {next(err)}
+}
+
+export const getSearchId = async (req, res, next) => {
+    try {
+        const { email, password } = req.body
+
+        const id = await usersServices.searchId({email, password})
+
+        res.jsonMessage(`${id}`)
     } catch (err) {next(err)}
 }

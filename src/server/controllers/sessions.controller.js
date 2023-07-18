@@ -1,5 +1,6 @@
 import { sessionsServices } from "../services/Sessions.service.js"
 import passport from "passport"
+import commander from "../utils/commander.js"
 
 export const cookieExtractor = req  => {
     let token = null
@@ -47,7 +48,8 @@ export const forgotPasswordController = async (req, res, next) => {
         const { email } = req.body
         const code = await sessionsServices.forgotPassword({email})
 
-        res.redirectPage('/login')
+        if (commander.mode === 'dev') return res.jsonSuccess({code, redirect: '/login'})
+        return res.redirectPage('/login')
     } catch (err) {next(err)}
 }
 
@@ -63,6 +65,7 @@ export const newPasswordController = async (req, res, next) => {
         if (!req.user) return res.redirectPage('/forgotpassword')
         
         const {token, id} = await sessionsServices.newPassword({email: req.user.user})
+        
         //cookie for challenge password
         return res.cookieNewPassword({token, id})
     } catch (err) {next(err)}

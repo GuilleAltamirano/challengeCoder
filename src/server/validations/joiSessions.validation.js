@@ -8,11 +8,11 @@ const schema = Joi.object({
 }).alter({
     forgot: (schema) => schema,
     login: (schema) => schema.required(),
-})
+}).min(1).max(2)
 
 const schemaEmail = Joi.object({
     code: Joi.string().alphanum()
-})
+}).length(1)
 
 export const sessionsValidation =  async (type) => {
     return async (req, res, next) => {

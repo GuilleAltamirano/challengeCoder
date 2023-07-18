@@ -28,7 +28,7 @@ class ProductsServices {
 
     async post (prod) {
         const existProd = await this.get({code: prod.code})
-        if (existProd.length !== 0) throw new ApiError('Product existing', 400)
+        if (existProd.length !== 0 || !prod) throw new ApiError('Product existing', 400)
         const addProd = new ProductsDtoPost(prod)
         const newProd = await productsDao.post(addProd)
         return newProd

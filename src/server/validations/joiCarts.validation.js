@@ -6,7 +6,7 @@ const schemaPaginate = Joi.object({
     limit: Joi.number().integer().min(1).max(12),
     product: Joi.string().alphanum(),
     sort: Joi.string().valid('asc', 'desc')
-})
+}).max(4)
 
 const schemaPut = Joi.object({
     products: Joi.array().items(
@@ -15,11 +15,11 @@ const schemaPut = Joi.object({
             quantity: Joi.number().required()
         })
     )
-})
+}).min(1)
 
 const schemaPutQty = Joi.object({
     quantity: Joi.number().min(1)
-})
+}).length(1)
 
 export const cartsValidation = async (type) => {
     return async (req, res, next) => {

@@ -12,13 +12,13 @@ const schema = Joi.object({
 }).alter({
     post: (schema) => schema.required(),
     put: (schema) => schema,
-})
+}).min(1)
 
 export const productsValidation = async (type) => {
     return async (req, res, next) => {
         try {
             const typeSchema = schema.tailor(type).validate(req.body)
-            if (typeSchema.error) throw new ApiError(`Product`, 400)
+            if (typeSchema.error) throw new ApiError(`Product keys invalid`, 400)
             next()
         } catch (err) {next(err)}
     };

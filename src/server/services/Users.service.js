@@ -3,8 +3,9 @@ import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
-import { generateTokenForValidation } from "../config/passport.config.js"
+import { generateToken, generateTokenForValidation } from "../config/passport.config.js"
 import { sendEmailValidation } from "../utils/nodemailer.js"
+import { SessionsDto } from "../dao/DTOs/sessions.dto.js"
 
 class UsersServices {
     async post ({ first_name, last_name, email, age, password }) {
@@ -49,7 +50,21 @@ class UsersServices {
 
         if (existUser[0].role === 'ADMIN') return
         const up = existUser[0].role === 'PREMIUM' ? await usersDao.put({_id: uid}, {role: 'USER'}) : await usersDao.put({_id: uid}, {role: 'PREMIUM'})
-        return
+
+        const updateUser = await usersDao.get({_id: uid})
+        const user = new SessionsDto(updateUser[0])
+        const token = await generateToken(user)
+        
+        return token
+    }
+
+    async searchId ({email, password}){
+        if (email !== 'LGuille.2000@gmail.com' || password !== 'admin@admin') return
+
+        const existUser = await usersDao.get({email})
+        if (existUser.length === 0) throw new ApiError('User no existing', 400)
+
+        return existUser[0]._id
     }
 }
 
