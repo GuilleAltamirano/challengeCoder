@@ -4,7 +4,7 @@ import { ApiError } from "../errors/Api.error.js";
 const schemaMessage = Joi.object({
     email: Joi.string().email().required(),
     message: Joi.string().min(1).required()
-}).length(2)
+})
 
 export const messagesValidation = async (req, res, next) => {
     try {

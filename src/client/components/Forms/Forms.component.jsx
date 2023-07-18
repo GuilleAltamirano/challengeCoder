@@ -73,7 +73,7 @@ export const FormRegister = () => {
         if (!isValidPassword(data.password)){console.log('Password invalid'); return}
         if (!isValidAge(data.age)){console.log('Age invalid'); return}
 
-        return fetch('/api/sessions/register', {
+        return fetch('/api/users/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

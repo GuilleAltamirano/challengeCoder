@@ -1,11 +1,12 @@
 import chai from "chai"
 import supertest from "supertest"
+import { usersDao } from "../src/server/dao/factory.dao.js"
 
 const expect = chai.expect
 const requester = supertest('http://localhost:8080')
 
 describe('Testing Ddbase', () => {
-    let cookieToken, id, user
+    let cookieToken, uid, user, pid, cid
     describe('Test session and User', () => {
         it('Type petition post /api/sessions/register, create user', async () => {
             const newUser = {
@@ -23,9 +24,11 @@ describe('Testing Ddbase', () => {
         })
 
         it('Type petition get /api/sessions/verification/?code=id, validate email', async () => {
-            const {_body} = await requester.post(`/api/users/id`).send(user)
-            id = _body.message
-            const {statusCode} = await requester.get(`/api/sessions/verification/?code=${id}`)
+            const data = await usersDao.get({email: user.email})
+            uid = data[0]._id
+            cid = data[0].cart._id
+
+            const {statusCode} = await requester.get(`/api/sessions/verification/?code=${uid}`)
 
             expect(statusCode).to.be.ok
         })
@@ -38,7 +41,7 @@ describe('Testing Ddbase', () => {
         })
 
         it('Type petition put /api/sessions/premium/:uid, for challenge role to premium', async () => {
-            const result = await requester.put(`/api/users/premium/${id}`).set('Cookie', cookieToken)
+            const result = await requester.put(`/api/users/premium/${uid}`).set('Cookie', cookieToken)
             cookieToken = result.headers['set-cookie'][1] //token with new role
 
             expect(result).to.be.ok
@@ -71,7 +74,7 @@ describe('Testing Ddbase', () => {
         })
 
         it('Type petition put /api/users/newPassword/:uid, validated password and challenge', async () => {
-            const {_body} = await requester.put(`/api/users/newpassword/${id}`).send({password: user.password}).set('Cookie', cookieToken)
+            const {_body} = await requester.put(`/api/users/newpassword/${uid}`).send({password: user.password}).set('Cookie', cookieToken)
 
             expect(_body).to.be.ok
         })
@@ -84,19 +87,40 @@ describe('Testing Ddbase', () => {
             expect(_body.payload.docs).to.be.ok
         })
 
-        it('Type petition get /api/products, create new product', async () => {
+        it('Type petition post /api/products, create new product', async () => {
             const newProduct = {
                 title: 'Product test',
-                description: "It's product for test",
+                description: "this product for test",
                 code: "TTT999",
                 price: 5000,
                 stock: 4,
                 category: 'test'
             }
-            console.log(newProduct);
-            // const {_body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
-            // console.log(_body);
-            // expect(_body.payload).to.be.ok
+
+            const {_body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
+            pid = _body.payload._id
+
+            expect(_body.payload).to.be.ok
         })
+
+        it('Type petition put /api/products/:pid, update product', async () => {
+
+            const {_body} = await requester.put(`/api/products/${pid}`).send({stock: 1}).set('Cookie', cookieToken)
+
+            expect(_body.message).to.be.ok
+        })
+
+        it('Type petition delete /api/products/:pid, update status to false', async () => {
+
+            const {_body} = await requester.delete(`/api/products/${pid}`).set('Cookie', cookieToken)
+
+            expect(_body.message).to.be.ok
+        })
+
+
+    })
+
+    describe('Test carts', () => {
+        
     })
 })
