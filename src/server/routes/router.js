@@ -53,7 +53,7 @@ export default class Routers {
         try {
             res.jsonSuccess = payload => res.status(200).json({status: 'success', payload})
             res.jsonMessage = message => res.status(200).json({status: true, message})
-            res.redirectPage = url => res.status(304).redirect(url)
+            res.redirectPage = url => res.status(302).redirect(url)
             res.cookieSession = token => res.cookie('cookieToken', token, {
                 signed: true,
                 maxAge: 3600000,
@@ -68,7 +68,7 @@ export default class Routers {
                 signed: true,
                 maxAge: 3600000,
                 httpOnly: true
-            }).status(304).redirect(`/newpassword/?user=${id}`)
+            }).status(302).redirect(`/newpassword/?user=${id}`)
             next()
         } catch (err) {next(err)}
     }

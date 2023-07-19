@@ -39,13 +39,3 @@ export const putRoleController = async (req, res, next) => {
         res.clearCookie('cookieToken').cookieSession(token)
     } catch (err) {next(err)}
 }
-
-export const getSearchId = async (req, res, next) => {
-    try {
-        const { email, password } = req.body
-
-        const id = await usersServices.searchId({email, password})
-
-        res.jsonMessage(`${id}`)
-    } catch (err) {next(err)}
-}

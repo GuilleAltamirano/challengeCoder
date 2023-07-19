@@ -29,13 +29,13 @@ class CartsRouter extends Routers {
 
         this.post('/',['ADMIN'], postCarts)
         this.post('/:cid/products/:pid',['USER', 'PREMIUM'], postProdInCartController)
-        this.post('/:cid/purchase', ['USER'], postPurchaseController)
+        this.post('/:cid/purchase', ['USER', 'PREMIUM'], postPurchaseController)
 
-        this.put('/:cid',['USER'], await cartsValidation('put'),putCartController)
-        this.put('/:cid/products/:pid', ['USER'], await cartsValidation('putQty'),putQuantityProds)
+        this.put('/:cid',['USER', 'PREMIUM'], await cartsValidation('put'),putCartController)
+        this.put('/:cid/products/:pid', ['USER', 'PREMIUM'], await cartsValidation('putQty'),putQuantityProds)
         
-        this.delete('/:cid/products/:pid', ['USER'], delProdInCart)
-        this.delete('/:cid', ['USER'], putCartController)
+        this.delete('/:cid/products/:pid', ['USER', 'PREMIUM'], delProdInCart)
+        this.delete('/:cid', ['ADMIN'], putCartController)
     }
 }
 
