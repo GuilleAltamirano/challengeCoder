@@ -132,7 +132,6 @@ describe('Testing Ddbase', () => {
 
             expect(_body).to.be.ok
         })
-
         
         it('Request type delete /api/carts/:cid/product/:pid, delete product in cart', async () => {
             const {_body} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).set('Cookie', cookieToken)
