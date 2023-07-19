@@ -22,7 +22,7 @@ export class CartsDaoMongo {
         }
 
         async put(id, prod) {
-                return this.carts.updateOne(id, prod)
+                return this.carts.updateOne({_id: id}, {products: prod})
         }
 
 }

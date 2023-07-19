@@ -1,6 +1,7 @@
 import { PurchaseDto } from "../dao/DTOs/carts.dto.js"
 import { cartsDao, productsDao, ticketsDao, usersDao } from "../dao/factory.dao.js"
 import { ApiError } from "../errors/Api.error.js"
+import { productServices } from "./Products.service.js"
 
 class CartsServices {
     async paginate (queryParams) {
@@ -23,22 +24,25 @@ class CartsServices {
     }
 
     async put ({_id, products}) {
-        const updated = await cartsDao.put({_id, products})
+        const updated = await cartsDao.put(_id, products)
+
         return
     }
 
     async postProdInCart ({cid, pid, user}) {
-        const prod = await productsDao.get({_id: pid}) //valid product existence
-        if (!prod[0].status) throw new ApiError('Product invalid', 400)
-        if (prod[0].owner === user.email && prod[0].owner !== 'ADMIN') throw new ApiError('No permission', 400)
+        const prod = await productServices.get({_id: pid}) //valid product existence
 
+        if (!prod[0].status || !prod[0] || prod.length === 0) throw new ApiError('Product invalid', 400)
+        if (prod[0].owner === user.email && prod[0].owner !== 'ADMIN') throw new ApiError('No permission', 400)
+        
         const prodsInCart = await this.get({_id: cid})
         const existProdInCart = prodsInCart.find(products => products.product._id.equals(prod[0]._id))//valid product existence in cart
-
+        
         if (!existProdInCart){
             const addProd = {product: prod[0]._id, quantity: 1}
             prodsInCart.push(addProd)
-            const updated = await cartsDao.put({"_id": cid}, {"products": prodsInCart})
+            const updated = await this.put({_id: cid, products: prodsInCart})
+
             return updated
         }
 
@@ -46,14 +50,17 @@ class CartsServices {
 
         existProdInCart.quantity += 1
 
-        const updated = await cartsDao.put({"_id": cid}, {"products": prodsInCart})
+        const updated = await this.put({_id: cid, products: prodsInCart})
 
         return updated
     }
 
     async postPurchase (cid) {
-        const user = await usersDao.get({cart: cid})
-        if (user[0].cart.length === 0) throw new ApiError('Cart invalid or empty', 400)
+        const user = await usersDao.get({cart: {_id: cid}})
+        const cart = await this.get({_id: cid})
+        
+        if (cart.length === 0 || user.length === 0) throw new ApiError('Cart invalid or empty', 400)
+        
         const products = user[0].cart.products
         let acu = 0 //total purchase
         const success = [] //products to purchase
@@ -78,12 +85,15 @@ class CartsServices {
         return {ticket, refuseProducts}
     }
 
-    async putQtyProd (data) {
-        const {cid, pid, qty} = data
-        const cart = await this.get({_id: cid})
-        const existProdInCart = cart.find(i => i.product._id.equals(pid))
+    async putQtyProd ({cid, pid, qty}) {
+        const prod = await productServices.get({_id: pid}) //valid product existence
+        if (prod[0].stock < qty || !prod[0].status) throw new ApiError('Quantity or product invalid', 400)
 
+        const cart = await this.get({_id: cid})
+        if (cart.length === 0) throw new ApiError('Cart invalid', 400)
+        const existProdInCart = cart.find(i => i.product._id.equals(pid))
         if (!existProdInCart) throw new ApiError('product does not exist in cart', 400)
+        
         existProdInCart.quantity = qty
 
         await this.put({_id: cid, products: cart})

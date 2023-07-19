@@ -1,4 +1,3 @@
-import { ApiError } from "../errors/Api.error.js"
 import { cartsServices } from "../services/carts.service.js"
 import { productServices } from "../services/Products.service.js"
 
@@ -69,10 +68,7 @@ export const putQuantityProds = async (req, res, next) => {
         const cid = req.cid
         const pid = req.pid
         const qty = req.body.quantity
-        const prod = await productServices.get({_id: pid}) //valid product existence
-        
-        if (prod[0].stock < qty || !prod[0].status) throw new ApiError('Quantity invalid', 400)
-        
+
         const updated = await cartsServices.putQtyProd({cid, pid, qty})
 
         res.jsonSuccess(updated)

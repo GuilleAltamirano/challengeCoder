@@ -200,8 +200,8 @@ describe('Testing Ddbase', () => {
 
         it('Request type delete /api/products/:pid, update status to false', async () => {
             //no authentication
-            const {statusCode} = await requester.delete('/api/products')
-            expect(statusCode).to.be.eql(404)
+            const {statusCode} = await requester.delete(`/api/products/${uid}`)
+            expect(statusCode).to.be.eql(401)
             //pid invalid
             const {body} = await requester.delete(`/api/products/${uid}`).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Product no existing')
@@ -215,49 +215,82 @@ describe('Testing Ddbase', () => {
         })
     })
 
-    // describe('Test carts', () => {
-    //     it('Request type post /api/carts/:cid/products/:pid, add product in cart', async () => {
+    describe('Test carts', () => {
+        it('Request type post /api/carts/:cid/products/:pid, add product in cart', async () => {
+            //no authentication
+            const {statusCode} = await requester.post(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            expect(statusCode).to.be.eql(401)
+            //product status false
+            const {body} = await requester.post(`/api/carts/${uid}/products/${pid}`).set('Cookie', cookieToken)
+            expect(body).to.have.property('error', 'Product invalid')
+            //all ok
+            const {_body} = await requester.post(`/api/carts/${cid}/products/6433d2d9253a5014b24bbf85`).set('Cookie', cookieToken)
 
-    //         const {_body} = await requester.post(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).set('Cookie', cookieToken)
+            expect(_body.payload).to.be.eql('Product add in cart')
+        })
 
-    //         expect(_body).to.be.ok
-    //     })
-
-    //     it('Request type put /api/carts/:cid/products/:pid, update qty to product', async () => {
-    //         const quantity = 3
-    //         const {_body} = await requester.put(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).send({quantity}).set('Cookie', cookieToken)
-
-    //         expect(_body).to.be.ok
-    //     })
-        
-    //     it('Request type delete /api/carts/:cid/product/:pid, delete product in cart', async () => {
-    //         const {_body} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).set('Cookie', cookieToken)
+        it('Request type put /api/carts/:cid/products/:pid, update qty to product', async () => {
+            const quantity = 3
             
-    //         expect(_body).to.be.ok
-    //     })
+            //no authentication
+            const {statusCode} = await requester.put(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            expect(statusCode).to.be.eql(401)
+            //product status false
+            const {body} = await requester.put(`/api/carts/${cid}/products/${pid}`).send({quantity}).set('Cookie', cookieToken)
+            expect(body).to.have.property('error', 'Quantity or product invalid')
+            //product does not exist in the cart
+            const {_body} = await requester.put(`/api/carts/${cid}/products/6434b4043686ffd2f48230bd`).send({quantity}).set('Cookie', cookieToken)
+            expect(_body).to.have.property('error', 'product does not exist in cart')
+            //all ok
+            const {status} = await requester.put(`/api/carts/${cid}/products/6433d2d9253a5014b24bbf85`).send({quantity}).set('Cookie', cookieToken)
 
-    //     it('Request type put /api/carts/:cid, update cart with two products', async () => {
-    //         const newCart = {
-    //             products: [
-    //                 {
-    //                     product: '64b1c648a2c7631c977a039a',
-    //                     quantity: 5
-    //                 },
-    //                 {
-    //                     product: '6433d2d9253a5014b24bbf85',
-    //                     quantity: 1
-    //                 },
-    //             ]
-    //         }
-    //         const {_body} = await requester.put(`/api/carts/${cid}/`).send(newCart).set('Cookie', cookieToken)
-    
-    //         expect(_body).to.be.ok
-    //     })
+            expect(status).to.be.eql(200)
+        })
+        
+        it('Request type delete /api/carts/:cid/product/:pid, delete product in cart', async () => {
+            //no authentication
+            const {statusCode} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            expect(statusCode).to.be.eql(401)
+            //all ok
+            const {_body} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).set('Cookie', cookieToken)
+            
+            expect(_body).to.have.property('status', 'success')
+        })
 
-    //     it('Request type post /api/carts/:cid/purchase, generate ticket', async () => {
-    //         const {_body} = await requester.post(`/api/carts/${cid}/purchase`).set('Cookie', cookieToken)
+        it('Request type put /api/carts/:cid, update cart with two products', async () => {
+            const newCart = {
+                products: [
+                    {
+                        product: '6434b4043686ffd2f48230be',
+                        quantity: 5
+                    },
+                    {
+                        product: '6433d2d9253a5014b24bbf85',
+                        quantity: 1
+                    },
+                ]
+            }
+            //no authentication
+            const {statusCode} = await requester.put(`/api/carts/${cid}/`)
+            expect(statusCode).to.be.eql(401)
+            //all ok
+            const {_body} = await requester.put(`/api/carts/${cid}/`).send(newCart).set('Cookie', cookieToken)
 
-    //         expect(_body).to.be.ok
-    //     })
-    // })
+            expect(_body).to.have.property('status', 'success')
+        })
+
+        it('Request type post /api/carts/:cid/purchase, generate ticket', async () => {
+            //no authentication
+            const {statusCode} = await requester.post(`/api/carts/${cid}/purchase`)
+            expect(statusCode).to.be.eql(401)
+            //cid empty
+            const {body} = await requester.post(`/api/carts/64b7457c3be49133794185eb/purchase`).set('Cookie', cookieToken)
+
+            expect(body).to.have.property('error', 'Cart invalid or empty')
+            //all ok
+            const {_body} = await requester.post(`/api/carts/${cid}/purchase`).set('Cookie', cookieToken)
+
+            expect(_body).to.have.property('status', 'success')
+        })
+    })
 })
