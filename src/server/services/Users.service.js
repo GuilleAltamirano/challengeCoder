@@ -32,7 +32,7 @@ class UsersServices {
 
     async newPassword ({_id, password, email}) {
         const existUser = await usersDao.get({_id})
-        if (existUser.length === 0) throw new ApiError('User no existing', 400)
+        if (existUser.length === 0) throw new ApiError('User no exist', 400)
         if (existUser[0].email !== email && email !== varsEnv.EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
 
         const isValid = await isValidPassword(existUser[0], password)
@@ -56,15 +56,6 @@ class UsersServices {
         const token = await generateToken(user)
         
         return token
-    }
-
-    async searchId ({email, password}){
-        if (email !== 'LGuille.2000@gmail.com' || password !== 'admin@admin') return
-
-        const existUser = await usersDao.get({email})
-        if (existUser.length === 0) throw new ApiError('User no existing', 400)
-
-        return existUser[0]._id
     }
 }
 

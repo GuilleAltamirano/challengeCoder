@@ -14,8 +14,8 @@ class SessionsServices {
         const existUser = await usersDao.get({email})
         if (!existUser[0]) throw new ApiError(`User or password invalid`, 400)
 
-        if (!isValidPassword(existUser[0], password)) throw new ApiError(`User or password invalid`, 400)
-        
+        if (!await isValidPassword(existUser[0], password)) throw new ApiError(`User or password invalid`, 400)
+
         const user = new SessionsDto(existUser[0])
         const token = await generateToken(user)
 

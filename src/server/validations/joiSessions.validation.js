@@ -6,13 +6,13 @@ const schema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6)
 }).alter({
-    forgot: (schema) => schema,
-    login: (schema) => schema.required(),
+    forgot: (schema) => schema.length(1),
+    login: (schema) => schema.required().length(2),
 })
 
 const schemaEmail = Joi.object({
     code: Joi.string().alphanum()
-})
+}).min(1)
 
 export const sessionsValidation =  async (type) => {
     return async (req, res, next) => {
@@ -26,7 +26,7 @@ export const sessionsValidation =  async (type) => {
 
 export const emailsValidation = async (req, res, next) => {
     try {
-        const typeSchema = schemaEmail.validate(req.body)
+        const typeSchema = schemaEmail.validate(req.query)
         if (typeSchema.error) throw new ApiError(`Code invalid`, 400)
         next()
     } catch (err) {next(err)}
