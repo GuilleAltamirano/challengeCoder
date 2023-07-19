@@ -146,43 +146,74 @@ describe('Testing Ddbase', () => {
         })
     })
 
-    // describe('Test Products', () => {
-    //     it('Request type get /api/products, return all products in format mongoose-paginate', async () => {
-    //         const {_body} = await requester.get('/api/products').set('Cookie', cookieToken)
+    describe('Test Products', () => {
+        it('Request type get /api/products, return all products in format mongoose-paginate', async () => {
+            const {_body} = await requester.get('/api/products').set('Cookie', cookieToken)
 
-    //         expect(_body.payload.docs).to.be.ok
-    //     })
+            expect(_body.payload.docs).to.be.ok
+        })
 
-    //     it('Request type post /api/products, create new product', async () => {
-    //         const newProduct = {
-    //             title: 'Product test',
-    //             description: "this product for test",
-    //             code: "TTT999",
-    //             price: 5000,
-    //             stock: 4,
-    //             category: 'test'
-    //         }
+        it('Request type post /api/products, create new product', async () => {
+            const newProduct = {
+                title: 'Product test',
+                description: "this product for test",
+                code: "TTT999",
+                price: 5000,
+                stock: 4,
+                category: 'test'
+            }
+            //no authentication
+            const {statusCode} = await requester.post('/api/products').send(newProduct)
+            expect(statusCode).to.be.eql(401)
+            //no product
+            const {status} = await requester.post('/api/products').set('Cookie', cookieToken)
+            expect(status).to.be.eql(400)
+            //all ok
+            const {_body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
+            
+            pid = _body.payload._id
 
-    //         const {_body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
-    //         pid = _body.payload._id
+            expect(_body.payload).to.be.ok
+            //create existing product
+            const {body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
+            expect(body).to.have.property('error', 'Product existing')
+        })
 
-    //         expect(_body.payload).to.be.ok
-    //     })
+        it('Request type put /api/products/:pid, update product', async () => {
+            //no authentication
+            const {statusCode} = await requester.post('/api/products')
+            expect(statusCode).to.be.eql(401)
+            //no update
+            const {error} = await requester.put(`/api/products/${pid}`).set('Cookie', cookieToken)
+            expect(error.status).to.be.eql(400)
+            //pid invalid
+            const {body} = await requester.put(`/api/products/${uid}`).send({stock: 1}).set('Cookie', cookieToken)
+            expect(body).to.have.property('error', 'Product no existing')
+            //owner invalid
+            const {status} = await requester.put(`/api/products/641a984b38770badd8bb0794`).send({stock: 1}).set('Cookie', cookieToken)
+            expect(status).to.be.eql(400)
+            //all ok
+            const {_body} = await requester.put(`/api/products/${pid}`).send({stock: 1}).set('Cookie', cookieToken)
 
-    //     it('Request type put /api/products/:pid, update product', async () => {
+            expect(_body.message).to.be.ok
+        })
 
-    //         const {_body} = await requester.put(`/api/products/${pid}`).send({stock: 1}).set('Cookie', cookieToken)
+        it('Request type delete /api/products/:pid, update status to false', async () => {
+            //no authentication
+            const {statusCode} = await requester.delete('/api/products')
+            expect(statusCode).to.be.eql(404)
+            //pid invalid
+            const {body} = await requester.delete(`/api/products/${uid}`).set('Cookie', cookieToken)
+            expect(body).to.have.property('error', 'Product no existing')
+            //owner invalid
+            const {status} = await requester.put(`/api/products/641a984b38770badd8bb0794`).send({stock: 1}).set('Cookie', cookieToken)
+            expect(status).to.be.eql(400)
+            //all ok
+            const {_body} = await requester.delete(`/api/products/${pid}`).set('Cookie', cookieToken)
 
-    //         expect(_body.message).to.be.ok
-    //     })
-
-    //     it('Request type delete /api/products/:pid, update status to false', async () => {
-
-    //         const {_body} = await requester.delete(`/api/products/${pid}`).set('Cookie', cookieToken)
-
-    //         expect(_body.message).to.be.ok
-    //     })
-    // })
+            expect(_body.message).to.be.ok
+        })
+    })
 
     // describe('Test carts', () => {
     //     it('Request type post /api/carts/:cid/products/:pid, add product in cart', async () => {
