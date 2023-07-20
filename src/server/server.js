@@ -17,7 +17,7 @@ if (cluster.isPrimary) {
   }
 }else {
   const httpServer = app.listen(varsEnv.PORT, () => {
-    logger.info(`I'm worked with id: ${process.pid}`)
+    logger.info(`I'm worked with id: ${process.pid} 🦾`)
   })
 }
 // await socketConfig(httpServer)
