@@ -7,7 +7,7 @@ const expect = chai.expect
 const requester = supertest('http://localhost:8080')
 
 describe('Testing Ddbase', () => {
-    let cookieToken, uid, user, pid, cid, codeInvalid = '64b77191ad09ec4e79d5fe8a', prodBuy = '6433d2d9253a5014b24bbf85', prodNoBuy = '6434b4043686ffd2f48230be', cartInvalid = '64b879e74c929a6ed1e10829'
+    let cookieToken, uid, user, pid, cid, codeInvalid = '64b77191ad09ec4e79d5fe8a', prodBuy = '6433d2d9253a5014b24bbf85', prodNoBuy = '6434b4043686ffd2f48230be', cartInvalid = '6482acf481ff161da42b7c62'
     describe('Test session and User', () => {
         it('Request type post /api/sessions/register, create user', async () => {
             const {first_name, last_name, email, password} = await createFakerUsers()

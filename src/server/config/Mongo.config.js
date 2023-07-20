@@ -7,7 +7,7 @@ export const mongoConfig = async () => {await MongoSingleton.getInstance()}
 class MongoSingleton {
     static #instance
     constructor() {
-        connect(`mongodb://127.0.0.1/eccomerce`), { //${varsEnv.URL}${varsEnv.ACCESS}${varsEnv.SERVER}${varsEnv.PARAMS}
+        connect(`${varsEnv.URL}${varsEnv.ACCESS}${varsEnv.SERVER}${varsEnv.PARAMS}`), {
             useNewUrlParser: true,
             userUnifiedTopology: true
         }
