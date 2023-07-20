@@ -8,18 +8,26 @@ async function generateCode() {
         code += characters[randomIndex];
     }
     return code;
-  }
+}
 
 export const createFakerProducts = async () => {
     return {
-        _id: faker.database.mongodbObjectId(),
         title: faker.commerce.product(),
-        description: faker.commerce.productDescription(),
+        description: faker.lorem.words().substring(3, 40),
         code: await generateCode(),
         price: faker.commerce.price(),
-        status: faker.datatype.boolean(),
         stock: faker.commerce.price({min:1, max:10, dec:0}),
         category: faker.commerce.department(),
         thumbnails: faker.image.url()
+    }
+}
+
+export const createFakerUsers = async () => {
+    return {
+        first_name: faker.person.firstName(),
+        last_name: faker.person.lastName(),
+        email: faker.internet.email(),
+        age: faker.number.int({max: 80, min: 18}),
+        password: faker.internet.password()
     }
 }

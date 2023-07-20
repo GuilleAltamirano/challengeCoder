@@ -1,30 +1,25 @@
 import chai from "chai"
 import supertest from "supertest"
 import { usersDao } from "../src/server/dao/factory.dao.js"
+import { createFakerUsers, createFakerProducts } from "../src/server/utils/facker.js"
 
 const expect = chai.expect
 const requester = supertest('http://localhost:8080')
 
 describe('Testing Ddbase', () => {
-    let cookieToken, uid, user, pid, cid
+    let cookieToken, uid, user, pid, cid, codeInvalid = '64b77191ad09ec4e79d5fe8a', prodBuy = '6433d2d9253a5014b24bbf85', prodNoBuy = '6434b4043686ffd2f48230be', cartInvalid = '64b879e74c929a6ed1e10829'
     describe('Test session and User', () => {
         it('Request type post /api/sessions/register, create user', async () => {
-            const newUser = {
-                first_name: 'User', 
-                last_name: 'Test', 
-                email: 'LGuille.2000@gmail.com',
-                age: 22, 
-                password: 'admin@admin'
-            }
-            user = { email: newUser.email, password: newUser.password }
+            const {first_name, last_name, email, password} = await createFakerUsers()
+            user = { email, password: password }
             //keys invalid
             const {_body} = await requester.post('/api/users/register')
             expect(_body).to.have.property('error', 'User keys invalid')
             //keys valid
-            const {statusCode} = await requester.post('/api/users/register').send(newUser)
+            const {statusCode} = await requester.post('/api/users/register').send({first_name, last_name, email, password})
             expect(statusCode).to.be.eql(302)
             //keys valid but duplicated
-            const {body} = await requester.post('/api/users/register').send(newUser)
+            const {body} = await requester.post('/api/users/register').send({first_name, last_name, email, password})
             expect(body.error).to.be.eql('user existing')
         })
 
@@ -34,7 +29,7 @@ describe('Testing Ddbase', () => {
             cid = data[0].cart._id
             
             //code or uid invalid
-            const {body} = await requester.get(`/api/sessions/verification/?code=64b77191ad09ec4e79d5fe8a`)
+            const {body} = await requester.get(`/api/sessions/verification/?code=${codeInvalid}`)
             expect(body).to.have.property('error', 'User invalid')
             //no code query
             const {_body} = await requester.get(`/api/sessions/verification/`)
@@ -70,7 +65,7 @@ describe('Testing Ddbase', () => {
             const {status} = await requester.put(`/api/users/premium/ansjdnajsdnajsd`).set('Cookie', cookieToken)
             expect(status).to.be.eql(400)
             //uid no existing
-            const {body} = await requester.put(`/api/users/premium/64b77191ad09ec4e79d5fe8a`).set('Cookie', cookieToken)
+            const {body} = await requester.put(`/api/users/premium/${codeInvalid}`).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'User no existing')
             //data ok
             const result = await requester.put(`/api/users/premium/${uid}`).set('Cookie', cookieToken)
@@ -134,7 +129,7 @@ describe('Testing Ddbase', () => {
             const {statusCode} = await requester.put(`/api/users/newpassword/${uid}`).send({password: user.password})
             expect(statusCode).to.be.eql(401)
             //uid invalid
-            const {_body} = await requester.put(`/api/users/newpassword/64b77191ad09ec4e79d5fe8a`).send({password: user.password}).set('Cookie', cookieToken)
+            const {_body} = await requester.put(`/api/users/newpassword/${codeInvalid}`).send({password: user.password}).set('Cookie', cookieToken)
             expect(_body).to.have.property('error', 'User no exist')
             //same password
             const {body} = await requester.put(`/api/users/newpassword/${uid}`).send({password: user.password}).set('Cookie', cookieToken)
@@ -154,28 +149,21 @@ describe('Testing Ddbase', () => {
         })
 
         it('Request type post /api/products, create new product', async () => {
-            const newProduct = {
-                title: 'Product test',
-                description: "this product for test",
-                code: "TTT999",
-                price: 5000,
-                stock: 4,
-                category: 'test'
-            }
+            const {title, description, code, price, stock, category} = await createFakerProducts()
             //no authentication
-            const {statusCode} = await requester.post('/api/products').send(newProduct)
+            const {statusCode} = await requester.post('/api/products').send({title, description, code, price, stock, category})
             expect(statusCode).to.be.eql(401)
             //no product
             const {status} = await requester.post('/api/products').set('Cookie', cookieToken)
             expect(status).to.be.eql(400)
             //all ok
-            const {_body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
-            
+            const {_body} = await requester.post('/api/products').send({title, description, code, price, stock, category}).set('Cookie', cookieToken)
+
             pid = _body.payload._id
 
             expect(_body.payload).to.be.ok
             //create existing product
-            const {body} = await requester.post('/api/products').send(newProduct).set('Cookie', cookieToken)
+            const {body} = await requester.post('/api/products').send({title, description, code, price, stock, category}).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Product existing')
         })
 
@@ -190,7 +178,7 @@ describe('Testing Ddbase', () => {
             const {body} = await requester.put(`/api/products/${uid}`).send({stock: 1}).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Product no existing')
             //owner invalid
-            const {status} = await requester.put(`/api/products/641a984b38770badd8bb0794`).send({stock: 1}).set('Cookie', cookieToken)
+            const {status} = await requester.put(`/api/products/${prodBuy}`).send({stock: 1}).set('Cookie', cookieToken)
             expect(status).to.be.eql(400)
             //all ok
             const {_body} = await requester.put(`/api/products/${pid}`).send({stock: 1}).set('Cookie', cookieToken)
@@ -206,7 +194,7 @@ describe('Testing Ddbase', () => {
             const {body} = await requester.delete(`/api/products/${uid}`).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Product no existing')
             //owner invalid
-            const {status} = await requester.put(`/api/products/641a984b38770badd8bb0794`).send({stock: 1}).set('Cookie', cookieToken)
+            const {status} = await requester.put(`/api/products/${prodBuy}`).send({stock: 1}).set('Cookie', cookieToken)
             expect(status).to.be.eql(400)
             //all ok
             const {_body} = await requester.delete(`/api/products/${pid}`).set('Cookie', cookieToken)
@@ -218,13 +206,13 @@ describe('Testing Ddbase', () => {
     describe('Test carts', () => {
         it('Request type post /api/carts/:cid/products/:pid, add product in cart', async () => {
             //no authentication
-            const {statusCode} = await requester.post(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            const {statusCode} = await requester.post(`/api/carts/${cid}/products/${pid}`)
             expect(statusCode).to.be.eql(401)
             //product status false
             const {body} = await requester.post(`/api/carts/${uid}/products/${pid}`).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Product invalid')
             //all ok
-            const {_body} = await requester.post(`/api/carts/${cid}/products/6433d2d9253a5014b24bbf85`).set('Cookie', cookieToken)
+            const {_body} = await requester.post(`/api/carts/${cid}/products/${prodBuy}`).set('Cookie', cookieToken)
 
             expect(_body.payload).to.be.eql('Product add in cart')
         })
@@ -233,26 +221,26 @@ describe('Testing Ddbase', () => {
             const quantity = 3
             
             //no authentication
-            const {statusCode} = await requester.put(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            const {statusCode} = await requester.put(`/api/carts/${cid}/products/${prodBuy}`)
             expect(statusCode).to.be.eql(401)
             //product status false
             const {body} = await requester.put(`/api/carts/${cid}/products/${pid}`).send({quantity}).set('Cookie', cookieToken)
             expect(body).to.have.property('error', 'Quantity or product invalid')
             //product does not exist in the cart
-            const {_body} = await requester.put(`/api/carts/${cid}/products/6434b4043686ffd2f48230bd`).send({quantity}).set('Cookie', cookieToken)
+            const {_body} = await requester.put(`/api/carts/${cid}/products/${prodNoBuy}`).send({quantity}).set('Cookie', cookieToken)
             expect(_body).to.have.property('error', 'product does not exist in cart')
             //all ok
-            const {status} = await requester.put(`/api/carts/${cid}/products/6433d2d9253a5014b24bbf85`).send({quantity}).set('Cookie', cookieToken)
+            const {status} = await requester.put(`/api/carts/${cid}/products/${prodBuy}`).send({quantity}).set('Cookie', cookieToken)
 
             expect(status).to.be.eql(200)
         })
         
         it('Request type delete /api/carts/:cid/product/:pid, delete product in cart', async () => {
             //no authentication
-            const {statusCode} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`)
+            const {statusCode} = await requester.delete(`/api/carts/${cid}/products/${prodBuy}`)
             expect(statusCode).to.be.eql(401)
             //all ok
-            const {_body} = await requester.delete(`/api/carts/${cid}/products/64b1c648a2c7631c977a039a`).set('Cookie', cookieToken)
+            const {_body} = await requester.delete(`/api/carts/${cid}/products/${prodBuy}`).set('Cookie', cookieToken)
             
             expect(_body).to.have.property('status', 'success')
         })
@@ -261,11 +249,11 @@ describe('Testing Ddbase', () => {
             const newCart = {
                 products: [
                     {
-                        product: '6434b4043686ffd2f48230be',
+                        product: `${prodNoBuy}`,
                         quantity: 5
                     },
                     {
-                        product: '6433d2d9253a5014b24bbf85',
+                        product: `${prodBuy}`,
                         quantity: 1
                     },
                 ]
@@ -284,7 +272,7 @@ describe('Testing Ddbase', () => {
             const {statusCode} = await requester.post(`/api/carts/${cid}/purchase`)
             expect(statusCode).to.be.eql(401)
             //cid empty
-            const {body} = await requester.post(`/api/carts/64b7457c3be49133794185eb/purchase`).set('Cookie', cookieToken)
+            const {body} = await requester.post(`/api/carts/${cartInvalid}/purchase`).set('Cookie', cookieToken)
 
             expect(body).to.have.property('error', 'Cart invalid or empty')
             //all ok
