@@ -26,8 +26,7 @@ class SessionsServices {
         const user = await usersDao.get({_id})
         if (user.length === 0) throw new ApiError('User invalid', 400)
         const update = await usersDao.put({_id}, {verified: true})
-
-        return
+        return update
     }
 
     async googleAuth (profile) {
