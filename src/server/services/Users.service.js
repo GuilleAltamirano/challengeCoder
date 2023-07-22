@@ -6,6 +6,7 @@ import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import { generateToken } from "../config/passport.config.js"
 import { sendEmailValidation } from "../utils/nodemailer.js"
 import { SessionsDto } from "../dao/DTOs/sessions.dto.js"
+import { __dirname } from "../utils/utils.js"
 
 class UsersServices {
     async post ({ first_name, last_name, email, age, password }) {
@@ -48,8 +49,10 @@ class UsersServices {
         const existUser = await usersDao.get({_id: uid})
         if (existUser.length === 0) throw new ApiError('User no existing', 400)
 
+
         if (existUser[0].role === 'ADMIN') return
-        const up = existUser[0].role === 'PREMIUM' ? await usersDao.put({_id: uid}, {role: 'USER'}) : await usersDao.put({_id: uid}, {role: 'PREMIUM'})
+        if (existUser[0].role === 'USER' && existUser[0].status !== 'AllDocuments' || existUser[0].status !== 'AllDocuments') throw new ApiError('Documentation incomplete', 401)
+        existUser[0].role === 'USER' ? await usersDao.put({_id: uid}, {role: 'PREMIUM'}) : await usersDao.put({_id: uid}, {role: 'USER'})
 
         const updateUser = await usersDao.get({_id: uid})
         const user = new SessionsDto(updateUser[0])
@@ -57,6 +60,48 @@ class UsersServices {
         
         return token
     }
+
+    async uploadsDocuments ({files, user}) {
+        const dataUser = await usersDao.get({email: user.email})
+        const documents = dataUser[0].documents
+        
+        //delete __dirname of path
+        const documentation = async (name, path) => {
+            const reference = path.replace(__dirname, "")
+            return {name, reference}
+        }
+        
+        //delete path extra
+        if (files.profile[0].path) {
+            const path = files.profile[0].path
+            const last = "uploads";
+            const deletePath = path.replace(path.split(last)[0], "/")
+            
+            dataUser[0].profile = deletePath
+        } 
+
+        if (files.identification && files.identification[0].path) documents.push(await documentation(files.identification[0].fieldname, files.identification[0].path))
+        if (files.address && files.address[0].path) documents.push(await documentation(files.address[0].fieldname, files.address[0].path))
+        if (files.account_status && files.account_status[0].path) documents.push(await documentation(files.account_status[0].fieldname, files.account_status[0].path))
+        
+        //update status
+        const qtyDocuments = 3
+        if (documents && documents.length === qtyDocuments) {
+            let acu = 0
+            for (let i = 0; i < documents.length; i++) {
+                if (documents[i].name === 'identification' && documents[i].reference.length > 0) acu += 1
+                if (documents[i].name === 'address' && documents[i].reference.length > 0) acu += 1
+                if (documents[i].name === 'account_status' && documents[i].reference.length > 0) acu += 1
+            }
+            
+            if (acu === qtyDocuments) dataUser[0].status = 'AllDocuments'
+        }
+
+        const userUpdate = await usersDao.put({_id: dataUser[0]._id}, dataUser[0])
+
+        return 
+    }
+
 }
 
 export const usersServices = new UsersServices()

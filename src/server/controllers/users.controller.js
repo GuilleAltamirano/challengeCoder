@@ -39,3 +39,13 @@ export const putRoleController = async (req, res, next) => {
         res.clearCookie('cookieToken').cookieSession(token)
     } catch (err) {next(err)}
 }
+
+export const postUploadsDocumentsController = async (req, res, next) => {
+    try {
+        const files = req.files
+        const user = req.user.user
+        const status = await usersServices.uploadsDocuments({files, user})
+
+        res.jsonMessage('Upload success')
+    } catch (err) {next(err)}
+}

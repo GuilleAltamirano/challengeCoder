@@ -16,16 +16,26 @@ class SessionsServices {
 
         if (!await isValidPassword(existUser[0], password)) throw new ApiError(`User or password invalid`, 400)
 
+        const updateLastConnection = await usersDao.put({_id: existUser[0]._id}, {last__connection: new Date()})
         const user = new SessionsDto(existUser[0])
         const token = await generateToken(user)
 
         return token
     }
 
+    async logout ({user}) {
+        const existUser = await usersDao.get({email: user.email})
+        if (!existUser[0]) throw new ApiError(`User or password invalid`, 400)
+
+        const updateLastConnection = await usersDao.put({_id: existUser[0]._id}, {last__connection: new Date()})
+
+        return
+    }
+
     async codeValid ({_id}) {
         const user = await usersDao.get({_id})
         if (user.length === 0) throw new ApiError('User invalid', 400)
-        const update = await usersDao.put({_id}, {verified: true})
+        const update = await usersDao.put({_id}, {verified: 'Verified'})
         return update
     }
 

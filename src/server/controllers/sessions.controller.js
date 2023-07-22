@@ -19,6 +19,15 @@ export const loginController = async (req, res, next) => {
     } catch (err) {next(err)}
 }
 
+export const logoutController = async (req, res, next) => {
+    try {
+        const user = req.user.user
+        const updateLastConnection = await sessionsServices.logout({user})
+
+        res.clearCookie('cookieToken').redirectPage('/login')
+    } catch (err) {next(err)}
+}
+
 export const googleController = async (request, accessToken, refreshToken, profile, done) => {
     try {
         const token = await sessionsServices.googleAuth(profile)

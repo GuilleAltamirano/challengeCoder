@@ -10,7 +10,14 @@ const userSchema = new Schema({
     password: {type: String},
     cart: {type: Schema.Types.ObjectId, ref: 'Carts', required: true},
     role: {type: String, default: 'USER'},
-    verified: {type: Boolean, default: false, required: true}
+    email_verified: {type: String, default: 'Disable', required: true},
+    status: {type: String, default: 'DocumentsIncomplete'},
+    profile: {type: String, default: 'https://placehold.co/300x300'},
+    documents: [{
+        name: {type: String},
+        reference: {type: String}
+    }],
+    last__connection: {type: Date, default: Date.now()}
 })
 
 

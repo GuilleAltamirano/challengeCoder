@@ -11,7 +11,7 @@ export const appConfig = async (app, express) => {
     // config
     app.use(express.json())
     app.use(express.urlencoded({extended: true}))
-    app.use(express.static(__dirname + '../../public'))
+    app.use(express.static(__dirname + '../../../public'))
     app.use(cors())
     //cookie
     app.use(cookieParser(varsEnv.COOKIE_SECRET))

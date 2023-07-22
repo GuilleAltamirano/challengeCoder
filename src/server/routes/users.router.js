@@ -1,8 +1,9 @@
 import { isValidObjectId } from "mongoose"
-import { postUsersController, putNewPasswordController, putRoleController } from "../controllers/users.controller.js"
+import { postUsersController, putNewPasswordController, putRoleController, postUploadsDocumentsController } from "../controllers/users.controller.js"
 import Routers from "./router.js"
 import { ApiError } from "../errors/Api.error.js"
 import { usersValidation } from "../validations/joiUsers.validation.js"
+import { uploadDocuments } from "../utils/multer.js"
 
 class UsersRouter extends Routers {
     constructor () {
@@ -18,6 +19,8 @@ class UsersRouter extends Routers {
 
     async init(){
         this.post('/register', ['PUBLIC'], await usersValidation('post'), postUsersController)
+        this.post('/:uid/documents', ['USER', 'PREMIUM', 'ADMIN'], uploadDocuments, postUploadsDocumentsController)
+
         this.put('/newPassword/:uid', ['USER', 'PREMIUM'], putNewPasswordController)
         this.put('/premium/:uid', ['USER', 'PREMIUM'], putRoleController)
     }
