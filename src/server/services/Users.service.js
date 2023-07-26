@@ -65,13 +65,13 @@ class UsersServices {
         const dataUser = await usersDao.get({email: user.email})
         const documents = dataUser[0].documents
         
-        //delete __dirname of path
+        //remove __dirname of path
         const documentation = async (name, path) => {
             const reference = path.replace(__dirname, "")
             return {name, reference}
         }
         
-        //delete path extra
+        //remove extra path
         if (files.profile[0].path) {
             const path = files.profile[0].path
             const last = "uploads";
