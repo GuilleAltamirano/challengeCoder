@@ -2,7 +2,7 @@ import express from 'express'
 import { appConfig } from './config/app.config.js'
 // import { socketConfig } from './config/socket.config.js'
 import varsEnv from './env/vars.env.js'
-import ViteExpress from "vite-express"
+// import ViteExpress from "vite-express"
 import { logger } from './utils/logger.js'
 import cluster from 'cluster'
 import { cpus } from 'os'
@@ -19,7 +19,7 @@ if (cluster.isPrimary) {
   const httpServer = app.listen(varsEnv.PORT, () => {
     logger.info(`I'm worked with id: ${process.pid} 🦾`)
   })
-  ViteExpress.bind(app, httpServer)
+  // ViteExpress.bind(app, httpServer)
 }
 // await socketConfig(httpServer)
 
