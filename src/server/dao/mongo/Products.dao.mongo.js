@@ -7,16 +7,14 @@ export class ProductsDaoMongo {
     }
 
     async get(filter) {
-        if (filter) return this.products.find(filter).lean()
-        
-        return this.products.find().lean()
+        return this.products.find(filter)
     }
 
     async paginate ({ page, limit, category, sort, provider }) {
-        const filter = {}
-        filter.status = true
+        const filter = {status: true}
         if (category) filter.category = category
         if (provider) filter.title = provider
+
         return this.products.paginate(filter, {page, limit, sort, lean: true})
     }
 
@@ -28,8 +26,8 @@ export class ProductsDaoMongo {
         return this.products.create(product)
     }
 
-    async put(id, update) {
-        return this.products.updateOne(id, update)
+    async put({_id}, update) { //do not destructuring update
+        return this.products.updateOne({_id}, update)
     }
 
     async bulkWrite (operations) {

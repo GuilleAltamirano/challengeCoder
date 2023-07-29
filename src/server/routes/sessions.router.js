@@ -1,6 +1,6 @@
 import Routers from "./router.js"
 import { emailsValidationController, loginController, forgotPasswordController, newPasswordController, logoutController } from "../controllers/sessions.controller.js"
-import { emailsValidation, sessionsValidation } from "../validations/joiSessions.validation.js"
+import { emailsValidation, sessionsValidation } from "../middlewares/sessionsValidations.middleware.js"
 import passport from "passport"
 
 class SessionsRouter extends Routers {
@@ -17,10 +17,10 @@ class SessionsRouter extends Routers {
         this.get('/newpassword', ['PUBLIC'], newPasswordController)
         this.delete('/logout', ['USER', 'ADMIN', 'PREMIUM'], logoutController)
         
+        //google
         this.get('/auth/google', ['PUBLIC'],passport.authenticate('google', { session: false }))
         this.get('/auth/google/callback', ['PUBLIC'],passport.authenticate('google', 
         {session: false,failureRedirect: '/auth/google/failure',successRedirect: '/'}))
-        
         this.get('/auth/google/failure', ['PUBLIC'], async (req, res) => res.json({status: false, error: 'Error in google'}))
     }
 }

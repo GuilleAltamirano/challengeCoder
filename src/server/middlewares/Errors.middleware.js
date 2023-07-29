@@ -2,7 +2,7 @@ import { ApiError } from "../errors/Api.error.js"
 import { logger } from "../utils/logger.js"
 // import { generateWhatsapp } from "../utils/twilio.js"
 
-export const errorMiddlewares = async (err, req, res, next) => {
+export const errorMiddleware = async (err, req, res, next) => {
     if (err instanceof ApiError) {
         logger.error(err.message)
         return res.status(err.status).json({

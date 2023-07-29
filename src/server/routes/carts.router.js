@@ -2,7 +2,7 @@ import Routers from "./router.js"
 import { isValidObjectId } from "mongoose"
 import { ApiError } from "../errors/Api.error.js"
 import { getCartsController, getCartByIdController, postCarts, postProdInCartController, postPurchaseController, putCartController, putQuantityProds, delProdInCart } from "../controllers/carts.controller.js"
-import { cartsValidation } from "../validations/joiCarts.validation.js"
+import { cartsValidation } from "../middlewares/cartsValidation.middleware.js"
 
 class CartsRouter extends Routers {
     constructor () {

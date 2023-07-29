@@ -6,7 +6,7 @@ import { getProductsController,
 import Routers from "./router.js"
 import { isValidObjectId } from "mongoose"
 import { ApiError } from "../errors/Api.error.js"
-import { productsValidation } from "../validations/joiProducts.validation.js"
+import { productsValidation } from "../middlewares/productsValidation.middleware.js"
 
 class ProductsRouter extends Routers {
         constructor () {
@@ -22,7 +22,7 @@ class ProductsRouter extends Routers {
 
         async init(){
                 this.get('/',['PUBLIC'], getProductsController)
-                this.get('/:pid',['USER', 'ADMIN'], getProductsByIdController)
+                this.get('/:pid',['USER', 'PREMIUM','ADMIN'], getProductsByIdController)
 
                 this.post('/',['ADMIN', 'PREMIUM'], await productsValidation('post'), postProductsController)
 

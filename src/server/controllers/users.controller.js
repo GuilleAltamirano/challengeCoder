@@ -1,5 +1,15 @@
 import { usersServices } from "../services/Users.service.js"
 
+export const getUsersPaginateController = async (req, res, next) => {
+    try {
+        const {role=null, status=null, verified=null, page=1} = req.query
+
+        const result = await usersServices.paginate({role, status, verified, page})
+
+        res.jsonSuccess(result)
+    } catch (err) {next(err)}
+}
+
 export const postUsersController = async (req, res, next) => {
     try {
         const { first_name, last_name, email, age, password } = req.body
@@ -34,9 +44,10 @@ export const putNewPasswordController = async (req, res, next) => {
 export const putRoleController = async (req, res, next) => {
     try {
         const uid = req.uid
+
         const token = await usersServices.challengeRole({uid})
 
-        res.clearCookie('cookieToken').cookieSession(token)
+        res.clearCookie('cookieToken').cookieSession(token) //Change cookie
     } catch (err) {next(err)}
 }
 
@@ -44,8 +55,17 @@ export const postUploadsDocumentsController = async (req, res, next) => {
     try {
         const files = req.files
         const user = req.user.user
+
         const status = await usersServices.uploadsDocuments({files, user})
 
         res.jsonMessage('Upload success')
+    } catch (err) {next(err)}
+}
+
+export const deleteUsersController = async (req, res, next) => {
+    try {
+        const result = await usersServices.deleteUsers()
+
+        res.jsonMessage('Users deleted')
     } catch (err) {next(err)}
 }

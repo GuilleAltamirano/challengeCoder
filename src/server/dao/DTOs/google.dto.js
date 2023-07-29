@@ -7,5 +7,6 @@ export class GoogleDto {
         this.cart = cart._id
         this.age = undefined
         this.verified = profile.verified
+        this.profile = profile.picture
     }
 }

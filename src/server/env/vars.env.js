@@ -1,7 +1,8 @@
 import { config } from "dotenv"
 import commander from "../utils/commander.js"
+
 let envPath = '.env.production'
-if (commander.mode != 'production'){commander.mode === 'dev' ? envPath = '.env.dev' : envPath = '.env.test'}
+commander.mode != 'production' ? envPath = '.env.dev' : envPath = '.env.production'
 config({ path: envPath })
 
 export default {

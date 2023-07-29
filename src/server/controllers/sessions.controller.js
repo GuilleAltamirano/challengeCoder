@@ -13,6 +13,7 @@ export const cookieExtractor = req  => {
 export const loginController = async (req, res, next) => {
     try {
         const { email, password } = req.body
+
         const token = await sessionsServices.login({email, password})
 
         res.cookieSession(token)
@@ -22,6 +23,7 @@ export const loginController = async (req, res, next) => {
 export const logoutController = async (req, res, next) => {
     try {
         const user = req.user.user
+        
         const updateLastConnection = await sessionsServices.logout({user})
 
         res.clearCookie('cookieToken').redirectPage('/login')
@@ -30,7 +32,7 @@ export const logoutController = async (req, res, next) => {
 
 export const googleController = async (request, accessToken, refreshToken, profile, done) => {
     try {
-        const token = await sessionsServices.googleAuth(profile)
+        const token = await sessionsServices.googleAuth({profile})
 
         const res = request.res
         res.cookie('cookieToken', token, {
@@ -44,7 +46,7 @@ export const googleController = async (request, accessToken, refreshToken, profi
 
 export const emailsValidationController = async (req, res, next) => {
     try {
-        const code = req.query.code
+        const code = req.query.code //code is uid
 
         const codeValid = await sessionsServices.codeValid({_id: code})
 
@@ -55,9 +57,10 @@ export const emailsValidationController = async (req, res, next) => {
 export const forgotPasswordController = async (req, res, next) => {
     try {
         const { email } = req.body
+
         const code = await sessionsServices.forgotPassword({email})
 
-        if (commander.mode === 'dev') return res.jsonSuccess({code, redirect: '/login'})
+        if (commander.mode === 'dev') return res.jsonSuccess({code, redirect: '/login'}) //for supertest
         return res.redirectPage('/login')
     } catch (err) {next(err)}
 }
@@ -70,12 +73,11 @@ export const newPasswordController = async (req, res, next) => {
             if (user) return req.user = user
             return req.user = undefined
         })(req, res, next)
-        //new email
         if (!req.user) return res.redirectPage('/forgotpassword')
         
-        const {token, id} = await sessionsServices.newPassword({email: req.user.user})
+        const {token, id} = await sessionsServices.newPassword({email: req.user.user}) //jwt valid
         
-        //cookie for challenge password
+        //cookie and redirect for challenge password
         return res.cookieNewPassword({token, id})
     } catch (err) {next(err)}
 }

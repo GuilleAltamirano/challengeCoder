@@ -5,6 +5,7 @@ import { usersRoute } from "./users.router.js"
 import { productsRoute } from "./products.router.js"
 import { sessionsRoute } from "./sessions.router.js"
 import { messagesRoute } from "./messages.router.js"
+import commander from '../utils/commander.js'
 
 export const routes = async (app) => {
     app
@@ -13,5 +14,6 @@ export const routes = async (app) => {
         .use('/api/products', await productsRoute.getRouter())
         .use('/api/sessions', await sessionsRoute.getRouter())
         .use('/api/messages', await messagesRoute.getRouter())
-        .use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
+        
+        if (commander.mode === 'dev') app.use('/api/docs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs))
 }

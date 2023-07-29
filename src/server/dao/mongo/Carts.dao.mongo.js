@@ -6,7 +6,6 @@ export class CartsDaoMongo {
         }
 
         async get (query) {
-                if(!query) return this.carts.find().lean()
                 return this.carts.find(query).lean()
         }
 
@@ -21,8 +20,8 @@ export class CartsDaoMongo {
                 return this.carts.create({products: []})
         }
 
-        async put(id, prod) {
-                return this.carts.updateOne({_id: id}, {products: prod})
+        async put({_id}, prod) {
+                return this.carts.updateOne({_id}, {products: prod})
         }
 
 }

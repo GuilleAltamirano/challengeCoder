@@ -5,19 +5,6 @@ import { ApiError } from "../errors/Api.error.js"
 import fs from 'fs'
 
 
-export const uploadDocuments = async (req, res, next) => {
-    upload.fields([
-        { name: 'identification', maxCount: 1 },
-        { name: 'address', maxCount: 1 },
-        { name: 'account_status', maxCount: 1 },
-        { name: 'profile', maxCount: 1 }
-    ]) (req, res, (err) => {
-        if (err) return next(new ApiError('Upload invalid', 400))
-        next()
-    })
-}
-
-
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const user = req.user.user.fullname
@@ -48,9 +35,13 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({
+export const upload = multer({
     storage: storage,
     limits: { fileSize: 1 * 1024 * 1024 }, // 1 Mb
+    onError: (error, next) => {
+        const err = new ApiError('Upload incomplete', 400)
+        next(err)
+    },
     fileFilter: (req, file, callback) => {
         let acceptableExtensions = []
         if (file.fieldname === 'identification' || file.fieldname === 'address' || file.fieldname === 'account_status') acceptableExtensions = ['png', 'jpg', 'jpeg', 'pdf']

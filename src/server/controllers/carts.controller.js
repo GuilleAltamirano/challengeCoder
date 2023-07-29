@@ -4,6 +4,7 @@ import { productServices } from "../services/Products.service.js"
 export const getCartsController = async (req, res, next) => {
     try {
         const { page=1, limit=10, product, sort } = req.query
+        
         const {docs, totalPages, hasPrevPage, prevPage, hasNextPage, nextPage} = await cartsServices.paginate({ page, limit, product, sort })
 
         res.jsonSuccess({docs, totalPages, hasPrevPage, prevPage, hasNextPage, nextPage})
@@ -13,9 +14,10 @@ export const getCartsController = async (req, res, next) => {
 export const getCartByIdController = async (req, res, next) => {
     try {
         const cid = req.cid
+
         const cart = await cartsServices.get({_id: cid})
 
-        res.json({payload: cart})
+        res.jsonSuccess({payload: cart})
     } catch (err) {next(err)}
 }
 
@@ -42,8 +44,9 @@ export const postProdInCartController = async (req, res, next) => {
 export const postPurchaseController = async (req, res, next) => {
     try {
         const cid = req.cid
-        const {ticket, refuseProducts} = await cartsServices.postPurchase(cid)
-        const payload = {
+        
+        const {ticket, refuseProducts} = await cartsServices.postPurchase({cid})
+        const payload = { //failed are not supported
             successful_purchase: ticket,
             failed_purchase: refuseProducts
         }
@@ -55,8 +58,9 @@ export const postPurchaseController = async (req, res, next) => {
 export const putCartController = async (req, res, next) => {
     try {
         const cid = req.cid
-        const cart = await cartsServices.get({_id: cid})
+
         const newProds = req.body.products ?? [] //[] is for remove all
+
         const updated = await cartsServices.put({_id: cid, products: newProds})
 
         res.jsonSuccess(newProds)
@@ -79,7 +83,6 @@ export const delProdInCart = async (req, res, next) => {
     try {
         const cid = req.cid
         const pid = req.pid
-        const prod = await productServices.get({_id: pid}) //valid product existence
 
         const updated = await cartsServices.delProdInCart({cid, pid})
 

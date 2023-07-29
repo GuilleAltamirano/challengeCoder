@@ -1,9 +1,9 @@
 import { isValidObjectId } from "mongoose"
-import { postUsersController, putNewPasswordController, putRoleController, postUploadsDocumentsController } from "../controllers/users.controller.js"
+import { getUsersPaginateController, postUsersController, putNewPasswordController, putRoleController, postUploadsDocumentsController, deleteUsersController } from "../controllers/users.controller.js"
 import Routers from "./router.js"
 import { ApiError } from "../errors/Api.error.js"
-import { usersValidation } from "../validations/joiUsers.validation.js"
-import { uploadDocuments } from "../utils/multer.js"
+import { usersValidation } from "../middlewares/usersValidation.middleware.js"
+import { uploadDocuments } from "../middlewares/upload.middleware.js"
 
 class UsersRouter extends Routers {
     constructor () {
@@ -18,11 +18,15 @@ class UsersRouter extends Routers {
     }
 
     async init(){
+        this.get('/', ['ADMIN'], getUsersPaginateController)
+
         this.post('/register', ['PUBLIC'], await usersValidation('post'), postUsersController)
         this.post('/:uid/documents', ['USER', 'PREMIUM', 'ADMIN'], uploadDocuments, postUploadsDocumentsController)
 
         this.put('/newPassword/:uid', ['USER', 'PREMIUM'], putNewPasswordController)
         this.put('/premium/:uid', ['USER', 'PREMIUM'], putRoleController)
+
+        this.delete('/', ['ADMIN'], deleteUsersController)
     }
 }
 

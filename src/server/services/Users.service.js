@@ -1,4 +1,4 @@
-import { UsersDto } from "../dao/DTOs/users.dto.js"
+import { UsersDto, UsersPaginateDto } from "../dao/DTOs/users.dto.js"
 import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
@@ -9,25 +9,47 @@ import { SessionsDto } from "../dao/DTOs/sessions.dto.js"
 import { __dirname } from "../utils/utils.js"
 
 class UsersServices {
+    async paginate ({ role, status, verified, page }) {
+        const users = []
+        const arrayPage = []
+
+        const {docs, totalDocs, totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } = await usersDao.paginate({role, status, verified, page})
+        
+        if (page > totalPages) throw new ApiError('Query error', 400)
+        //remove sensitive data
+        docs.forEach(doc => {
+            const user = new UsersPaginateDto(doc)
+            users.push(user)
+        })
+        //for navigation button
+        let start = Math.max(1, page - 5)
+        let end = Math.min(totalPages, start + 9)
+        for (let i = start; i <= end; i++) {
+            arrayPage.push(i)
+        }
+        
+        return {users, totalDocs, arrayPage, totalPages, page, hasPrevPage, hasNextPage, prevPage, nextPage }
+    }
+
     async post ({ first_name, last_name, email, age, password }) {
-        const existUser = await usersDao.get({email})
+        const emailLower = email.toLowerCase()
+        const existUser = await usersDao.get({email: emailLower})
         if ((email === varsEnv.EMAIL_ADMIN) || existUser.length > 0) throw new ApiError('user existing', 400)
 
         const cart = await cartsDao.post()
         password = await createHash(password)
-        const newUser = await usersDao.post(new UsersDto({first_name, last_name, email, age, password, cart: cart._id}))
+        const newUser = await usersDao.post(new UsersDto({first_name, last_name, email: emailLower, age, password, cart: cart._id}))
 
-        const sendEmailVerify = await sendEmailValidation({receiver: email, code: newUser._id, use: 'verify', user: newUser.first_name})
+        const sendEmailVerify = await sendEmailValidation({receiver: email, code: newUser._id, use: 'verify', user: first_name})
 
         return
     }
 
-    async put (data) {
-        const {uid, update} = data
+    async put ({uid}, update) {
         const user = await usersDao.get({_id: uid})
         if (!user) throw new ApiError('User invalid', 400)
-        const { email=user.email, age=user.age, password=user.password, role=user.role } = update
-        const updated = await usersDao.put({ email, age, password, role })
+
+        const updated = await usersDao.put({_id: uid}, update)
         return updated
     }
 
@@ -40,7 +62,8 @@ class UsersServices {
         if (isValid) throw new ApiError('Invalid, same password', 400)
 
         const newPassword = await createHash(password)
-        const upUser = await usersDao.put(_id, {password: newPassword})
+
+        const updateUser = await usersDao.put(_id, {password: newPassword})
         
         return
     }
@@ -49,19 +72,19 @@ class UsersServices {
         const existUser = await usersDao.get({_id: uid})
         if (existUser.length === 0) throw new ApiError('User no existing', 400)
 
-
         if (existUser[0].role === 'ADMIN') return
-        if (existUser[0].role === 'USER' && existUser[0].status !== 'AllDocuments' || existUser[0].status !== 'AllDocuments') throw new ApiError('Documentation incomplete', 401)
+        if (existUser[0].role === 'USER' && (existUser[0].status !== 'AllDocuments' || existUser[0].email_verified !== 'Verified')) throw new ApiError('Documentation incomplete', 401)
         existUser[0].role === 'USER' ? await usersDao.put({_id: uid}, {role: 'PREMIUM'}) : await usersDao.put({_id: uid}, {role: 'USER'})
 
         const updateUser = await usersDao.get({_id: uid})
-        const user = new SessionsDto(updateUser[0])
+        const user = new SessionsDto(updateUser[0]) //remove sensitive data
         const token = await generateToken(user)
         
         return token
     }
 
     async uploadsDocuments ({files, user}) {
+        if (!files) throw new ApiError('Upload incomplete or invalid', 400)
         const dataUser = await usersDao.get({email: user.email})
         const documents = dataUser[0].documents
         
@@ -72,7 +95,7 @@ class UsersServices {
         }
         
         //remove extra path
-        if (files.profile[0].path) {
+        if (files && files.profile) {
             const path = files.profile[0].path
             const last = "uploads";
             const deletePath = path.replace(path.split(last)[0], "/")
@@ -80,9 +103,9 @@ class UsersServices {
             dataUser[0].profile = deletePath
         } 
 
-        if (files.identification && files.identification[0].path) documents.push(await documentation(files.identification[0].fieldname, files.identification[0].path))
-        if (files.address && files.address[0].path) documents.push(await documentation(files.address[0].fieldname, files.address[0].path))
-        if (files.account_status && files.account_status[0].path) documents.push(await documentation(files.account_status[0].fieldname, files.account_status[0].path))
+        if (files && files.identification) documents.push(await documentation(files.identification[0].fieldname, files.identification[0].path))
+        if (files && files.address) documents.push(await documentation(files.address[0].fieldname, files.address[0].path))
+        if (files && files.account_status) documents.push(await documentation(files.account_status[0].fieldname, files.account_status[0].path))
         
         //update status
         const qtyDocuments = 3
@@ -100,6 +123,15 @@ class UsersServices {
         const userUpdate = await usersDao.put({_id: dataUser[0]._id}, dataUser[0])
 
         return 
+    }
+
+    async deleteUsers () {
+        let twoDaysAgo = new Date()
+        twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
+
+        const deleted = await usersDao.delete(twoDaysAgo)
+
+        return deleted
     }
 
 }
