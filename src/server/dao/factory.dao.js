@@ -6,8 +6,9 @@ import { messagesDaosMongo } from "./mongo/Messages.dao.mongo.js";
 import { productsDaosMongo } from "./mongo/Products.dao.mongo.js";
 import { ticketsDaoMongo } from "./mongo/Tickets.dao.mongo.js";
 import { userDaosMongo } from "./mongo/Users.dao.mongo.js";
+import { pricesDaoMongo } from "./mongo/Prices.dao.mongo.js";
 
-export let productsDao, cartsDao, usersDao, messagesDao, ticketsDao
+export let productsDao, cartsDao, usersDao, messagesDao, ticketsDao, pricesDao
 
 switch (varsEnv.PERSISTENCE) {
     case 'MONGO':
@@ -17,6 +18,7 @@ switch (varsEnv.PERSISTENCE) {
         usersDao = userDaosMongo
         messagesDao = messagesDaosMongo
         ticketsDao = ticketsDaoMongo
+        pricesDao = pricesDaoMongo
         break;
 
     case 'MEMORY':

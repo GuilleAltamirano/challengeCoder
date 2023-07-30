@@ -22,10 +22,10 @@ export const getProductsByIdController = async (req, res, next) => {
 
 export const postProductsController = async (req, res, next) => {
     try {
-        const { title, description, code, price, stock, category, thumbnails } = req.body
+        const { title, description, code, prices, stock, category, thumbnails } = req.body
         const user = req.user.user
         
-        const payload = await productServices.post({ title, description, code, price, stock, category, thumbnails, user })
+        const payload = await productServices.post({ title, description, code, prices, stock, category, thumbnails, user })
 
         res.jsonSuccess(payload)
     } catch (err) {next(err)}

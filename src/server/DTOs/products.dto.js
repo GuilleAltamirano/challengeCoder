@@ -3,8 +3,8 @@ export class ProductsDtoPost {
         this.title = product.title
         this.description = product.description
         this.code = product.code
-        this.price = product.price
-        this.status = true
+        this.prices = product.prices
+        this.status = 'Active'
         this.stock = product.stock
         this.category = product.category
         this.thumbnails = product.thumbnails

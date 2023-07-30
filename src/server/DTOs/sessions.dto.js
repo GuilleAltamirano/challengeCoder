@@ -1,4 +1,4 @@
-import varsEnv from "../../env/vars.env.js"
+import varsEnv from "../env/vars.env.js"
 
 export class SessionsDto {
     constructor (data) {

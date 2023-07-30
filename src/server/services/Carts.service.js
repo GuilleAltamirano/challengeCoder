@@ -1,4 +1,4 @@
-import { PurchaseDto } from "../dao/DTOs/carts.dto.js"
+import { PurchaseDto } from "../DTOs/carts.dto.js"
 import { cartsDao, productsDao, ticketsDao, usersDao } from "../dao/factory.dao.js"
 import { ApiError } from "../errors/Api.error.js"
 import { productServices } from "./Products.service.js"
@@ -37,8 +37,9 @@ class CartsServices {
 
     async postProdInCart ({cid, pid, user}) {
         const prod = await productServices.get({_id: pid}) //valid product existence
-        //Validations
-        if (!prod[0].status || !prod[0] || prod.length === 0) throw new ApiError('Product invalid', 400)
+
+        if (prod[0].status !== 'Active' || !prod[0] || prod.length === 0) throw new ApiError('Product invalid', 400)
+        //owner != Admin cannot buy your product
         if (prod[0].owner === user.email && prod[0].owner !== 'ADMIN') throw new ApiError('No permission', 400)
 
         const prodsInCart = await this.get({_id: cid}) //control the bug
@@ -76,7 +77,7 @@ class CartsServices {
         for (let prod = 0; prod < products.length; prod++) {
             const {_id, stock, price, quantity, status} = new PurchaseDto(products[prod])
             
-            if ((quantity > stock) || !status) continue
+            if ((quantity > stock) || status !== 'Active') continue
             
             success.push(_id)
             acu += quantity * price
@@ -100,7 +101,7 @@ class CartsServices {
 
     async putQtyProd ({cid, pid, qty}) {
         const prod = await productServices.get({_id: pid}) //valid product existence
-        if (prod[0].stock < qty || !prod[0].status) throw new ApiError('Quantity or product invalid', 400)
+        if (prod[0].stock < qty || prod[0].status !== 'Active') throw new ApiError('Quantity or product invalid', 400)
         //validations
         const cart = await this.get({_id: cid})
         if (cart.length === 0) throw new ApiError('Cart invalid', 400)

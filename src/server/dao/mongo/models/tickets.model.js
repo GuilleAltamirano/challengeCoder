@@ -6,6 +6,11 @@ const ticketsSchema = new Schema({
         default: () => Math.random().toString(36).substring(2, 8), // Generates a random string of 6 characters
         unique: true
     },
+    products: [{
+        product: {type: String, required: true},
+        quantity: {type: Number, required: true, min: 1},
+        price: {type: Number, required: true}
+    }],
     purchase_datetime: { type: Date, default: Date.now, required: true },
     amount: {type: Number, min: 1, required: true},
     purchaser: {type: String, required: true, ref: 'Users.email'}

@@ -12,7 +12,7 @@ import dataImg from '../../assets/components/data-analytics.png'
 
 const Home = () => {
     const navigate = useNavigate()
-    const {isAuth} = useContext(AuthContext)
+    const {isAuth, setIsAuth} = useContext(AuthContext)
     const {user} = useContext(UserContext)
 
     useEffect(() => {

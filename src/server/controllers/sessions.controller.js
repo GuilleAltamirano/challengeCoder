@@ -33,11 +33,11 @@ export const logoutController = async (req, res, next) => {
 export const googleController = async (request, accessToken, refreshToken, profile, done) => {
     try {
         const token = await sessionsServices.googleAuth({profile})
-
+        console.log('estoy aca');
         const res = request.res
         res.cookie('cookieToken', token, {
             signed: true,
-            maxAge: 3600000,
+            maxAge: 3600000 * 12,
             httpOnly: true
         })
         done(null, token)

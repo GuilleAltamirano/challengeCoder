@@ -1,11 +1,11 @@
-import { UsersDto, UsersPaginateDto } from "../dao/DTOs/users.dto.js"
+import { UsersDto, UsersPaginateDto } from "../DTOs/users.dto.js"
 import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
 import { createHash, isValidPassword } from "../utils/bcrypt.js"
 import { generateToken } from "../config/passport.config.js"
 import { sendEmailValidation } from "../utils/nodemailer.js"
-import { SessionsDto } from "../dao/DTOs/sessions.dto.js"
+import { SessionsDto } from "../DTOs/sessions.dto.js"
 import { __dirname } from "../utils/utils.js"
 
 class UsersServices {

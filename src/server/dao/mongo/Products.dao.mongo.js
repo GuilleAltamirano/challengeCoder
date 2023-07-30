@@ -1,7 +1,6 @@
 import { productsModel } from "./models/products.model.js"
 
 export class ProductsDaoMongo {
-    
     constructor () {
         this.products = productsModel
     }
@@ -11,7 +10,7 @@ export class ProductsDaoMongo {
     }
 
     async paginate ({ page, limit, category, sort, provider }) {
-        const filter = {status: true}
+        const filter = {status: 'Active'}
         if (category) filter.category = category
         if (provider) filter.title = provider
 

@@ -1,5 +1,5 @@
-import { ProductsDtoPost } from "../dao/DTOs/products.dto.js";
-import { productsDao } from "../dao/factory.dao.js";
+import { ProductsDtoPost } from "../DTOs/products.dto.js";
+import { productsDao, pricesDao } from "../dao/factory.dao.js";
 import { ApiError } from "../errors/Api.error.js";
 import { sendEmailValidation } from "../utils/nodemailer.js";
 
@@ -38,10 +38,12 @@ class ProductsServices {
     async post (prod) { //user in prod
         const existProd = await productsDao.get({code: prod.code})
         if (existProd.length !== 0) throw new ApiError(`Existing product`, 404)
-        
+
+        const newPrices = await pricesDao.post(prod.prices)
+        prod.prices = newPrices._id
         const addProd = new ProductsDtoPost(prod) //add owner and status
         const newProd = await productsDao.post(addProd)
-
+        
         return newProd
     }
 
@@ -61,7 +63,7 @@ class ProductsServices {
         if (user.email !== existProd[0].owner && user.role !== 'ADMIN') throw new ApiError('No permission', 400)
         if (existProd[0].owner !== 'ADMIN') sendEmailValidation({receiver: user.email, use: 'delProd', user: user.fullname, code: existProd[0].title})
 
-        const del = await productsDao.put({_id}, {status: false})
+        const del = await productsDao.put({_id}, {status: 'Disable'})
         
         return
     }

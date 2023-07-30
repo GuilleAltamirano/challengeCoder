@@ -56,7 +56,7 @@ export default class Routers {
             res.redirectPage = url => res.status(302).redirect(url)
             res.cookieSession = token => res.cookie('cookieToken', token, {
                 signed: true,
-                maxAge: 3600000,
+                maxAge: 3600000 * 12,
                 httpOnly: true
             }).redirect(302, '/home')
             res.cookieAuthEmail = (date) => res.cookie('cookieAuthEmail', date, {

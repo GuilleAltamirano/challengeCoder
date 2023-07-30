@@ -1,5 +1,5 @@
-import { GoogleDto } from "../dao/DTOs/google.dto.js"
-import { SessionsDto } from "../dao/DTOs/sessions.dto.js"
+import { GoogleDto } from "../DTOs/google.dto.js"
+import { SessionsDto } from "../DTOs/sessions.dto.js"
 import { cartsDao, usersDao } from "../dao/factory.dao.js"
 import varsEnv from "../env/vars.env.js"
 import { ApiError } from "../errors/Api.error.js"
