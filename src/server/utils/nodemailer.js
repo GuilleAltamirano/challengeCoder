@@ -1,19 +1,21 @@
 import { createTransport } from "nodemailer"
 import varsEnv from "../env/vars.env.js"
 
+const {PROJECT_NAME, EMAIL_NODEMAILER, PASS_NODEMAILER} = varsEnv
+
 //config
 const nodemailer = createTransport({
     service: 'gmail',
     port: 587,
     auth: {
-        user: varsEnv.EMAIL_NODEMAILER,
-        pass: varsEnv.PASS_NODEMAILER
+        user: EMAIL_NODEMAILER,
+        pass: PASS_NODEMAILER
     }
 })
 
 export const sendEmailValidation = async ({receiver, code, use, user}) => {
     nodemailer.sendMail({
-        from: `Ddbase <${varsEnv.EMAIL_NODEMAILER}>`,
+        from: `${PROJECT_NAME} <${EMAIL_NODEMAILER}>`,
         to: receiver,
         subject: typeSubject({use}),
         html: typeEmail({code, user, use}),
@@ -45,7 +47,7 @@ const htmlForgot = ({code, user}) => {
                             <tr>
                                 <td align="center" style="padding: 40px 0 30px 0;">
                                     <img src="https://firebasestorage.googleapis.com/v0/b/ddbase.appspot.com/o/nav%2FisoTipo.png?alt=media&token=cd21ebbe-2412-4aa7-9662-1b21b1b44833" alt="Logo Ddbase" width="80" height="70" style="display: block;" />
-                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>Ddbase</h1>
+                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>${PROJECT_NAME}</h1>
                                 </td>
                             </tr>
                             <tr>
@@ -58,7 +60,7 @@ const htmlForgot = ({code, user}) => {
                                         </tr>
                                         <tr>
                                             <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 20px; padding: 20px 0 30px 0; color:white;">
-                                                We heard that you lost your Ddbase password. Sorry about that!<br><br>But don’t worry! You can use the following bottom to reset your password:<br><br>
+                                                We heard that you lost your ${PROJECT_NAME} password. Sorry about that!<br><br>But don’t worry! You can use the following bottom to reset your password:<br><br>
                                             </p>
                                         </tr>
                                         <tr align="center">
@@ -89,7 +91,7 @@ const htmlVerify = ({code, user}) => {
                             <tr>
                                 <td align="center" style="padding: 40px 0 30px 0;">
                                     <img src="https://firebasestorage.googleapis.com/v0/b/ddbase.appspot.com/o/nav%2FisoTipo.png?alt=media&token=cd21ebbe-2412-4aa7-9662-1b21b1b44833" alt="Logo Ddbase" width="80" height="70" style="display: block;" />
-                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>Ddbase</h1>
+                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>${PROJECT_NAME}</h1>
                                 </td>
                             </tr>
                             <tr>
@@ -97,7 +99,7 @@ const htmlVerify = ({code, user}) => {
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
                                             <p style="font-family: Arial, sans-serif; font-size: 24px; color:white;">
-                                                Welcome to Ddbase ${user}
+                                                Welcome to ${PROJECT_NAME} ${user}
                                             </p>
                                         </tr>
                                         <tr>
@@ -133,7 +135,7 @@ const htmlDelProd = ({code, user}) => {// code is product name
                             <tr>
                                 <td align="center" style="padding: 40px 0 30px 0;">
                                     <img src="https://firebasestorage.googleapis.com/v0/b/ddbase.appspot.com/o/nav%2FisoTipo.png?alt=media&token=cd21ebbe-2412-4aa7-9662-1b21b1b44833" alt="Logo Ddbase" width="80" height="70" style="display: block;" />
-                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>Ddbase</h1>
+                                    <h1 style='font-size: 350%; color: white; margin: 0 0 0 1%;'>${PROJECT_NAME}</h1>
                                 </td>
                             </tr>
                             <tr>
@@ -152,7 +154,7 @@ const htmlDelProd = ({code, user}) => {// code is product name
                                             We sincerely apologize for any inconvenience this may have caused and would like to provide you with further details regarding this action. Our moderation team carefully reviewed the products listed on our website and found that your product ${code} violated our terms of use and conditions.
                                             </p>
                                             <p style="font-family: Arial, sans-serif; font-size: 16px; line-height: 20px; padding: 20px 0 30px 0; color:white;">
-                                            Thank you for being a part of our community at Ddbase. We look forward to seeing you again and wish you success in your future transactions.
+                                            Thank you for being a part of our community at ${PROJECT_NAME}. We look forward to seeing you again and wish you success in your future transactions.
                                             </p>
                                         </tr>
                                     </table>

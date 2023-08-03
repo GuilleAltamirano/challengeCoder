@@ -5,10 +5,12 @@ import GoogleStrategy from "passport-google-oauth2"
 import { cookieExtractor, googleController,  } from "../controllers/sessions.controller.js"
 import varsEnv from "../env/vars.env.js"
 
+const {JWT_SECRET_KEY, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, SESSION_DURATION, TOKEN_VALIDATION_DURATION} = varsEnv
+
 export const passportConfig = async () => {
     passport.use('login', new Strategy({
         jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-        secretOrKey: varsEnv.JWT_SECRET_KEY
+        secretOrKey: JWT_SECRET_KEY
     }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload)
@@ -17,7 +19,7 @@ export const passportConfig = async () => {
 
     passport.use('verification', new Strategy({
         jwtFromRequest: ExtractJwt.fromUrlQueryParameter('code'),
-        secretOrKey: varsEnv.JWT_SECRET_KEY
+        secretOrKey: JWT_SECRET_KEY
     }, async (jwt_payload, done) => {
         try {
             return done(null, jwt_payload)
@@ -25,13 +27,13 @@ export const passportConfig = async () => {
     }))
 
     passport.use('google', new GoogleStrategy.Strategy({
-        clientID: varsEnv.GOOGLE_CLIENT_ID,
-        clientSecret: varsEnv.GOOGLE_CLIENT_SECRET,
+        clientID: GOOGLE_CLIENT_ID,
+        clientSecret: GOOGLE_CLIENT_SECRET,
         callbackURL: "http://localhost:8080/api/sessions/auth/google/callback",
         passReqToCallback: true,
         scope: [ 'email', 'profile' ]
     }, googleController))
 }
 //generate tokens
-export const generateToken = async (user) => {return jwt.sign({user}, varsEnv.JWT_SECRET_KEY, {expiresIn: "12h"})}
-export const generateTokenForValidation = async (user) => {return jwt.sign({user}, varsEnv.JWT_SECRET_KEY, {expiresIn: "1h"})}
+export const generateToken = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: SESSION_DURATION})}
+export const generateTokenForValidation = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: TOKEN_VALIDATION_DURATION})}

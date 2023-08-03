@@ -1,10 +1,12 @@
 import varsEnv from "../env/vars.env.js"
 
+const {SUPERIOR_PRIVILEGES, EMAIL_ADMIN} = varsEnv
+
 export class SessionsDto {
     constructor (data) {
-        if (data === 'admin') {
+        if (data === SUPERIOR_PRIVILEGES) {
             this.fullname = data
-            this.email = varsEnv.EMAIL_ADMIN
+            this.email = EMAIL_ADMIN
             this.role = data
             return
         }

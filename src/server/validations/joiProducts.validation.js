@@ -10,12 +10,13 @@ export const schemaProducts = Joi.object({
         list_two: Joi.number().min(1),
         list_three: Joi.number().min(1),
         promotion: Joi.number().min(1),
-    }).length(5),
+    }).min(4).max(5),
     stock: Joi.number().min(1),
     category: Joi.string(),
     promotion: Joi.string(),
+    provider: Joi.string(),
     thumbnails: Joi.array().items(Joi.string())
 }).alter({
-    post: (schema) => schema.required().min(6).max(7),//thumbnails optional
+    post: (schema) => schema.required().min(6).max(8),//thumbnails optional
     put: (schema) => schema.min(1).max(7),
 })

@@ -1,5 +1,4 @@
 import { cartsServices } from "../services/carts.service.js"
-import { productServices } from "../services/Products.service.js"
 
 export const getCartsController = async (req, res, next) => {
     try {

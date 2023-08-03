@@ -4,6 +4,9 @@ import Routers from "./router.js"
 import { ApiError } from "../errors/Api.error.js"
 import { usersValidation } from "../middlewares/usersValidation.middleware.js"
 import { uploadDocuments } from "../middlewares/upload.middleware.js"
+import varsEnv from "../env/vars.env.js"
+
+const {SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED, ROLE_USER_BASIC, ROLE_PUBLIC} = varsEnv
 
 class UsersRouter extends Routers {
     constructor () {
@@ -18,15 +21,15 @@ class UsersRouter extends Routers {
     }
 
     async init(){
-        this.get('/', ['ADMIN'], getUsersPaginateController)
+        this.get('/', [SUPERIOR_PRIVILEGES], getUsersPaginateController)
 
-        this.post('/register', ['PUBLIC'], await usersValidation('post'), postUsersController)
-        this.post('/:uid/documents', ['USER', 'PREMIUM', 'ADMIN'], uploadDocuments, postUploadsDocumentsController)
+        this.post('/register', [ROLE_PUBLIC], await usersValidation('post'), postUsersController)
+        this.post('/:uid/documents', [ROLE_USER_BASIC, ROLE_USER_ADVANCED, SUPERIOR_PRIVILEGES], uploadDocuments, postUploadsDocumentsController)
 
-        this.put('/newPassword/:uid', ['USER', 'PREMIUM'], putNewPasswordController)
-        this.put('/premium/:uid', ['USER', 'PREMIUM'], putRoleController)
+        this.put('/newPassword/:uid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], putNewPasswordController)
+        this.put('/premium/:uid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], putRoleController)
 
-        this.delete('/', ['ADMIN'], deleteUsersController)
+        this.delete('/', [SUPERIOR_PRIVILEGES], deleteUsersController)
     }
 }
 

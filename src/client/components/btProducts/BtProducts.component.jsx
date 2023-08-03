@@ -16,9 +16,9 @@ export const QtyProdComponent = ({stock}) => {
 
     return (
         <div className={style.container_qty}>
-            <button disabled={qty <= 1} onClick={decQty}>-</button>
-            <p>{qty}</p>
             <button disabled={qty >= stock} onClick={incQty}>+</button>
+            <p>{qty}</p>
+            <button disabled={qty <= 1} onClick={decQty}>-</button>
         </div>
     )
 }

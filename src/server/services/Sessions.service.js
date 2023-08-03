@@ -7,12 +7,14 @@ import { isValidPassword } from "../utils/bcrypt.js"
 import { generateToken, generateTokenForValidation } from "../config/passport.config.js"
 import { sendEmailValidation } from "../utils/nodemailer.js"
 
+const {EMAIL_ADMIN, PASSWORD_ADMIN, SUPERIOR_PRIVILEGES, EMAIL_VERIFIED_USERS} = varsEnv
+
 class SessionsServices {
     async login ({ email, password }) {
         const emailLower = email.toLowerCase()
 
         //is admin? For greater security, the admin must be exact regarding capital letters
-        if (email === varsEnv.EMAIL_ADMIN && passwordLower === varsEnv.PASSWORD_ADMIN) return new SessionsDto('admin')
+        if (email === EMAIL_ADMIN && passwordLower === PASSWORD_ADMIN) return new SessionsDto(SUPERIOR_PRIVILEGES)
 
         const existUser = await usersDao.get({email: emailLower})
         if (!existUser.length === 0) throw new ApiError(`User or password invalid`, 400)
@@ -41,12 +43,12 @@ class SessionsServices {
         const user = await usersDao.get({_id})
         if (user.length === 0) throw new ApiError('User invalid', 400)
         
-        const update = await usersDao.put({_id}, {verified: 'Verified'})
+        const update = await usersDao.put({_id}, {verified: EMAIL_VERIFIED_USERS})
         return update
     }
 
     async googleAuth ({profile}) {
-        if (profile.email === varsEnv.EMAIL_ADMIN) return new SessionsDto('admin')
+        if (profile.email === EMAIL_ADMIN) return new SessionsDto(SUPERIOR_PRIVILEGES)
         
         const existUser = await usersDao.get({email: profile.email})
         if (existUser.length === 0) {

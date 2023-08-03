@@ -2,6 +2,9 @@ import { PurchaseDto } from "../DTOs/carts.dto.js"
 import { cartsDao, productsDao, ticketsDao, usersDao } from "../dao/factory.dao.js"
 import { ApiError } from "../errors/Api.error.js"
 import { productServices } from "./Products.service.js"
+import varsEnv from "../env/vars.env.js"
+
+const {STATUS_PRODUCTS, SUPERIOR_PRIVILEGES} = varsEnv
 
 class CartsServices {
     async paginate ({ page, limit, product, sort }) {
@@ -36,13 +39,12 @@ class CartsServices {
     }
 
     async postProdInCart ({cid, pid, user}) {
-        const prod = await productServices.get({_id: pid}) //valid product existence
-
-        if (prod[0].status !== 'Active' || !prod[0] || prod.length === 0) throw new ApiError('Product invalid', 400)
-        //owner != Admin cannot buy your product
-        if (prod[0].owner === user.email && prod[0].owner !== 'ADMIN') throw new ApiError('No permission', 400)
-
         const prodsInCart = await this.get({_id: cid}) //control the bug
+        const prod = await productServices.get({_id: pid}) //valid product existence
+        if (prod[0].status !== STATUS_PRODUCTS || !prod[0] || prod.length === 0) throw new ApiError('Product invalid', 400)
+        //owner != Admin cannot buy your product
+        if (prod[0].owner === user.email && prod[0].owner !== SUPERIOR_PRIVILEGES) throw new ApiError('No permission', 400)
+
         //valid product existence in cart
         const existProdInCart = prodsInCart.find(products => products.product._id.equals(prod[0]._id))
         //product no exist in cart, add product with quantity = 1
@@ -70,17 +72,17 @@ class CartsServices {
         if (cart.length === 0 || user.length === 0) throw new ApiError('Cart invalid or empty', 400)
         
         const products = user[0].cart.products
-        let acu = 0 //total purchase
+        let totalPurchase = 0 //total purchase
         const success = [] //products to purchase
         const updateProds = [] //products to update stock
-        
+
         for (let prod = 0; prod < products.length; prod++) {
             const {_id, stock, price, quantity, status} = new PurchaseDto(products[prod])
             
-            if ((quantity > stock) || status !== 'Active') continue
+            if ((quantity > stock) || status !== STATUS_PRODUCTS) continue
             
             success.push(_id)
-            acu += quantity * price
+            totalPurchase += quantity * price
             updateProds.push({
                 updateOne: { //update new stock for product
                     filter: {_id},
@@ -88,20 +90,20 @@ class CartsServices {
                 }
             })
         }
+        if (success.length === 0) throw new ApiError('Products invalid', 400)
+
         const updateManyProds = await productsDao.bulkWrite(updateProds) //update stocks all products
         const refuseProducts = products.filter(prod => !success.includes(prod.product._id)) //failed purchase
         const updateCart = await this.put({_id: cid, products: refuseProducts}) //update cart with products refused
         
-        if (success.length === 0) throw new ApiError('Products invalid', 400)
-        
-        const ticket = await ticketsDao.post({amount: acu, purchaser: user[0].email})
+        const ticket = await ticketsDao.post({amount: totalPurchase, purchaser: user[0].email, products: success})
         
         return {ticket, refuseProducts}
     }
 
     async putQtyProd ({cid, pid, qty}) {
         const prod = await productServices.get({_id: pid}) //valid product existence
-        if (prod[0].stock < qty || prod[0].status !== 'Active') throw new ApiError('Quantity or product invalid', 400)
+        if (prod[0].stock < qty || prod[0].status !== STATUS_PRODUCTS) throw new ApiError('Quantity or product invalid', 400)
         //validations
         const cart = await this.get({_id: cid})
         if (cart.length === 0) throw new ApiError('Cart invalid', 400)

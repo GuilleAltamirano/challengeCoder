@@ -2,11 +2,16 @@ import { getProductsController,
         getProductsByIdController, 
         postProductsController,
         putProductsController,
-        deleteProductsController} from "../controllers/products.controller.js"
+        deleteProductsController,
+        postUploadThumbnailsController} from "../controllers/products.controller.js"
 import Routers from "./router.js"
 import { isValidObjectId } from "mongoose"
 import { ApiError } from "../errors/Api.error.js"
 import { productsValidation } from "../middlewares/productsValidation.middleware.js"
+import { uploadThumbnails } from "../middlewares/upload.middleware.js"
+import varsEnv from "../env/vars.env.js"
+
+const {SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED, ROLE_USER_BASIC, ROLE_PUBLIC} = varsEnv
 
 class ProductsRouter extends Routers {
         constructor () {
@@ -21,14 +26,15 @@ class ProductsRouter extends Routers {
         }
 
         async init(){
-                this.get('/',['PUBLIC'], getProductsController)
-                this.get('/:pid',['USER', 'PREMIUM','ADMIN'], getProductsByIdController)
+                this.get('/',[ROLE_PUBLIC], getProductsController)
+                this.get('/:pid',[ROLE_USER_BASIC, ROLE_USER_ADVANCED,SUPERIOR_PRIVILEGES], getProductsByIdController)
 
-                this.post('/',['ADMIN', 'PREMIUM'], await productsValidation('post'), postProductsController)
+                this.post('/', [SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED], await productsValidation('post'), postProductsController)
+                this.post('/uploadThumbnails', [SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED], uploadThumbnails, postUploadThumbnailsController)
 
-                this.put('/:pid',['ADMIN', 'PREMIUM'], await productsValidation('put'), putProductsController)
+                this.put('/:pid',[SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED], await productsValidation('put'), putProductsController)
 
-                this.delete('/:pid',['ADMIN', 'PREMIUM'], deleteProductsController)
+                this.delete('/:pid',[SUPERIOR_PRIVILEGES, ROLE_USER_ADVANCED], deleteProductsController)
         }
 }
 

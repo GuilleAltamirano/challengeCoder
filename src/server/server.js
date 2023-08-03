@@ -9,17 +9,18 @@ import { cpus } from 'os'
 
 const app = express()
 await appConfig(app, express)
+const {PORT} = varsEnv
 
 if (cluster.isPrimary) {
-  logger.info(`Server http run in route localhost:${varsEnv.PORT} ✅`)
+  logger.info(`Server http run in route localhost:${PORT} ✅`)
   for (let i = 0; i < cpus().length; i++) {
     cluster.fork()
   }
 }else {
-  const httpServer = app.listen(varsEnv.PORT, () => {
+  const httpServer = app.listen(PORT, () => {
     logger.info(`I'm worked with id: ${process.pid} 🦾`)
   })
-  // ViteExpress.bind(app, httpServer)
+  ViteExpress.bind(app, httpServer)
 }
 // await socketConfig(httpServer)
 

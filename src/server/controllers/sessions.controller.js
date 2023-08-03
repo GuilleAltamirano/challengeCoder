@@ -1,11 +1,14 @@
 import { sessionsServices } from "../services/Sessions.service.js"
 import passport from "passport"
 import commander from "../utils/commander.js"
+import varsEnv from "../env/vars.env.js"
+
+const {NAME_COOKIE_SESSION} = varsEnv
 
 export const cookieExtractor = req  => {
     let token = null
     if (req.signedCookies && req) {
-        token = req.signedCookies['cookieToken']
+        token = req.signedCookies[NAME_COOKIE_SESSION]
     }
     return token
 }
@@ -26,16 +29,15 @@ export const logoutController = async (req, res, next) => {
         
         const updateLastConnection = await sessionsServices.logout({user})
 
-        res.clearCookie('cookieToken').redirectPage('/login')
+        res.clearCookie(NAME_COOKIE_SESSION).redirectPage('/login')
     } catch (err) {next(err)}
 }
 
 export const googleController = async (request, accessToken, refreshToken, profile, done) => {
     try {
         const token = await sessionsServices.googleAuth({profile})
-        console.log('estoy aca');
         const res = request.res
-        res.cookie('cookieToken', token, {
+        res.cookie(NAME_COOKIE_SESSION, token, {
             signed: true,
             maxAge: 3600000 * 12,
             httpOnly: true

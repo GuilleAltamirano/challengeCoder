@@ -46,7 +46,7 @@ const Products = () => {
                     <div className={style.search}>
                         <SearchComponent title={'Search product in Ddbase'}/>
                     </div>
-                    <ProductsComponent docs={payload.docs}/>
+                    <ProductsComponent docs={payload.docs} user={user}/>
                     <BtPaginateComponent pagination={payload.pagination} qry={{query, setQuery}}/>
                 </div>
                 {!user || (user.role !== 'PREMIUM' && user.role !== 'ADMIN') ? '' : 

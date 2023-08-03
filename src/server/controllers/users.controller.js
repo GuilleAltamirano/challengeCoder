@@ -1,4 +1,7 @@
+import varsEnv from "../env/vars.env.js"
 import { usersServices } from "../services/Users.service.js"
+
+const {NAME_COOKIE_SESSION} = varsEnv
 
 export const getUsersPaginateController = async (req, res, next) => {
     try {
@@ -47,7 +50,7 @@ export const putRoleController = async (req, res, next) => {
 
         const token = await usersServices.challengeRole({uid})
 
-        res.clearCookie('cookieToken').cookieSession(token) //Change cookie
+        res.clearCookie(NAME_COOKIE_SESSION).cookieSession(token) //Change cookie
     } catch (err) {next(err)}
 }
 

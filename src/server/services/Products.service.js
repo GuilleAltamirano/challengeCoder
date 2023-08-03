@@ -1,15 +1,17 @@
 import { ProductsDtoPost } from "../DTOs/products.dto.js";
 import { productsDao, pricesDao } from "../dao/factory.dao.js";
+import varsEnv from "../env/vars.env.js";
 import { ApiError } from "../errors/Api.error.js";
 import { sendEmailValidation } from "../utils/nodemailer.js";
 
+const {SUPERIOR_PRIVILEGES} = varsEnv
 
 class ProductsServices {
     async paginate ({ page, limit, category, sort, provider }) {
         const arrayPage = []
         //filter for categories or provider
         const allCategories = await productsDao.distinct('category')
-        const allProvider = await productsDao.distinct('title')
+        const allProvider = await productsDao.distinct('provider')
         //order for price
         if (sort === 'asc') sort = {price: -1}
         if (sort === 'dec') sort = {price: 1}
@@ -41,16 +43,32 @@ class ProductsServices {
 
         const newPrices = await pricesDao.post(prod.prices)
         prod.prices = newPrices._id
+
         const addProd = new ProductsDtoPost(prod) //add owner and status
         const newProd = await productsDao.post(addProd)
         
         return newProd
     }
 
+    async uploadThumbnails({ thumbnails, user }) {
+        if (thumbnails.length === 0) throw new ApiError('Upload invalid', 400)
+        const path = []
+        const endPath = 'C:/Users/lguil/OneDrive/Escritorio/Ddbase/public'
+    
+        thumbnails.forEach(image => {
+            const dir = image.path.replace(/\\/g, '/')
+            const pathImage = dir.replace(endPath, '')
+            path.push(pathImage)
+        })
+
+        return path
+    }
+    
+
     async put ({_id, user}, update){
         const existProd = await this.get({_id}) //this.get control the bug
 
-        if (user.email !== existProd[0].owner && user.role !== 'ADMIN') throw new ApiError('No permission', 400)
+        if (user.email !== existProd[0].owner && user.role !== SUPERIOR_PRIVILEGES) throw new ApiError('No permission', 400)
         
         const up = await productsDao.put({_id}, update)
         
@@ -60,8 +78,8 @@ class ProductsServices {
     async delete ({_id, user}) {
         const existProd = await this.get({_id})//this.get control the bug
 
-        if (user.email !== existProd[0].owner && user.role !== 'ADMIN') throw new ApiError('No permission', 400)
-        if (existProd[0].owner !== 'ADMIN') sendEmailValidation({receiver: user.email, use: 'delProd', user: user.fullname, code: existProd[0].title})
+        if (user.email !== existProd[0].owner && user.role !== SUPERIOR_PRIVILEGES) throw new ApiError('No permission', 400)
+        if (existProd[0].owner !== SUPERIOR_PRIVILEGES) sendEmailValidation({receiver: user.email, use: 'delProd', user: user.fullname, code: existProd[0].title})
 
         const del = await productsDao.put({_id}, {status: 'Disable'})
         

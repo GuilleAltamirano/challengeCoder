@@ -30,10 +30,14 @@
         display: flex !important
         flex-direction: column 
         background: none !important
+        border-top-left-radius: 10px
         label
             text-align: start
             font-size: 150%
             margin: 2%
+            input //for promotion price and upload photos
+                margin: 0 0 0 2%
+                max-height: 13px
         input
             max-width: 80%
             margin-left: 10%
@@ -41,6 +45,30 @@
             border-radius: 10px
             border: none
             background-color: white
+        .container_prices
+            display: grid
+            justify-content: center
+            grid-template-columns: 25% 25% 25% 25%
+            max-width: 650px
+        div //for upload images
+            display: flex !important
+            flex-direction: row
+            max-height: 150px
+            max-width: 650px
+            margin: none !important
+            img
+                height: 90px
+                width: 90px
+                cursor: pointer
+        .errorActive
+            border: 2px solid #A62B1F
+        .withThumbnails
+            max-width: 100px 
+            height: auto
+            cursor: pointer
+            margin: 1%
+            
+
     button
         max-width: 40%
         max-height: 40px
@@ -61,4 +89,8 @@
     margin: 10% 0 10% 0
     max-width: 72%
 
-
+.styleError
+    background: none !important
+    border: none !important
+    color: #A62B1F
+    margin-left: 10%

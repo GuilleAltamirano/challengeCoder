@@ -1,6 +1,9 @@
 import { Router } from "express"
 import passport from "passport"
 import { ApiError } from "../errors/Api.error.js"
+import varsEnv from "../env/vars.env.js"
+
+const {ROLE_PUBLIC, NAME_COOKIE_SESSION, NAME_COOKIE_VALIDATION} = varsEnv
 
 export default class Routers {
     constructor () {
@@ -38,7 +41,7 @@ export default class Routers {
         try {
             passport.authenticate('login', function (err, user, info) {
                 if (err) return next(err)
-                if (policies[0] === 'PUBLIC') return next()
+                if (policies[0] === ROLE_PUBLIC) return next()
                 if (!user && (req.path !== '/login' && req.path !== '/register' && req.path !== '/register/verification' && req.path !== '/auth/google' && req.path !== '/auth/google/callback')) return res.status(401).json({status: false, message: 'redirect to login'})
                 if (user && (req.path === '/login' || req.path === '/register')) return res.status(401).json({status: false, message: 'Logged in, redirect to home'})
                 req.user = user
@@ -54,17 +57,17 @@ export default class Routers {
             res.jsonSuccess = payload => res.status(200).json({status: 'success', payload})
             res.jsonMessage = message => res.status(200).json({status: true, message})
             res.redirectPage = url => res.status(302).redirect(url)
-            res.cookieSession = token => res.cookie('cookieToken', token, {
+            res.cookieSession = token => res.cookie(NAME_COOKIE_SESSION, token, {
                 signed: true,
                 maxAge: 3600000 * 12,
                 httpOnly: true
             }).redirect(302, '/home')
-            res.cookieAuthEmail = (date) => res.cookie('cookieAuthEmail', date, {
+            res.cookieAuthEmail = (date) => res.cookie(NAME_COOKIE_VALIDATION, date, {
                 signed: true,
                 maxAge: 600000,
                 httpOnly: true
             }).redirect(304, '/validation')
-            res.cookieNewPassword = ({token, id}) => res.cookie('cookieToken', token, {
+            res.cookieNewPassword = ({token, id}) => res.cookie(NAME_COOKIE_SESSION, token, {
                 signed: true,
                 maxAge: 3600000,
                 httpOnly: true

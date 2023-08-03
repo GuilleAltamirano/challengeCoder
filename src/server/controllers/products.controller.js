@@ -22,10 +22,10 @@ export const getProductsByIdController = async (req, res, next) => {
 
 export const postProductsController = async (req, res, next) => {
     try {
-        const { title, description, code, prices, stock, category, thumbnails } = req.body
+        const { title, description, code, prices, stock, category, promotion, provider, thumbnails } = req.body
         const user = req.user.user
         
-        const payload = await productServices.post({ title, description, code, prices, stock, category, thumbnails, user })
+        const payload = await productServices.post({ title, description, code, prices, stock, category, promotion, provider, thumbnails, user })
 
         res.jsonSuccess(payload)
     } catch (err) {next(err)}
@@ -51,5 +51,16 @@ export const deleteProductsController = async (req, res, next) => {
         const del = await productServices.delete({_id: pid, user})
 
         res.jsonMessage('Product deleted')
+    } catch (err) {next(err)}
+}
+
+export const postUploadThumbnailsController = async (req, res, next) => {
+    try {
+        const thumbnails = req.files
+        const user = req.user.user
+
+        const result = await productServices.uploadThumbnails({thumbnails, user})
+
+        res.jsonSuccess(result)
     } catch (err) {next(err)}
 }

@@ -8,6 +8,8 @@ import { sendEmailValidation } from "../utils/nodemailer.js"
 import { SessionsDto } from "../DTOs/sessions.dto.js"
 import { __dirname } from "../utils/utils.js"
 
+const {EMAIL_ADMIN, SUPERIOR_PRIVILEGES, STATUS_DOCUMENTS_USERS, EMAIL_VERIFIED_USERS, ROLE_USER_ADVANCED, ROLE_USER_BASIC, UPLOAD_DOCUMENT_ONE, UPLOAD_DOCUMENT_TWO, UPLOAD_DOCUMENT_THREE} = varsEnv
+
 class UsersServices {
     async paginate ({ role, status, verified, page }) {
         const users = []
@@ -34,7 +36,7 @@ class UsersServices {
     async post ({ first_name, last_name, email, age, password }) {
         const emailLower = email.toLowerCase()
         const existUser = await usersDao.get({email: emailLower})
-        if ((email === varsEnv.EMAIL_ADMIN) || existUser.length > 0) throw new ApiError('user existing', 400)
+        if ((email === EMAIL_ADMIN) || existUser.length > 0) throw new ApiError('user existing', 400)
 
         const cart = await cartsDao.post()
         password = await createHash(password)
@@ -56,7 +58,7 @@ class UsersServices {
     async newPassword ({_id, password, email}) {
         const existUser = await usersDao.get({_id})
         if (existUser.length === 0) throw new ApiError('User no exist', 400)
-        if (existUser[0].email !== email && email !== varsEnv.EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
+        if (existUser[0].email !== email && email !== EMAIL_ADMIN) throw new ApiError('Credentials invalid', 400)
 
         const isValid = await isValidPassword(existUser[0], password)
         if (isValid) throw new ApiError('Invalid, same password', 400)
@@ -72,9 +74,9 @@ class UsersServices {
         const existUser = await usersDao.get({_id: uid})
         if (existUser.length === 0) throw new ApiError('User no existing', 400)
 
-        if (existUser[0].role === 'ADMIN') return
-        if (existUser[0].role === 'USER' && (existUser[0].status !== 'AllDocuments' || existUser[0].email_verified !== 'Verified')) throw new ApiError('Documentation incomplete', 401)
-        existUser[0].role === 'USER' ? await usersDao.put({_id: uid}, {role: 'PREMIUM'}) : await usersDao.put({_id: uid}, {role: 'USER'})
+        if (existUser[0].role === SUPERIOR_PRIVILEGES) return
+        if (existUser[0].role === 'USER' && (existUser[0].status !== STATUS_DOCUMENTS_USERS || existUser[0].email_verified !== EMAIL_VERIFIED_USERS)) throw new ApiError('Documentation incomplete', 401)
+        existUser[0].role === 'USER' ? await usersDao.put({_id: uid}, {role: ROLE_USER_ADVANCED}) : await usersDao.put({_id: uid}, {role: ROLE_USER_BASIC})
 
         const updateUser = await usersDao.get({_id: uid})
         const user = new SessionsDto(updateUser[0]) //remove sensitive data
@@ -97,7 +99,7 @@ class UsersServices {
         //remove extra path
         if (files && files.profile) {
             const path = files.profile[0].path
-            const last = "uploads";
+            const last = "uploads"
             const deletePath = path.replace(path.split(last)[0], "/")
             
             dataUser[0].profile = deletePath
@@ -112,12 +114,12 @@ class UsersServices {
         if (documents && documents.length === qtyDocuments) {
             let acu = 0
             for (let i = 0; i < documents.length; i++) {
-                if (documents[i].name === 'identification' && documents[i].reference.length > 0) acu += 1
-                if (documents[i].name === 'address' && documents[i].reference.length > 0) acu += 1
-                if (documents[i].name === 'account_status' && documents[i].reference.length > 0) acu += 1
+                if (documents[i].name === UPLOAD_DOCUMENT_ONE && documents[i].reference.length > 0) acu += 1
+                if (documents[i].name === UPLOAD_DOCUMENT_TWO && documents[i].reference.length > 0) acu += 1
+                if (documents[i].name === UPLOAD_DOCUMENT_THREE && documents[i].reference.length > 0) acu += 1
             }
             
-            if (acu === qtyDocuments) dataUser[0].status = 'AllDocuments'
+            if (acu === qtyDocuments) dataUser[0].status = STATUS_DOCUMENTS_USERS
         }
 
         const userUpdate = await usersDao.put({_id: dataUser[0]._id}, dataUser[0])
