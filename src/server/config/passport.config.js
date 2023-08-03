@@ -34,6 +34,7 @@ export const passportConfig = async () => {
         scope: [ 'email', 'profile' ]
     }, googleController))
 }
+
 //generate tokens
-export const generateToken = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: SESSION_DURATION})}
-export const generateTokenForValidation = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: TOKEN_VALIDATION_DURATION})}
+export const generateToken = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: `${SESSION_DURATION}`})}
+export const generateTokenForValidation = async (user) => {return jwt.sign({user}, JWT_SECRET_KEY, {expiresIn: `${TOKEN_VALIDATION_DURATION}`})}

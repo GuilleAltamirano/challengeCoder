@@ -3,7 +3,7 @@ import passport from "passport"
 import { ApiError } from "../errors/Api.error.js"
 import varsEnv from "../env/vars.env.js"
 
-const {ROLE_PUBLIC, NAME_COOKIE_SESSION, NAME_COOKIE_VALIDATION} = varsEnv
+const {ROLE_PUBLIC, NAME_COOKIE_SESSION, NAME_COOKIE_VALIDATION, COOKIE_AUTH_DURATION} = varsEnv
 
 export default class Routers {
     constructor () {
@@ -59,7 +59,7 @@ export default class Routers {
             res.redirectPage = url => res.status(302).redirect(url)
             res.cookieSession = token => res.cookie(NAME_COOKIE_SESSION, token, {
                 signed: true,
-                maxAge: 3600000 * 12,
+                maxAge: COOKIE_AUTH_DURATION,
                 httpOnly: true
             }).redirect(302, '/home')
             res.cookieAuthEmail = (date) => res.cookie(NAME_COOKIE_VALIDATION, date, {
@@ -69,7 +69,7 @@ export default class Routers {
             }).redirect(304, '/validation')
             res.cookieNewPassword = ({token, id}) => res.cookie(NAME_COOKIE_SESSION, token, {
                 signed: true,
-                maxAge: 3600000,
+                maxAge: COOKIE_AUTH_DURATION,
                 httpOnly: true
             }).status(302).redirect(`/newpassword/?user=${id}`)
             next()
