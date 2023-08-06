@@ -17,7 +17,8 @@ const productSchema = new Schema({
     provider: {type: String, require: true},
     thumbnails: {
         type: [String], 
-        default: ['https://placehold.co/300x300'], 
+        default: ['https://placehold.co/300x300'],
+        max: 5,
         set: thumbnails => (thumbnails[0] === '' ? ['https://placehold.co/300x300'] : thumbnails)
     }
 })

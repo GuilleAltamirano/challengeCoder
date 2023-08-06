@@ -49,11 +49,6 @@ const Products = () => {
                     <ProductsComponent docs={payload.docs} user={user}/>
                     <BtPaginateComponent pagination={payload.pagination} qry={{query, setQuery}}/>
                 </div>
-                {!user || (user.role !== 'PREMIUM' && user.role !== 'ADMIN') ? '' : 
-                    <div className={style.container_client} >
-                        <h3>clients</h3>
-                    </div>
-                }
             </div>
 
             }

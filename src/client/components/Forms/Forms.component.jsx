@@ -1,5 +1,5 @@
 import style from './Forms.module.sass'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { ButtonComponent } from '../Accessories/Accessories.component'
 import { isValidEmail, isValidPassword, isValidName, isValidAge, isValidProduct } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
@@ -193,32 +193,48 @@ export const FormNewPassword = ({id}) => {
 }
 
 export const FormNewProduct = () => {
-    //for values
-    const [prodTitle, setProdTitle] = useState('')
-    const [prodDescription, setProdDescription] = useState('')
-    const [prodCode, setProdCode] = useState('')
-    const [prodStock, setProdStock] = useState('')
-    const [prodCategory, setProdCategory] = useState('')
-    const [prodProvider, setProdProvider] = useState('')
-    const [prodPrices, setProdPrices] = useState([])
-    const [prodPromotion, setProdPromotion] = useState(false)
-    const [images, setImages] = useState([])
+    const [dataProd, setDataProd] = useState({title: false, description: false, code: false, stock: false, category: false, provider: false, prices: {}, promotion: false, thumbnails: []})
+    const [objError, setObjError] = useState({title: false, description: false, code: false, stock: false, category: false, provider: false, prices: false, promotion: false, thumbnails: false})
+    const [existErr, setExistErr] = useState(false)
+    //handleError
+    const handleError = ({err, key}) => {
+        setObjError((prevError) => ({
+            ...prevError, [key]: err
+        }))
+        return setExistErr(true)
+    }
+
+    const isError = () => {
+        if (!dataProd.title || objError.title.length > 0) objError.title.length > 0 ? handleError({err: objError.title, key: 'title'}) : handleError({err: 'Title is required', key: 'title'})
+        if (!dataProd.description || objError.description.length > 0) objError.description.length > 0 ? handleError(objError.description) : handleError({err: 'Description is required', key: 'description'})
+        if (!dataProd.code || objError.code.length > 0) objError.code.length > 0 ? handleError(objError.code) : handleError({err: 'Code is required', key: 'code'})
+        if (!dataProd.stock || objError.stock.length > 0) objError.stock.length > 0 ? handleError(objError.stock) : handleError({err: 'Stock is required', key: 'stock'})
+        if (!dataProd.category || objError.category.length > 0) objError.category.length > 0 ? handleError(objError.category) : handleError({err: 'Category is required', key: 'category'})
+        if (!dataProd.provider || objError.provider.length > 0) objError.provider.length > 0 ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'provider'})
+        if (dataProd.prices === 0 || objError.prices.length > 0) objError.prices.length > 0 ? handleError(objError.prices) : handleError({err: 'Prices is required}', key: 'prices'})
+        if (dataProd.promotion && objError.promotion.length > 0) objError.promotion ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'promotion'})
+        return
+    }
 
     //fetch to api
     const fetchNewProduct = async (e) => {
         e.preventDefault()
+        
+        setExistErr(false)
+        isError()
+        if (existErr) return
 
-        const promotion = prodPromotion ? 'Promotion' : 'No promotion'
-        const thumbnails = images.length > 0 ? images : undefined
+        const promotion = dataProd.promotion ? 'Promotion' : 'No promotion'
+        const thumbnails = dataProd.thumbnails.length > 0 ? dataProd.thumbnails : undefined
 
         const data = {
-            title: prodTitle,
-            description: prodDescription,
-            code: prodCode,
-            stock: prodStock,
-            category: prodCategory,
-            provider: prodProvider,
-            prices: prodPrices,
+            title: dataProd.title,
+            description: dataProd.description,
+            code: dataProd.code,
+            stock: dataProd.stock,
+            category: dataProd.category,
+            provider: dataProd.provider,
+            prices: dataProd.prices,
             promotion,
             thumbnails
         }
@@ -230,20 +246,24 @@ export const FormNewProduct = () => {
             },
             body: JSON.stringify(data),
         })
-        .then(res => res.json()).then(data => console.log(data))
+        .then(res => res.json()).then(data => {
+            const errorExisting = 'Existing product'
+            if (data.error === errorExisting) return setObjError({title: false, description: false, code: errorExisting, stock: false, category: false, provider: false, prices: false, promotion: false, thumbnails: false})
+            
+        })
     }
 
     return(
         <form className={style.form_newProduct} onSubmit={fetchNewProduct}>
-            <div><InputTitleProductComponent style={style} setProdTitle={setProdTitle} /></div>
-            <div><InputDescriptionProductComponent style={style} setProdDescription={setProdDescription} /></div>
-            <div><InputCodeProductComponent style={style} setProdCode={setProdCode} /></div>
-            <div><InputStockProductComponent style={style} setProdStock={setProdStock} /></div>
-            <div><InputCategoryProductComponent style={style} setProdCategory={setProdCategory} /></div>
-            <div><InputProviderProductComponent style={style} setProdProvider={setProdProvider} /></div>
-            <div><InputPricesProductComponent style={style} setProdPrices={setProdPrices} prodPrices={prodPrices} /></div>
-            <div><InputPromotionProductComponent style={style} setProdPromotion={setProdPromotion} /></div>
-            <div><UploadsImagesComponent style={style} images={images} setImages={setImages} /></div>
+            <div><InputTitleProductComponent style={style} setProdTitle={setDataProd} existErr={objError.title} addError={setObjError} handleError={handleError} /></div>
+            <div><InputDescriptionProductComponent style={style} setProdDescription={setDataProd} existErr={objError.description} addError={setObjError} handleError={handleError} /></div>
+            <div><InputCodeProductComponent style={style} setProdCode={setDataProd} existErr={objError.code} addError={setObjError} handleError={handleError} /></div>
+            <div><InputStockProductComponent style={style} setProdStock={setDataProd} existErr={objError.stock} addError={setObjError} handleError={handleError} /></div>
+            <div><InputCategoryProductComponent style={style} setProdCategory={setDataProd} existErr={objError.category} addError={setObjError} handleError={handleError} /></div>
+            <div><InputProviderProductComponent style={style} setProdProvider={setDataProd} existErr={objError.provider} addError={setObjError} handleError={handleError} /></div>
+            <div><InputPricesProductComponent style={style} setProdPrices={setDataProd} existErr={objError.prices} addError={setObjError} handleError={handleError} /></div>
+            <div><InputPromotionProductComponent style={style} setProdPromotion={setDataProd} prices={dataProd.prices} existErr={objError.promotion} addError={setObjError} handleError={handleError} /></div>
+            <div><UploadsImagesComponent style={style} images={dataProd.thumbnails} setImages={setDataProd} existErr={objError.thumbnails} addError={setObjError} handleError={handleError} /></div>
 
             <ButtonComponent title='Create product' />
         </form>

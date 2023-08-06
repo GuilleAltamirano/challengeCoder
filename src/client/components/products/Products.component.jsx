@@ -19,8 +19,8 @@ export const ProductsComponent = ({docs, user}) => {
                 {docs.map(prod => (
                 <div key={prod._id} className={style.products_container}>
                     <div className={style.img_container}><img src={prod.thumbnails[0]} alt={`Image ${prod.title}`} /></div>
-                    <h3>{prod.title.toLowerCase()}</h3>
-                    <p>{prod.description.toLowerCase()}</p>
+                    <h3>{prod.title}</h3>
+                    <p>{prod.description}</p>
                     <p>${prod.prices.list_three}</p>
                     <p>{prod.stock}</p>
                     <QtyProdComponent stock={prod.stock} />

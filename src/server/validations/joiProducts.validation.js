@@ -15,7 +15,7 @@ export const schemaProducts = Joi.object({
     category: Joi.string(),
     promotion: Joi.string(),
     provider: Joi.string(),
-    thumbnails: Joi.array().items(Joi.string())
+    thumbnails: Joi.array().items(Joi.string()).max(5)
 }).alter({
     post: (schema) => schema.required().min(6).max(8),//thumbnails optional
     put: (schema) => schema.min(1).max(7),
