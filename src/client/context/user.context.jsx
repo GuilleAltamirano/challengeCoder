@@ -14,7 +14,7 @@ export const UserProvider = ({ children }) => {
             setUser(data)
         }
         if (isAuth === 'true') petition()
-    }, [])
+    }, [isAuth])
 
     return (
         <UserContext.Provider value={{ user }}>

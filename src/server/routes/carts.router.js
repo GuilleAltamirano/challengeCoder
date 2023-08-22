@@ -28,7 +28,7 @@ class CartsRouter extends Routers {
 
     async init(){
         this.get('/',[SUPERIOR_PRIVILEGES], await cartsValidation('paginate'),getCartsController)
-        this.get('/:cid',[SUPERIOR_PRIVILEGES], getCartByIdController)
+        this.get('/:cid',[ROLE_USER_ADVANCED, ROLE_USER_BASIC], getCartByIdController)
 
         this.post('/',[SUPERIOR_PRIVILEGES], postCarts)
         this.post('/:cid/products/:pid',[ROLE_USER_BASIC, ROLE_USER_ADVANCED], postProdInCartController)
@@ -38,7 +38,7 @@ class CartsRouter extends Routers {
         this.put('/:cid/products/:pid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], await cartsValidation('putQty'),putQuantityProds)
         
         this.delete('/:cid/products/:pid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], delProdInCart)
-        this.delete('/:cid', [SUPERIOR_PRIVILEGES], putCartController)
+        this.delete('/:cid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], putCartController)
     }
 }
 

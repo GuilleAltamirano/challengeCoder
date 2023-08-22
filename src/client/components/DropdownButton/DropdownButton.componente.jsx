@@ -3,26 +3,28 @@ import style from './DropdownButton.module.sass'
 
 export const DropdownButton = ({ list, title, query }) => {
     const [filter, setFilter] = useState("")
+    const titleLower = title.toLowerCase()
 
     useEffect(() => {
         let updatedQuery = ""
+
         if (filter.length !== 0) {
             updatedQuery = query.query
                 .split("&")
-                .filter((param) => !param.startsWith(`${title}=`))
+                .filter((param) => !param.startsWith(`${titleLower}=`))
                 .join("&")
             updatedQuery = updatedQuery.length !== 0 ? `${updatedQuery}&${filter}` : filter
         } else {
             updatedQuery = query.query
                 .split("&")
-                .filter((param) => !param.startsWith(`${title}=`))
+                .filter((param) => !param.startsWith(`${titleLower}=`))
                 .join("&")
         }
         query.setQuery(updatedQuery)
     }, [filter])
 
     const handleCheckboxChange = (e, item) => {
-        const selectedValue = `${title}=${item}`
+        const selectedValue = `${titleLower}=${item}`
         const isItemSelected = filter === selectedValue
 
         if (isItemSelected) {

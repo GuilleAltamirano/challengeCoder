@@ -37,7 +37,7 @@ export const googleController = async (request, accessToken, refreshToken, profi
     try {
         const token = await sessionsServices.googleAuth({profile})
         const res = request.res
-        res.cookie(NAME_COOKIE_SESSION, token, {
+        res.cookie(NAME_COOKIE_SESSION, token.token, {
             signed: true,
             maxAge: 3600000 * 12,
             httpOnly: true

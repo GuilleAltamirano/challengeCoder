@@ -7,14 +7,14 @@ import { sendEmailValidation } from "../utils/nodemailer.js";
 const {SUPERIOR_PRIVILEGES} = varsEnv
 
 class ProductsServices {
-    async paginate ({ page, limit, category, sort, provider }) {
+    async paginate ({ page, limit, category, sort, provider, price }) {
         const arrayPage = []
         //filter for categories or provider
         const allCategories = await productsDao.distinct('category')
         const allProvider = await productsDao.distinct('provider')
         //order for price
-        if (sort === 'asc') sort = {price: -1}
-        if (sort === 'dec') sort = {price: 1}
+        if (price === 'Asc') sort = {price: -1}
+        if (price === 'Dec') sort = {price: 1}
 
         const { docs,totalPages,hasPrevPage,prevPage,hasNextPage,nextPage} = await productsDao.paginate({page, limit, category, sort, provider})
 

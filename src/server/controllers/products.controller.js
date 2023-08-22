@@ -2,9 +2,9 @@ import { productServices } from "../services/Products.service.js"
 
 export const getProductsController = async (req, res, next) => {
     try {
-        const { page=1, limit=5, category, sort={title: 1}, provider } = req.query
-        
-        const payload = await productServices.paginate({ page, limit, category, sort, provider })
+        const { page=1, limit=5, category, sort={title: 1}, provider, price } = req.query
+
+        const payload = await productServices.paginate({ page, limit, category, sort, provider, price })
 
         res.jsonSuccess(payload)
     } catch (err) {next(err)}

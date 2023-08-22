@@ -12,8 +12,8 @@ import dataImg from '../../assets/components/data-analytics.png'
 
 const Home = () => {
     const navigate = useNavigate()
-    const {isAuth, setIsAuth} = useContext(AuthContext)
     const {user} = useContext(UserContext)
+    const {isAuth, setIsAuth} = useContext(AuthContext)
 
     useEffect(() => {
         if (isAuth === 'false') navigate('/login')

@@ -42,5 +42,6 @@ export default {
     NAME_COOKIE_SESSION: process.env.NAME_COOKIE_SESSION ?? 'cookieToken',
     NAME_COOKIE_VALIDATION: process.env.NAME_COOKIE_VALIDATION ?? 'cookieAuthEmail',
     PROJECT_NAME: process.env.PROJECT_NAME ?? 'Ddbase',
-    COOKIE_AUTH_DURATION: process.env.COOKIE_AUTH_DURATION ?? 3600000*12
+    COOKIE_AUTH_DURATION: process.env.COOKIE_AUTH_DURATION ?? 3600000*12,
+    STRIPE_KEY_PRIVATE: process.env.STRIPE_KEY_PRIVATE
 }

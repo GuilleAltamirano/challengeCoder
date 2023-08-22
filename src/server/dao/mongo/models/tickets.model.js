@@ -9,7 +9,8 @@ const ticketsSchema = new Schema({
     products: [{
         product: {type: String, required: true},
         quantity: {type: Number, required: true, min: 1},
-        price: {type: Number, required: true}
+        price_cost: {type: Number, required: true},
+        price_sale: {type: Number, required: true}
     }],
     purchase_datetime: { type: Date, default: Date.now, required: true },
     amount: {type: Number, min: 1, required: true},

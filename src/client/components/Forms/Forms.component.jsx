@@ -1,5 +1,5 @@
 import style from './Forms.module.sass'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { ButtonComponent } from '../Accessories/Accessories.component'
 import { isValidEmail, isValidPassword, isValidName, isValidAge, isValidProduct } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
@@ -239,7 +239,7 @@ export const FormNewProduct = () => {
             thumbnails
         }
 
-        return await fetch('/api/products', {
+        await fetch('/api/products', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -248,8 +248,30 @@ export const FormNewProduct = () => {
         })
         .then(res => res.json()).then(data => {
             const errorExisting = 'Existing product'
-            if (data.error === errorExisting) return setObjError({title: false, description: false, code: errorExisting, stock: false, category: false, provider: false, prices: false, promotion: false, thumbnails: false})
-            
+            const errorKeys = 'Product keys invalid'
+            const resOk = 'success'
+
+            if (data.error === errorExisting) {
+                setObjError({title: false, description: false, code: errorExisting, stock: false, category: false, provider: false, prices: false, promotion: false, thumbnails: false})
+                return Swal.fire(
+                    errorExisting,
+                    'Try another product, if the error persists contact support',
+                    'error'
+                )
+            }
+            if (data.error === errorKeys) return Swal.fire(
+                errorKeys,
+                'Please check the fields and try again',
+                'error'
+            )
+            if (data.status === resOk) {
+                setDataProd({title: false, description: false, code: false, stock: false, category: false, provider: false, prices: {}, promotion: false, thumbnails: []})
+                return Swal.fire(
+                    resOk,
+                    'Product created!!',
+                    resOk
+                ).then(result => window.location.reload())
+            }
         })
     }
 

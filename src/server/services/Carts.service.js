@@ -1,4 +1,4 @@
-import { PurchaseDto } from "../DTOs/carts.dto.js"
+import { ProductsTicketsDto, PurchaseDto } from "../DTOs/carts.dto.js"
 import { cartsDao, productsDao, ticketsDao, usersDao } from "../dao/factory.dao.js"
 import { ApiError } from "../errors/Api.error.js"
 import { productServices } from "./Products.service.js"
@@ -17,9 +17,8 @@ class CartsServices {
 
     async get ({_id}) {
         const result = await cartsDao.get({_id})
-        
-        if (result.length === 0) {throw new ApiError(`cart or product invalid`, 404)}
-        
+        if (!result[0]) throw new ApiError(`cart or product invalid`, 404)
+    
         return result[0].products
     }
 
@@ -68,19 +67,20 @@ class CartsServices {
         //search user and cart
         const user = await usersDao.get({cart: {_id: cid}})
         const cart = await this.get({_id: cid})
-        
+
         if (cart.length === 0 || user.length === 0) throw new ApiError('Cart invalid or empty', 400)
         
         const products = user[0].cart.products
         let totalPurchase = 0 //total purchase
         const success = [] //products to purchase
         const updateProds = [] //products to update stock
+        const prodsTicket = [] //for ticket
 
         for (let prod = 0; prod < products.length; prod++) {
             const {_id, stock, price, quantity, status} = new PurchaseDto(products[prod])
-            
+
             if ((quantity > stock) || status !== STATUS_PRODUCTS) continue
-            
+            prodsTicket.push(new ProductsTicketsDto(products[prod]))
             success.push(_id)
             totalPurchase += quantity * price
             updateProds.push({
@@ -96,8 +96,8 @@ class CartsServices {
         const refuseProducts = products.filter(prod => !success.includes(prod.product._id)) //failed purchase
         const updateCart = await this.put({_id: cid, products: refuseProducts}) //update cart with products refused
         
-        const ticket = await ticketsDao.post({amount: totalPurchase, purchaser: user[0].email, products: success})
-        
+
+        const ticket = await ticketsDao.post({amount: totalPurchase, purchaser: user[0].email, products: prodsTicket})
         return {ticket, refuseProducts}
     }
 
