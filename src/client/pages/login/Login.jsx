@@ -1,19 +1,17 @@
 import { useContext, useEffect } from 'react'
+import { UserContext } from '../../context/user.context'
 import style from './Login.module.sass'
 import { Link, useNavigate } from 'react-router-dom'
 import { FormLogin } from '../../components/Forms/Forms.component.jsx'
 import { LineComponent, GoogleComponent } from '../../components/Accessories/Accessories.component.jsx'
-import {AuthContext} from '../../context/auth.context'
 
 const Login = () => {
     const navigate = useNavigate ()
-    const {isAuth} = useContext(AuthContext)
-    
+    const {user} = useContext(UserContext)
+
     useEffect(() => {
-        if (isAuth === 'true') {
-            navigate('/');
-        }
-    }, [isAuth])
+        if (user) return navigate('/')
+    }, [user])
 
     return (
         <div className={style.container_login}>

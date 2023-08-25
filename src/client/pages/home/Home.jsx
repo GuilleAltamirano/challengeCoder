@@ -1,9 +1,7 @@
-import { useContext, useEffect } from 'react'
+import { useContext } from 'react'
 import style from './Home.module.sass'
 import Products from '../products/Products'
 import { UserContext } from '../../context/user.context'
-import { AuthContext } from '../../context/auth.context'
-import { useNavigate } from 'react-router-dom'
 import { OptsHomeComponent } from '../../components/OptsHome/OptsHome.component'
 import customerImg from '../../assets/components/customer.png'
 import managerImg from '../../assets/components/manager.png'
@@ -11,13 +9,7 @@ import dataImg from '../../assets/components/data-analytics.png'
 
 
 const Home = () => {
-    const navigate = useNavigate()
     const {user} = useContext(UserContext)
-    const {isAuth, setIsAuth} = useContext(AuthContext)
-
-    useEffect(() => {
-        if (isAuth === 'false') navigate('/login')
-    }, [])
     
     return(
         <div>

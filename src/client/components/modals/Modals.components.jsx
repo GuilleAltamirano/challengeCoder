@@ -1,16 +1,13 @@
-import { useContext } from 'react'
 import style from  './ModalsComponents.module.sass'
-import { AuthContext } from '../../context/auth.context'
 
 export const ModalUserComponent = ({ user, closeModal }) => {
-    const {setIsAuth} = useContext(AuthContext)
 
     const fetchLogout = () => {
-        return fetch('/api/sessions/logout', {method: 'POST'})
+
+        return fetch('/api/sessions/logout', {method: 'DELETE'})
         .then(data => {
-            closeModal()
-            setIsAuth(false)
             window.location.reload()
+            closeModal()
         })
     }
 

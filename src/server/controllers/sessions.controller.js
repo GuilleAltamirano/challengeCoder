@@ -26,7 +26,7 @@ export const loginController = async (req, res, next) => {
 export const logoutController = async (req, res, next) => {
     try {
         const user = req.user.user
-        
+
         const updateLastConnection = await sessionsServices.logout({user})
 
         res.clearCookie(NAME_COOKIE_SESSION).redirectPage('/login')

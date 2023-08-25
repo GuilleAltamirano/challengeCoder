@@ -8,12 +8,10 @@ import NewPassword from './pages/newPassword/NewPassword';
 import Products from './pages/products/Products';
 import Home from './pages/home/Home';
 import Manager from './pages/manager/Manager';
-import { AuthProvider } from './context/auth.context';
 import { UserProvider } from './context/user.context';
 
 function App() {
   return (
-    <AuthProvider>
       <UserProvider>
         <BrowserRouter >
           <div className={style.App}>
@@ -23,6 +21,7 @@ function App() {
               <Route extract path='/register' element={<Register />} />
               <Route extract path='/forgotpassword' element={<ForgotPassword />} />
               <Route extract path='/newpassword' element={<NewPassword />} />
+
               <Route extract path='/' element={<Home />} />
               <Route extract path='/customer' element={<Products />} />
               <Route extract path='/manager' element={<Manager />} />
@@ -30,7 +29,6 @@ function App() {
           </div>
         </BrowserRouter>
       </UserProvider>
-    </AuthProvider>
   );
 }
 

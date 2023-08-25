@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import style from './BtProducts.module.sass'
 import { addProdInCartFetch, upQtyProdInCart } from '../../helper/cart.helper'
 
@@ -37,5 +38,15 @@ export const BtBuyProdComponent = ({pid, cid}) => {
 
     return (
         <button onClick={addProdInCart}>Add</button>
+    )
+}
+
+export const BtLoginToBuy = () => {
+    const navigate = useNavigate ()
+    const loginToBuy = () => {
+        return navigate ('/login')
+    }
+    return (
+        <button onClick={loginToBuy}>Login to buy</button>
     )
 }

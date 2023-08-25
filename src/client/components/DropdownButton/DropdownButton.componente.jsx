@@ -43,7 +43,6 @@ export const DropdownButton = ({ list, title, query }) => {
                     <input
                         type="checkbox"
                         name={title}
-                        checked={filter === `${title}=${item}`}
                         onChange={(e) => handleCheckboxChange(e, item)}
                     />
                     {item}

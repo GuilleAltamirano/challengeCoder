@@ -55,7 +55,7 @@ export default class Routers {
     customRes (req, res, next) {
         try {
             res.jsonSuccess = payload => res.status(200).json({status: 'success', payload})
-            res.jsonMessage = message => res.status(200).json({status: true, message})
+            res.jsonMessage = message => res.status(200).json({status: 'success', message})
             res.redirectPage = url => res.status(302).redirect(url)
             res.cookieSession = token => res.cookie(NAME_COOKIE_SESSION, token, {
                 signed: true,

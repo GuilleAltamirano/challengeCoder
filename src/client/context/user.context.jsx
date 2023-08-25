@@ -1,20 +1,19 @@
-import { createContext, useState, useEffect, useContext } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import { fetchUser } from '../helper/user.helper'
-import { AuthContext } from './auth.context'
 
 export const UserContext = createContext()
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const {isAuth, setIsAuth} = useContext(AuthContext)
+
+    const fetchUserData = async () => {
+        const data = await fetchUser()
+        setUser(data)
+    }
 
     useEffect(() => {
-        const petition = async () => {
-            const data = await fetchUser(setIsAuth)
-            setUser(data)
-        }
-        if (isAuth === 'true') petition()
-    }, [isAuth])
+        if (!user) fetchUserData()
+    }, [])
 
     return (
         <UserContext.Provider value={{ user }}>

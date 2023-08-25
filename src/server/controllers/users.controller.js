@@ -72,3 +72,13 @@ export const deleteUsersController = async (req, res, next) => {
         res.jsonMessage('Users deleted')
     } catch (err) {next(err)}
 }
+
+export const delUserController = async (req, res, next) => {
+    try {
+        const uid = req.uid
+
+        const result = await usersServices.delUser({uid})
+
+        res.jsonMessage(`User ${result} deleted`)
+    } catch (err) {next(err)}
+}

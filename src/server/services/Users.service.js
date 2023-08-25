@@ -16,7 +16,7 @@ class UsersServices {
         const arrayPage = []
 
         const {docs, totalDocs, totalPages, hasPrevPage, hasNextPage, prevPage, nextPage } = await usersDao.paginate({role, status, verified, page})
-        
+
         if (page > totalPages) throw new ApiError('Query error', 400)
         //remove sensitive data
         docs.forEach(doc => {
@@ -30,7 +30,7 @@ class UsersServices {
             arrayPage.push(i)
         }
         
-        return {users, totalDocs, arrayPage, totalPages, page, hasPrevPage, hasNextPage, prevPage, nextPage }
+        return {users, pagination: {arrayPage, hasPrevPage, prevPage, hasNextPage, nextPage, totalPages} }
     }
 
     async post ({ first_name, last_name, email, age, password }) {
@@ -131,9 +131,18 @@ class UsersServices {
         let twoDaysAgo = new Date()
         twoDaysAgo.setDate(twoDaysAgo.getDate() - 2)
 
-        const deleted = await usersDao.delete(twoDaysAgo)
+        const deleted = await usersDao.deleteUsers(twoDaysAgo)
 
         return deleted
+    }
+
+    async delUser ({uid}) {
+        const existUser = await usersDao.get({_id: uid})
+        if (existUser.length === 0) throw new ApiError('User invalid', 400)
+
+        const deleted = await usersDao.delete({_id: uid})
+
+        return existUser[0].fullname
     }
 
 }

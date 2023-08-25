@@ -1,5 +1,5 @@
 import { isValidObjectId } from "mongoose"
-import { getUsersPaginateController, postUsersController, putNewPasswordController, putRoleController, postUploadsDocumentsController, deleteUsersController } from "../controllers/users.controller.js"
+import { getUsersPaginateController, postUsersController, putNewPasswordController, putRoleController, postUploadsDocumentsController, deleteUsersController, delUserController } from "../controllers/users.controller.js"
 import Routers from "./router.js"
 import { ApiError } from "../errors/Api.error.js"
 import { usersValidation } from "../middlewares/usersValidation.middleware.js"
@@ -30,6 +30,7 @@ class UsersRouter extends Routers {
         this.put('/premium/:uid', [ROLE_USER_BASIC, ROLE_USER_ADVANCED], putRoleController)
 
         this.delete('/', [SUPERIOR_PRIVILEGES], deleteUsersController)
+        this.delete('/:uid', [SUPERIOR_PRIVILEGES], delUserController)
     }
 }
 

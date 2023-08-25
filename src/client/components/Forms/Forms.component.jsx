@@ -4,12 +4,9 @@ import { ButtonComponent } from '../Accessories/Accessories.component'
 import { isValidEmail, isValidPassword, isValidName, isValidAge, isValidProduct } from '../../validations/validations'
 import { LineComponent } from '../Accessories/Accessories.component'
 import { useNavigate } from 'react-router-dom'
-import {AuthContext} from '../../context/auth.context'
 import { InputCategoryProductComponent, InputCodeProductComponent, InputDescriptionProductComponent, InputPricesProductComponent, InputPromotionProductComponent, InputProviderProductComponent, InputStockProductComponent, InputTitleProductComponent, UploadsImagesComponent } from '../Input&label/ProductsInput.component'
 
 export const FormLogin = () => {
-    const {setIsAuth} = useContext(AuthContext)
-
     const loginFetch = async (e) => {
         e.preventDefault()
 
@@ -31,7 +28,6 @@ export const FormLogin = () => {
         })
         .then(res => {
             if (res.status === 200) {
-                setIsAuth(true)
                 window.location.reload()
             }
             return console.log(res)
@@ -57,6 +53,7 @@ export const FormLogin = () => {
 }
 
 export const FormRegister = () => {
+    const navigate = useNavigate ()
     const registerFetch = (e) => {
         e.preventDefault()
 
@@ -81,7 +78,9 @@ export const FormRegister = () => {
             body: JSON.stringify(data),
             redirect: 'follow',
         })
-        .then(res => console.log(res))
+        .then(res => {
+            if (res.status === 200) return navigate('/login')
+        })
     }
     return (
         <form className={style.form_signup} onSubmit={registerFetch}>
@@ -204,25 +203,21 @@ export const FormNewProduct = () => {
         return setExistErr(true)
     }
 
-    const isError = () => {
-        if (!dataProd.title || objError.title.length > 0) objError.title.length > 0 ? handleError({err: objError.title, key: 'title'}) : handleError({err: 'Title is required', key: 'title'})
-        if (!dataProd.description || objError.description.length > 0) objError.description.length > 0 ? handleError(objError.description) : handleError({err: 'Description is required', key: 'description'})
-        if (!dataProd.code || objError.code.length > 0) objError.code.length > 0 ? handleError(objError.code) : handleError({err: 'Code is required', key: 'code'})
-        if (!dataProd.stock || objError.stock.length > 0) objError.stock.length > 0 ? handleError(objError.stock) : handleError({err: 'Stock is required', key: 'stock'})
-        if (!dataProd.category || objError.category.length > 0) objError.category.length > 0 ? handleError(objError.category) : handleError({err: 'Category is required', key: 'category'})
-        if (!dataProd.provider || objError.provider.length > 0) objError.provider.length > 0 ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'provider'})
-        if (dataProd.prices === 0 || objError.prices.length > 0) objError.prices.length > 0 ? handleError(objError.prices) : handleError({err: 'Prices is required}', key: 'prices'})
-        if (dataProd.promotion && objError.promotion.length > 0) objError.promotion ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'promotion'})
-        return
-    }
+    // const isError = () => {
+    //     if (!dataProd.title || objError.title.length > 0) objError.title.length > 0 ? handleError({err: objError.title, key: 'title'}) : handleError({err: 'Title is required', key: 'title'})
+    //     if (!dataProd.description || objError.description.length > 0) objError.description.length > 0 ? handleError(objError.description) : handleError({err: 'Description is required', key: 'description'})
+    //     if (!dataProd.code || objError.code.length > 0) objError.code.length > 0 ? handleError(objError.code) : handleError({err: 'Code is required', key: 'code'})
+    //     if (!dataProd.stock || objError.stock.length > 0) objError.stock.length > 0 ? handleError(objError.stock) : handleError({err: 'Stock is required', key: 'stock'})
+    //     if (!dataProd.category || objError.category.length > 0) objError.category.length > 0 ? handleError(objError.category) : handleError({err: 'Category is required', key: 'category'})
+    //     if (!dataProd.provider || objError.provider.length > 0) objError.provider.length > 0 ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'provider'})
+    //     if (dataProd.prices === 0 || objError.prices.length > 0) objError.prices.length > 0 ? handleError(objError.prices) : handleError({err: 'Prices is required}', key: 'prices'})
+    //     if (dataProd.promotion && objError.promotion.length > 0) objError.promotion ? handleError(objError.provider) : handleError({err: 'Provider is required', key: 'promotion'})
+    //     return
+    // }
 
     //fetch to api
     const fetchNewProduct = async (e) => {
         e.preventDefault()
-        
-        setExistErr(false)
-        isError()
-        if (existErr) return
 
         const promotion = dataProd.promotion ? 'Promotion' : 'No promotion'
         const thumbnails = dataProd.thumbnails.length > 0 ? dataProd.thumbnails : undefined

@@ -26,7 +26,11 @@ export class UsersDaoMongo {
         return this.users.updateOne({_id}, user)
     }
 
-    async delete (today) {
+    async delete (filter) {
+        return this.users.deleteOne(filter)
+    }
+
+    async deleteUsers (today) {
         return this.users.deleteMany({ last__connection: {$lte: today}})
     }
 }

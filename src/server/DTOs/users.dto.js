@@ -18,5 +18,6 @@ export class UsersPaginateDto {
         this.status = data.status
         this.email_verified = data.email_verified
         this.profile = data.profile
+        this._id = data._id
     }
 }

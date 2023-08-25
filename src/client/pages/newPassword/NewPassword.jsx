@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react'
-import {AuthContext} from '../../context/auth.context'
+import { UserContext } from '../../context/user.context'
 import style from './NewPassword.module.sass'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FormNewPassword } from '../../components/Forms/Forms.component';
@@ -7,14 +7,14 @@ import { FormNewPassword } from '../../components/Forms/Forms.component';
 const NewPassword = () => {
     const navigate = useNavigate()
     const location = useLocation()
-    const {isAuth} = useContext(AuthContext)
+    const {user} = useContext(UserContext)
+
     const query = new URLSearchParams(location.search);
     const id = query.get('user')
     
     useEffect(() => {
-        if (isAuth === 'true') navigate('/')
-        if (!id) navigate ('/login')
-    }, [isAuth])
+        if (user) return navigate('/')
+    }, [user])
     
 
     return (
