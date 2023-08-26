@@ -265,7 +265,7 @@ export const FormNewProduct = () => {
                     resOk,
                     'Product created!!',
                     resOk
-                ).then(result => window.location.reload())
+                ).then(result => window.location.href('/customer'))
             }
         })
     }
