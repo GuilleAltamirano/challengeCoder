@@ -6,10 +6,12 @@ import ViteExpress from "vite-express"
 import { logger } from './utils/logger.js'
 import cluster from 'cluster'
 import { cpus } from 'os'
-
+import commander from './utils/commander.js'
+console.log(commander.mode);
 const app = express()
 await appConfig(app, express)
 const {PORT} = varsEnv
+commander.mode === 'production' ? ViteExpress.config({ mode: "production" }) : ViteExpress.config({ mode: "development" })
 
 if (cluster.isPrimary) {
   logger.info(`Server http run in route localhost:${PORT} ✅`)
@@ -23,5 +25,3 @@ if (cluster.isPrimary) {
   ViteExpress.bind(app, httpServer)
 }
 // await socketConfig(httpServer)
-
-// commander.mode === 'production' ? ViteExpress.config({ mode: "production" }) : ViteExpress.config({ mode: "development" })
