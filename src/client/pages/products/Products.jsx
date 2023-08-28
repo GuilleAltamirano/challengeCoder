@@ -7,7 +7,6 @@ import { ProductsComponent } from '../../components/products/Products.component'
 import { UserContext } from '../../context/user.context'
 import { BtPaginateComponent } from '../../components/btPaginate/BtPaginate.component'
 import { BtDelProdsInCart, BuyProds, CartComponent } from '../../components/Cart/Cart.component'
-import { BtLoginToBuy } from '../../components/btProducts/BtProducts.component'
 
 const Products = () => {
     const {user} = useContext(UserContext)
@@ -15,6 +14,7 @@ const Products = () => {
     const [payload, setPayload] = useState({})
     const [filters, setFilters] = useState({})
     const [query, setQuery] = useState('')
+    const [upCart, setUpCart] = useState(0)
 
     const priceOptions = ['Asc', 'Des']
     
@@ -30,6 +30,7 @@ const Products = () => {
             return setFilters({allCategories: payload.allCategories, allProvider: payload.allProvider})
         }
     }, [payload])
+
     return (
         <div>
             {!user || (user.role !== 'PREMIUM' && user.role !== 'ADMIN') ? '' : <h2>Customer</h2>}
@@ -51,7 +52,7 @@ const Products = () => {
                         <h3>Cart</h3>
                         {!user || user.role === 'ADMIN' ? <h4>No permission</h4> : 
                             <>
-                                <CartComponent user={user}/>
+                                <CartComponent user={user} upCart={upCart} />
                                 <BtDelProdsInCart user={user} />
                                 <BuyProds  user={user}/>
                             </>
@@ -63,7 +64,7 @@ const Products = () => {
                     <div className={style.search}>
                         <SearchComponent title={'Search product in Ddbase'}/>
                     </div>
-                    <ProductsComponent docs={payload.docs} user={user} quantity={1} />
+                    <ProductsComponent docs={payload.docs} user={user} quantity={1} updateCart={{upCart, setUpCart}} />
                     <BtPaginateComponent pagination={payload.pagination} qry={{query, setQuery}}/>
                 </div>
             </div>

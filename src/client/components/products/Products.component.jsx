@@ -2,7 +2,7 @@ import { useState } from 'react'
 import style from './ProductsComponent.module.sass'
 import { QtyProdComponent, BtBuyProdComponent, BtLoginToBuy } from '../btProducts/BtProducts.component'
 
-export const ProductsComponent = ({docs, user}) => {
+export const ProductsComponent = ({docs, user, updateCart}) => {
     const [typePrices, setTypePrices] = useState('list_three')
     const [modalPrice, setModalPrice] = useState(false)
     const arrayPrices = ['cost', 'list_one', 'list_two', 'list_three']
@@ -43,7 +43,7 @@ export const ProductsComponent = ({docs, user}) => {
                         <p>${prod.prices[typePrices]}</p>
                         <p>{prod.stock}</p>
                         <QtyProdComponent stock={prod.stock} pid={prod._id} quantity={1}/>
-                        {!user ? <BtLoginToBuy /> : <BtBuyProdComponent pid={prod._id} cid={user.cart._id}/>}
+                        {!user ? <BtLoginToBuy /> : <BtBuyProdComponent pid={prod._id} cid={user.cart._id} updateCart={updateCart} />}
                     </div>
                     ))}
                 </div>

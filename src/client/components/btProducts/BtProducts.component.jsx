@@ -25,7 +25,7 @@ export const QtyProdComponent = ({stock, pid, quantity}) => {
     )
 }
 
-export const BtBuyProdComponent = ({pid, cid}) => {
+export const BtBuyProdComponent = ({pid, cid, updateCart}) => {
     const addProdInCart = async () => {
         const qty = document.getElementById(pid).textContent
         
@@ -33,6 +33,7 @@ export const BtBuyProdComponent = ({pid, cid}) => {
         if (add !== 'success') return console.log(data)
 
         const updateQty = await upQtyProdInCart({pid, cid, qty})
+        updateCart.setUpCart(updateCart.upCart += 1 )
     }
 
     return (

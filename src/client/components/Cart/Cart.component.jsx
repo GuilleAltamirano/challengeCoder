@@ -3,7 +3,7 @@ import style from "./cartComponent.module.sass"
 import { deleteAllProds, fetchCart, purchase } from "../../helper/cart.helper"
 import { QtyProdComponent } from "../btProducts/BtProducts.component"
 
-export const CartComponent = ({user}) => {
+export const CartComponent = ({user, upCart}) => {
     const [cart, setCart] = useState([])
 
     const getCart = async () => {
@@ -18,7 +18,7 @@ export const CartComponent = ({user}) => {
 
     useEffect(() => {
         getCart()
-    }, [user])
+    }, [user, upCart])
     
     return !cart[0] ? <h4>No products</h4> :
     cart.map((prod, index) => (
