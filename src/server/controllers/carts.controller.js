@@ -1,5 +1,4 @@
-import { ApiError } from "../errors/Api.error.js"
-import { cartsServices } from "../services/carts.service.js"
+import { cartsServices } from "../services/Carts.service.js"
 
 export const getCartsController = async (req, res, next) => {
     try {
