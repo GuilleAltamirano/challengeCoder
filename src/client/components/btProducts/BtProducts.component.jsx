@@ -33,7 +33,6 @@ export const BtBuyProdComponent = ({pid, cid}) => {
         if (add !== 'success') return console.log(data)
 
         const updateQty = await upQtyProdInCart({pid, cid, qty})
-        
     }
 
     return (

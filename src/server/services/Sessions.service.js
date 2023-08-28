@@ -14,10 +14,10 @@ class SessionsServices {
         const emailLower = email.toLowerCase()
 
         //is admin? For greater security, the admin must be exact regarding capital letters
-        if (email === EMAIL_ADMIN && passwordLower === PASSWORD_ADMIN) return new SessionsDto(SUPERIOR_PRIVILEGES)
+        if (email === EMAIL_ADMIN && password === PASSWORD_ADMIN) return new SessionsDto(SUPERIOR_PRIVILEGES)
 
         const existUser = await usersDao.get({email: emailLower})
-        if (!existUser.length === 0) throw new ApiError(`User or password invalid`, 400)
+        if (existUser.length === 0) throw new ApiError(`User or password invalid`, 400)
 
         if (!await isValidPassword(existUser[0], password)) throw new ApiError(`User or password invalid`, 400)
 
@@ -42,8 +42,8 @@ class SessionsServices {
     async codeValid ({_id}) {
         const user = await usersDao.get({_id})
         if (user.length === 0) throw new ApiError('User invalid', 400)
-        
-        const update = await usersDao.put({_id}, {verified: EMAIL_VERIFIED_USERS})
+
+        const update = await usersDao.put({_id}, {email_verified: EMAIL_VERIFIED_USERS})
         return update
     }
 
