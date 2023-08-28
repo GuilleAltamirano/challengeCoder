@@ -21,3 +21,23 @@ export const ModalUserComponent = ({ user, closeModal }) => {
         </div>
     )
 }
+
+export const TicketModal = ({ticket}) => {
+    const closeModal = () => window.location.reload()
+
+
+    return (
+        <div className={style.container_ticket}>
+            <button className={style.close} onClick={closeModal}>X</button>
+            <h3>Success purchase</h3>
+            <div>{ticket.success_purchase.products.map((prod, index) => (
+                <div key={index}></div>
+            ))}</div>
+            <p>Amount: {ticket.success_purchase.amount}</p>
+            <p>Code: {ticket.success_purchase.code}</p>
+            <p>Date time: {ticket.success_purchase.purchase_datetime}</p>
+            <h4>Failed purchase</h4>
+        
+        </div>
+    )
+}

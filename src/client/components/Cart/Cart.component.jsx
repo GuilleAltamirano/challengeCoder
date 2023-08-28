@@ -50,11 +50,11 @@ export const BtDelProdsInCart = ({user}) => {
     )
 }
 
-export const BuyProds = ({user}) => {
+export const BuyProds = ({user, setUpCart}) => {
     const buyAllProds = async (e) => {
         e.preventDefault()
-
-        return await purchase({cid: user.cart._id})
+        const ticket = await purchase({cid: user.cart._id})
+        return setUpCart(0)
     }
 
     return (

@@ -54,7 +54,7 @@ const Products = () => {
                             <>
                                 <CartComponent user={user} upCart={upCart} />
                                 <BtDelProdsInCart user={user} />
-                                <BuyProds  user={user}/>
+                                <BuyProds user={user} setUpCart={setUpCart} />
                             </>
                         }
                     </div>
